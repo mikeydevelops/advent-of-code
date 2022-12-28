@@ -31,7 +31,7 @@ function aoc2015day2()
     $sizes = array_map('parseBoxSize', $sizes);
 
     $wrappingPaper = 0;
-    $part2 = 0;
+    $ribbon = 0;
 
     foreach ($sizes as $box) {
         $sides = [
@@ -45,13 +45,26 @@ function aoc2015day2()
         $extra = min($sides);
 
         $wrappingPaper += $area + $extra;
+
+        $volume = $box['length'] * $box['width'] * $box['height'];
+
+        $perimeters = [
+            (2 * $box['length']) + (2 * $box['width']),
+            (2 * $box['width']) + (2 * $box['height']),
+            (2 * $box['height']) + (2 * $box['length']),
+        ];
+
+        $perimeter = min($perimeters);
+
+        $ribbon += $perimeter + $volume;
     }
 
-    return [$wrappingPaper, $part2];
+    return [$wrappingPaper, $ribbon];
 }
 
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
-    list($wrappingPaper, $part2) = aoc2015day2();
+    list($wrappingPaper, $ribbon) = aoc2015day2();
 
     line("1. The elves should order $wrappingPaper sqft of wrapping paper.");
+    line("2. The elves should order $ribbon sqft of ribbon.");
 }
