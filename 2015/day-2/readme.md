@@ -28,4 +28,4 @@ For example:
 
 How many total feet of ribbon should they order?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `3842356`.
