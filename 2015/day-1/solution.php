@@ -2,6 +2,13 @@
 
 require_once __DIR__ . '/../../common.php';
 
+/**
+ * Advent of Code 2015
+ * Day 1: Not Quite Lisp
+ *
+ * @return integer[]
+ * @throws \Exception
+ */
 function aoc2015day1()
 {
     $input = getInput();
