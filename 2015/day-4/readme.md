@@ -15,6 +15,6 @@ Your puzzle answer was `282749`.
 
 ## Part Two
 
-Now find one that starts with six **zeroes**.
+Now find one that starts with **six zeroes**.
 
 Your puzzle answer was `?`.
