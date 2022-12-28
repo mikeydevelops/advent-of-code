@@ -17,4 +17,4 @@ Your puzzle answer was `282749`.
 
 Now find one that starts with **six zeroes**.
 
-Your puzzle answer was `?`.
+Your puzzle answer was `9962624`.
