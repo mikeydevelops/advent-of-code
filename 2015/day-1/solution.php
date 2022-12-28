@@ -21,5 +21,5 @@ foreach (str_split($input) as $idx => $instruction) {
     }
 }
 
-print("1. Santa will need to go to floor: $floor");
-print("2. The position of the character that causes Santa to enter the basement is: $basementPosition");
+line("1. Santa will need to go to floor: $floor");
+line("2. The position of the character that causes Santa to enter the basement is: $basementPosition");
