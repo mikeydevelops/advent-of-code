@@ -24,5 +24,7 @@ For example:
 
 To **what floor** do the instructions take Santa?
 
+Your puzzle answer was `138`.
+
 Your puzzle answer was `?`.
 
