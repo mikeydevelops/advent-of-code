@@ -6,3 +6,4 @@ Collect stars by helping Santa solve puzzles. Two puzzles will be made available
 
 - [Day 1: Not Quite Lisp](day-1)
 - [Day 2: I Was Told There Would Be No Math](day-2)
+- [Day 3: Perfectly Spherical Houses in a Vacuum](day-3)
