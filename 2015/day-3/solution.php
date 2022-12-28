@@ -6,12 +6,19 @@ require_once __DIR__ . '/../../common.php';
  * Create house grid from given directions.
  *
  * @param  array  $directions
+ * @param  integer  $totalPlayers  The number of players traversing the directions.
  * @return integer[][]
  */
-function createHouseGrid(array $directions)
+function createHouseGrid(array $directions, int $totalPlayers = 1)
 {
-    $x = 0;
-    $y = 0;
+    $players = array_map(function ($p) {
+        return [
+            'id' => $p,
+            'x' => 0,
+            'y' => 0,
+        ];
+    }, range(0, $totalPlayers));
+
     $rows = 1;
     $columns = 1;
     $grid = [[1]];
@@ -19,7 +26,14 @@ function createHouseGrid(array $directions)
     $horizontalDirections = ['<', '>'];
     $verticalDirections = ['^', 'v'];
 
+    $currentPlayer = 0;
+
     foreach ($directions as $direction) {
+        $player = &$players[$currentPlayer];
+
+        $x = &$player['x'];
+        $y = &$player['y'];
+
         $isHorizontal = in_array($direction, $horizontalDirections);
         $isVertical = in_array($direction, $verticalDirections);
 
@@ -49,6 +63,12 @@ function createHouseGrid(array $directions)
         }
 
         $grid[$y][$x] += 1;
+
+        $currentPlayer += 1;
+
+        if ($currentPlayer >= $totalPlayers) {
+            $currentPlayer = 0;
+        }
     }
 
     // for good measure sort the grid keys
@@ -71,27 +91,27 @@ function aoc2015day3()
 {
     $input = getInput();
 
-    $houses = 0;
-    $part2 = 0;
+    $houses1 = 0;
+    $houses2 = 0;
 
-    $grid = createHouseGrid(str_split($input));
+    $grid = createHouseGrid($directions = str_split($input));
 
     foreach ($grid as $row) {
-        $houses += count(array_filter($row));
+        $houses1 += count(array_filter($row));
     }
 
-    return [$grid, $houses, $part2];
+    $grid2 = createHouseGrid($directions, 2);
+
+    foreach ($grid2 as $row) {
+        $houses2 += count(array_filter($row));
+    }
+
+    return [$houses1, $houses2];
 }
 
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
-    list($grid, $houses, $part2) = aoc2015day3();
+    list($houses1, $houses2) = aoc2015day3();
 
-    $rows = count($grid);
-    $columns = count($grid[0]);
-
-    line("Grid contains $rows rows and $columns columns.");
-
-    line('');
-
-    line("1. The houses that should receive at least 1 present are $houses.");
+    line("1. The houses that received at least 1 present are $houses1.");
+    line("2. The houses that received at least 1 present are $houses2.");
 }
