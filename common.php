@@ -274,3 +274,14 @@ function error(string $message, ...$formats)
 {
     throw new Exception(sprintf($message, ...$formats));
 }
+
+/**
+ * Print a line and END OF LINE character.
+ *
+ * @param  string  $message
+ * @return int
+ */
+function line(string $message)
+{
+    return print($message . PHP_EOL);
+}
