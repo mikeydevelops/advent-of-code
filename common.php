@@ -285,3 +285,16 @@ function line(string $message)
 {
     return print($message . PHP_EOL);
 }
+
+/**
+ * Explode safely, removing empty parts of the array.
+ *
+ * @param  string  $delimiter
+ * @param  string  $input
+ * @param  integer  $limit
+ * @return array
+ */
+function explode_trim(string $delimiter, string $input, int $limit = PHP_INT_MAX) : array
+{
+    return array_values(array_filter(array_map('trim', explode($delimiter, $input, $limit))));
+}
