@@ -18,4 +18,4 @@ For example:
 
 After following the instructions, **how many lights are lit**?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `543903`.
