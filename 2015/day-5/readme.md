@@ -20,4 +20,4 @@ For example:
 .
 How many strings are nice?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `238`.
