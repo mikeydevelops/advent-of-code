@@ -312,3 +312,16 @@ function explode_trim(string $delimiter, string $input, int $limit = PHP_INT_MAX
 {
     return array_values(array_filter(array_map('trim', explode($delimiter, $input, $limit))));
 }
+
+/**
+ * Make 2d grid and fill it with given default value.
+ *
+ * @param  integer  $height
+ * @param  integer  $width
+ * @param  mixed  $fill
+ * @return array
+ */
+function makeGrid(int $height, int $width, $fill = null) : array
+{
+    return array_fill(0, $height, array_fill(0, $width, $fill));
+}
