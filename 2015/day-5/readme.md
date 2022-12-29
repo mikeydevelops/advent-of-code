@@ -40,4 +40,4 @@ For example:
 
 How many strings are nice under these new rules?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `69`.
