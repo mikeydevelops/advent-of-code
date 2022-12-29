@@ -52,16 +52,30 @@ function getInput(int $year = null, int $day = null)
  */
 function fetchInput(int $year, int $day) : string
 {
-    // create curl resource
     $ch = curl_init();
 
-    curl_setopt_array($ch, [
-        CURLOPT_URL => "https://adventofcode.com/$year/day/$day/input",
-        CURLOPT_RETURNTRANSFER => 1,
+    $url = "https://adventofcode.com/$year/day/$day/input";
+
+    $options = [
+        CURLOPT_URL => $url,
+        CURLOPT_RETURNTRANSFER => true,
         CURLOPT_COOKIE => 'session=' . getSession(),
-    ]);
+        CURLOPT_USERAGENT => 'Mikey Develops Advent of Code Input Fetcher/1.0',
+    ];
+
+    curl_setopt_array($ch, $options);
+
+    line("Fetching input for $year-12-$day from {$url}...");
 
     $input = curl_exec($ch);
+
+    if ($input === false) {
+        return error("Unable to fetch input $year-12-$day. Reason: %s", curl_error($ch));
+    } else {
+        line("Input fetched for $year-12-$day.");
+
+        $input = trim($input);
+    }
 
     curl_close($ch);
 
@@ -150,7 +164,7 @@ function loadSession() : string|false
         return error('Unable to load session from [%s]. Reason: %s', $path, $error['message']);
     }
 
-    return $session;
+    return trim($session);
 }
 
 /**
