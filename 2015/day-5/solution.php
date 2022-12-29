@@ -84,8 +84,71 @@ function aoc2015day5part1()
     return $nice;
 }
 
+/**
+ * Advent of Code 2015
+ * Day 5: Doesn't He Have Intern-Elves For This?
+ * Part Two
+ *
+ * @return integer
+ * @throws \Exception
+ */
+function aoc2015day5part2()
+{
+    $strings = explode_trim("\n", getInput());
+
+    $nice = 0;
+
+    foreach ($strings as $string) {
+        $pairs = [];
+        $repeats = [];
+
+        $pair = '';
+        $len = strlen($string);
+
+        foreach (str_split($string) as $idx => $char) {
+            $pair .= $char;
+
+            if (strlen($pair) == 2) {
+                $pairs[] = $pair;
+                $pair = $char;
+            }
+
+            $compareIdx = $idx + 2;
+
+            if ($compareIdx < $len && $char == $string[$compareIdx]) {
+                $repeats[] = $char;
+            }
+        }
+
+        // if there is no character that repeats
+        if (count($repeats) < 1) {
+            continue;
+        }
+
+        $pairCount = count($pairs);
+        $uniquePairs = count(array_flip($pairs));
+
+        // if there are overlapping characters ex. aaa
+        // and there are no other repeating pairs.
+        if (preg_match('/(\w)\1{2}/', $string) && $pairCount - $uniquePairs <= 1) {
+            continue;
+        }
+
+        // if there are no repeating pairs.
+        if ($pairCount === $uniquePairs) {
+            continue;
+        }
+
+        $nice ++;
+    }
+
+    return $nice;
+}
+
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
     $part1 = aoc2015day5part1();
+    $part2 = aoc2015day5part2();
 
     line("1. The nice strings are: $part1");
+    line("2. The better nice strings are: $part2");
 }
