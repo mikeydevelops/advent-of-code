@@ -90,8 +90,58 @@ function aoc2015day6part1()
     return $litLights;
 }
 
+/**
+ * Advent of Code 2015
+ * Day 6: Probably a Fire Hazard
+ * Part Two
+ *
+ * @return integer[]
+ * @throws \Exception
+ */
+function aoc2015day6part2()
+{
+    $instructions = getInstructions();
+
+    $grid = makeGrid(1000, 1000, 0);
+
+    foreach ($instructions as $instruction) {
+        extract($instruction);
+        /** @var string $command */
+        /** @var integer[] $from */
+        /** @var integer[] $to */
+
+        for ($y = $from['y']; $y <= $to['y']; $y++) {
+            for ($x = $from['x']; $x <= $to['x']; $x++) {
+                $value = $grid[$y][$x];
+
+                if ($command == 'toggle') {
+                    $value += 2;
+                }
+
+                if ($command == 'turn on') {
+                    $value += 1;
+                }
+
+                if ($command == 'turn off') {
+                    $value -= 1;
+                }
+
+                if ($value < 0) {
+                    $value = 0;
+                }
+
+                $grid[$y][$x] = $value;
+            }
+        }
+    }
+
+    return array_sum(array_map('array_sum', $grid));
+}
+
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
     $litLights = aoc2015day6part1();
+    $totalBrightness = aoc2015day6part2();
 
     line("1. The number of lit lights is: $litLights");
+    line("2. Total brightness of all lights is: $totalBrightness");
 }
