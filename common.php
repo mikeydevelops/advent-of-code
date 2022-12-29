@@ -52,15 +52,21 @@ function getInput(int $year = null, int $day = null)
  */
 function fetchInput(int $year, int $day) : string
 {
+    getSession();
+
     $ch = curl_init();
 
     $url = "https://adventofcode.com/$year/day/$day/input";
 
+    $cookieJarFile = getSessionPath();
+
     $options = [
         CURLOPT_URL => $url,
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_COOKIE => 'session=' . getSession(),
         CURLOPT_USERAGENT => 'Mikey Develops Advent of Code Input Fetcher/1.0',
+        CURLOPT_COOKIEFILE => $cookieJarFile,
+        CURLOPT_COOKIEJAR => $cookieJarFile,
+        CURLOPT_TIMEOUT => 10,
     ];
 
     curl_setopt_array($ch, $options);
@@ -69,6 +75,8 @@ function fetchInput(int $year, int $day) : string
 
     $input = curl_exec($ch);
 
+    curl_close($ch);
+
     if ($input === false) {
         return error("Unable to fetch input $year-12-$day. Reason: %s", curl_error($ch));
     } else {
@@ -76,8 +84,6 @@ function fetchInput(int $year, int $day) : string
 
         $input = trim($input);
     }
-
-    curl_close($ch);
 
     saveCachedInput($year, $day, $input);
 
@@ -93,6 +99,11 @@ function getSession() : string
 {
     if ($session = loadSession()) {
         return $session;
+    }
+
+    if (is_null($session)) {
+        line('Your previous session has expired. Please login again and provide the new session key.');
+        line('');
     }
 
     return askForSession();
@@ -145,10 +156,11 @@ function askForSession(bool $describe = true) : string
 /**
  * Load already cached session from disk.
  *
- * @return string|false
+ * @param  boolean  $ignoreExpired  Return session event if it is expired.
+ * @return string|false|null
  * @throws \Exception
  */
-function loadSession() : string|false
+function loadSession(bool $ignoreExpired = false) : string|false|null
 {
     $path = getSessionPath();
 
@@ -164,6 +176,18 @@ function loadSession() : string|false
         return error('Unable to load session from [%s]. Reason: %s', $path, $error['message']);
     }
 
+    if (! preg_match(getSessionCookiePattern(), $session, $matches)) {
+        return false;
+    }
+
+    $expiry = intval($matches[1]);
+
+    if (! $ignoreExpired && time() > $expiry) {
+        return null;
+    }
+
+    $session = $matches[2];
+
     return trim($session);
 }
 
@@ -178,7 +202,25 @@ function saveSession(string $session) : bool
 {
     $path = getSessionPath();
 
-    $result = @file_put_contents($path, $session);
+    $previousSession = loadSession(true);
+
+    $cookieLife = 35 * 24 * 60 * 60;
+
+    $expiry = time() + $cookieLife;
+
+    $cookie = ".adventofcode.com\tTRUE\t/\tTRUE\t$expiry\tsession\t$session";
+
+    $cookies = (@file_get_contents($path)) ?: '';
+
+    if ($previousSession) {
+        preg_match(getSessionCookiePattern(), $cookies, $matches);
+
+        $cookies = str_replace($matches[0], $cookie, $cookies);
+    } else {
+        $cookies .= $cookie . "\n";
+    }
+
+    $result = @file_put_contents($path, $cookies);
 
     if ($result === false) {
         $error = error_get_last();
@@ -189,6 +231,16 @@ function saveSession(string $session) : bool
     }
 
     return true;
+}
+
+/**
+ * Get the regex pattern that matches the session cookie for advent of code.
+ *
+ * @return string
+ */
+function getSessionCookiePattern()
+{
+    return '/^\.?adventofcode\.com.*?(\d{10})\s*session\s*(.*?)\s*$/m';
 }
 
 /**
