@@ -110,4 +110,14 @@ class Wire
     {
         return static::make($wire);
     }
+
+    /**
+     * Reset the wire cache.
+     *
+     * @return void
+     */
+    public static function resetWires() : void
+    {
+        static::$wires = [];
+    }
 }
