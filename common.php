@@ -377,3 +377,47 @@ function makeGrid(int $height, int $width, $fill = null) : array
 {
     return array_fill(0, $height, array_fill(0, $width, $fill));
 }
+
+/**
+ * Wrap a value in array.
+ * If value is already array return the same array.
+ * If value is null return empty array.
+ *
+ * @param  mixed  $arr
+ * @return array
+ */
+function array_wrap($arr) : array
+{
+    if (is_null($arr)) {
+        return [];
+    }
+
+    if (is_array($arr)) {
+        return $arr;
+    }
+
+    return [$arr];
+}
+
+/**
+ * Search one or multiple needles in a string.
+ *
+ * @param  string  $haystack
+ * @param  string|string[]  $needles
+ * @param  boolean $ignoreCase
+ * @return boolean
+ */
+function string_contains(string $haystack, $needles, bool $ignoreCase = false) : bool
+{
+    $needles = array_wrap($needles);
+
+    $func = $ignoreCase ? 'stripos' : 'strpos';
+
+    foreach ($needles as $needle) {
+        if (call_user_func($func, $haystack, $needle) !== false) {
+            return true;
+        }
+    }
+
+    return false;
+}
