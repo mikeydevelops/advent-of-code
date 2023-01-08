@@ -7,3 +7,4 @@
 - [Day 5: Doesn't He Have Intern-Elves For This?](day-5)
 - [Day 6: Probably a Fire Hazard](day-6)
 - [Day 7: Some Assembly Required](day-7)
+- [Day 8: Matchsticks](day-8)
