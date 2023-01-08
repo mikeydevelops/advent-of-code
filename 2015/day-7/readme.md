@@ -47,3 +47,8 @@ In little Bobby's kit's instructions booklet (provided as your puzzle input), wh
 
 Your puzzle answer was `3176`.
 
+## Part Two
+
+Now, take the signal you got on wire `a`, override wire `b` to that signal, and reset the other wires (including wire `a`). What new signal is ultimately provided to wire `a`?
+
+Your puzzle answer was `?`.
