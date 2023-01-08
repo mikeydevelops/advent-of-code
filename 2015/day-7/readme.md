@@ -51,4 +51,4 @@ Your puzzle answer was `3176`.
 
 Now, take the signal you got on wire `a`, override wire `b` to that signal, and reset the other wires (including wire `a`). What new signal is ultimately provided to wire `a`?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `14710`.

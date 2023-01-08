@@ -85,8 +85,39 @@ function aoc2015day7part1()
     return Wire::make('a')->getSignal();
 }
 
+/**
+ * Advent of Code 2015
+ * Day 7: Some Assembly Required
+ * Part Two
+ *
+ * @param  integer  $overrideSignal
+ * @return integer
+ * @throws \Exception
+ */
+function aoc2015day7part2(int $overrideSignal)
+{
+    Wire::resetWires();
+
+    $gates = getInstructions();
+
+    // remove the gate that will override the new b signal
+    foreach ($gates as $idx => $gate) {
+        if ($gate->getOutput()->getName() == 'b') {
+            unset($gates[$idx]);
+        }
+    }
+
+    Wire::wire('b')->setSignal($overrideSignal);
+
+    processGates($gates);
+
+    return Wire::make('a')->getSignal();
+}
+
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
     $signal = aoc2015day7part1();
+    $signal2 = aoc2015day7part2($signal);
 
     line("1. The signal provided to wire a is: $signal");
+    line("2. The signal provided to wire a after override is: $signal2");
 }

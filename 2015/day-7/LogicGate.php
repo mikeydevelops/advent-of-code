@@ -132,6 +132,16 @@ class LogicGate
     }
 
     /**
+     * Get the output of the gate.
+     *
+     * @return \Wire
+     */
+    public function getOutput() : Wire
+    {
+        return $this->output;
+    }
+
+    /**
      * Set the raw gate string.
      *
      * @param  string  $raw
