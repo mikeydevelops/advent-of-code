@@ -20,8 +20,7 @@ function aoc2015day8part1(): int
 }
 
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
-    $litLights = aoc2015day8part1();
+    $characters = aoc2015day8part1();
 
-    line("1. The number of lit lights is: $litLights");
-    line("2. Total brightness of all lights is: $totalBrightness");
+    line("1. The number of needed characters is: $characters");
 }
