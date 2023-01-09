@@ -8,7 +8,7 @@ This year, however, he has some new locations to visit; his elves have provided 
 
 For example, given the following distances:
 
-```
+```txt
 London to Dublin = 464
 London to Belfast = 518
 Dublin to Belfast = 141
@@ -16,7 +16,7 @@ Dublin to Belfast = 141
 
 The possible routes are therefore:
 
-```
+```txt
 Dublin -> London -> Belfast = 982
 London -> Dublin -> Belfast = 605
 London -> Belfast -> Dublin = 659
