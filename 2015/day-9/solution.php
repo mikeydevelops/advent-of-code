@@ -20,7 +20,7 @@ function aoc2015day9part1(): int
 }
 
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
-    $distance = aoc2015day8part1();
+    $distance = aoc2015day9part1();
 
     line("1. The shortest distance is: $distance");
 }
