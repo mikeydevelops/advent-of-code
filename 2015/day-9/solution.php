@@ -80,10 +80,10 @@ function findRoutes(array $locations) : array
  * Day 9: All in a Single Night
  * Part One
  *
- * @return integer
+ * @return array
  * @throws \Exception
  */
-function aoc2015day9part1(): int
+function aoc2015day9part1(): array
 {
     $distances = parseDistances(explode("\n", getInput()));
 
@@ -91,11 +91,32 @@ function aoc2015day9part1(): int
 
     $routes = findRoutes($locations);
 
-    return min($routes);
+    return [$min = min($routes), array_search($min, $routes)];
+}
+
+/**
+ * Advent of Code 2015
+ * Day 9: All in a Single Night
+ * Part One
+ *
+ * @return array
+ * @throws \Exception
+ */
+function aoc2015day9part2(): array
+{
+    $distances = parseDistances(explode("\n", getInput()));
+
+    $locations = getLocations($distances);
+
+    $routes = findRoutes($locations);
+
+    return [$max = max($routes), array_search($max, $routes)];
 }
 
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
-    $distance = aoc2015day9part1();
+    [$shortest, $shortestRoute] = aoc2015day9part1();
+    [$longest, $longestRoute] = aoc2015day9part2();
 
-    line("1. The shortest distance is: $distance");
+    line("1. The shortest distance is: $shortest via ($shortestRoute)");
+    line("2. The longest distance is: $longest via ($longestRoute)");
 }
