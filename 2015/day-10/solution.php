@@ -18,7 +18,7 @@ function aoc2015day10part1(): int
 }
 
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
-    $length = aoc2015day8part1();
+    $length = aoc2015day10part1();
 
     line("1. The length of the result is: $length");
 }
