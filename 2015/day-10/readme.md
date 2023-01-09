@@ -18,4 +18,4 @@ Starting with the digits in your puzzle input, apply this process `40` times.
 
 What is **the length of the result**?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `492982`.
