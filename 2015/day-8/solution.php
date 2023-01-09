@@ -12,11 +12,19 @@ require_once __DIR__ . '/../../common.php';
  */
 function aoc2015day8part1(): int
 {
-    $input = getInput();
+    $strings = explode("\n", getInput());
 
-    $result = 0;
+    $lengths = array_map(function ($string) {
+        return [
+            'code' => strlen($string),
+            'memory' => strlen(eval('return ' . $string . ';')),
+        ];
+    }, $strings);
 
-    return $result;
+    $codeTotal = array_sum(array_column($lengths, 'code'));
+    $memoryTotal = array_sum(array_column($lengths, 'memory'));
+
+    return $codeTotal - $memoryTotal;
 }
 
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
