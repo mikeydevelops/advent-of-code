@@ -421,3 +421,57 @@ function string_contains(string $haystack, $needles, bool $ignoreCase = false) :
 
     return false;
 }
+
+/**
+ * Calculate permutations of array.
+ *
+ * @param  array  $array
+ * @return array
+ */
+function combinations($array, $size = 3, $combinations = [])
+{
+    if (empty($combinations)) {
+        $combinations = $array;
+    }
+
+    if ($size == 1) {
+        return $combinations;
+    }
+
+    $newCombination = [];
+
+    foreach ($array as $key => $val) {
+        foreach ($combinations as $item) {
+            $item = array_wrap($item);
+
+            if(in_array($val, $item)) {
+                continue;
+            }
+
+            $newCombination[] = array_merge(array_wrap($val), $item);
+        }
+    }
+
+    return combinations($array, $size - 1, $newCombination);
+}
+
+/**
+ * Create chunks representing a "sliding window" view of the items in the collection.
+ *
+ * @param  array  $array
+ * @param  int  $size
+ * @param  int  $step
+ * @return array
+ */
+function array_sliding(array $array, $size = 2, $step = 1)
+{
+    $chunks = floor((count($array) - $size) / $step) + 1;
+
+    $windows = [];
+
+    foreach (range(1, $chunks) as $number) {
+        $windows[] = array_slice($array, ($number - 1) * $step, $size);
+    }
+
+    return $windows;
+}
