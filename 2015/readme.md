@@ -8,3 +8,4 @@
 - [Day 6: Probably a Fire Hazard](day-6)
 - [Day 7: Some Assembly Required](day-7)
 - [Day 8: Matchsticks](day-8)
+- [Day 9: All in a Single Night](day-9)
