@@ -26,4 +26,6 @@ Neat, right? You might also enjoy hearing [John Conway talking about this sequen
 
 Now, starting again with the digits in your puzzle input, apply this process `50` times. What is **the length of the new result**?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `6989950`.
+
+Note: lol second pass needs lots of memory (2GB on my inpuy) using my solutio :O
