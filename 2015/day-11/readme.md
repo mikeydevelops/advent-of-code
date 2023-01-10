@@ -20,7 +20,7 @@ For example:
 - `abbceffg` meets the third requirement (because it repeats `bb` and `ff`) but fails the first requirement.
 - `abbcegjk` fails the third requirement, because it only has one double letter (`bb`).
 - The next password after `abcdefgh` is `abcdffaa`.
-- The next password after `ghijklmn` is `ghjaabcc`, because you eventually skip all the passwords that start with g`hi...`, since `i` is not allowed.
+- The next password after `ghijklmn` is `ghjaabcc`, because you eventually skip all the passwords that start with `ghi...`, since `i` is not allowed.
 
 Given Santa's current password (your puzzle input), what should his **next password** be?
 
