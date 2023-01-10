@@ -24,4 +24,4 @@ For example:
 
 Given Santa's current password (your puzzle input), what should his **next password** be?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `hxbxxyzz`.
