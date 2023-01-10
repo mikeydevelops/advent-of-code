@@ -46,6 +46,8 @@ function stringHasConsecutiveCharacters(string $string, int $limit = 1) : bool
 
         foreach (range(1, $limit) as $next) {
             if (chr($ord + $next) != $string[$idx + $next]) {
+                $matching = 0;
+
                 continue 2;
             }
 
@@ -76,17 +78,13 @@ function strpos_any(array $needles, string $haystack, bool $strict = false) : in
 }
 
 /**
- * Advent of Code 2015
- * Day 11: Corporate Policy
- * Part One
+ * Find next password for given old password.
  *
+ * @param  string  $oldPassword
  * @return string
- * @throws \Exception
  */
-function aoc2015day11part1(): string
+function findNextPassword(string $oldPassword): string
 {
-    $oldPassword = getInput();
-
     $previousPassword = $oldPassword;
 
     $newPassword = null;
@@ -107,8 +105,6 @@ function aoc2015day11part1(): string
                 }
             }
         }
-
-        // line('Checking: ' . $possible);
 
         $previousPassword = $possible;
 
@@ -131,8 +127,36 @@ function aoc2015day11part1(): string
     return $newPassword;
 }
 
+/**
+ * Advent of Code 2015
+ * Day 11: Corporate Policy
+ * Part One
+ *
+ * @return string
+ * @throws \Exception
+ */
+function aoc2015day11part1() : string
+{
+    return findNextPassword(getInput());
+}
+
+/**
+ * Advent of Code 2015
+ * Day 11: Corporate Policy
+ * Part Two
+ *
+ * @return string
+ * @throws \Exception
+ */
+function aoc2015day11part2() : string
+{
+    return findNextPassword(findNextPassword(getInput()));
+}
+
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
     $password = aoc2015day11part1();
+    $secondPassword = aoc2015day11part2();
 
     line("1. Santa's next password should be: $password");
+    line("2. Santa's other next password should be: $secondPassword");
 }
