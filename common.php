@@ -507,3 +507,37 @@ function findRepeatingItems(array $items)
 
     return $overlapping;
 }
+
+/**
+ * Check to see if given array is associative or not.
+ *
+ * @param  array  $array
+ * @return boolean
+ */
+function array_is_assoc(array $array) : bool
+{
+    $keys = array_keys($array);
+
+    return array_keys($keys) !== $keys;
+}
+
+/**
+ * Filter array recursively.
+ *
+ * @param  array  $array
+ * @param  null|callable  $callback
+ * @param  integer  $mode
+ * @return array
+ */
+function array_filter_recursive(array $array, ?callable $callback, int $mode = 0) : array
+{
+    $array = array_filter($array, function ($item) use ($callback, $mode) {
+        if (is_array($item)) {
+            return array_filter_recursive($item, $callback, $mode);
+        }
+
+        return $callback($item);
+    });
+
+    return array_filter($array, $callback, $mode);
+}
