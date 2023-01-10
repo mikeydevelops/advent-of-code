@@ -3,37 +3,6 @@
 require_once __DIR__ . '/../../common.php';
 
 /**
- * Find repeating items in an array.
- *
- * @param  array  $items
- * @return array
- */
-function findRepeatingItems(array $items)
-{
-    $overlapping = [];
-
-    foreach ($items as $idx => $item) {
-        $next = $items[$idx + 1] ?? false;
-
-        if ($next === false) {
-            break;
-        }
-
-        if ($item !== $next) {
-            continue;
-        }
-
-        if (in_array($item, $overlapping)) {
-            continue;
-        }
-
-        $overlapping[] = $item;
-    }
-
-    return $overlapping;
-}
-
-/**
  * Advent of Code 2015
  * Day 5: Doesn't He Have Intern-Elves For This?
  * Part One
