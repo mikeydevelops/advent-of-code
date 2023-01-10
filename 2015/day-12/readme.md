@@ -17,4 +17,4 @@ You will not encounter any strings containing numbers.
 
 What is the **sum of all numbers** in the document?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `191164`.
