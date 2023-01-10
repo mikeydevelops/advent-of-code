@@ -475,3 +475,35 @@ function array_sliding(array $array, $size = 2, $step = 1)
 
     return $windows;
 }
+
+
+/**
+ * Find repeating items in an array.
+ *
+ * @param  array  $items
+ * @return array
+ */
+function findRepeatingItems(array $items)
+{
+    $overlapping = [];
+
+    foreach ($items as $idx => $item) {
+        $next = $items[$idx + 1] ?? false;
+
+        if ($next === false) {
+            break;
+        }
+
+        if ($item !== $next) {
+            continue;
+        }
+
+        if (in_array($item, $overlapping)) {
+            continue;
+        }
+
+        $overlapping[] = $item;
+    }
+
+    return $overlapping;
+}
