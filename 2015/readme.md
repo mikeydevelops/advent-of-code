@@ -11,3 +11,4 @@
 - [Day 9: All in a Single Night](day-9)
 - [Day 10: Elves Look, Elves Say](day-10)
 - [Day 11: Corporate Policy](day-11)
+- [Day 12: JSAbacusFramework.io](day-12)
