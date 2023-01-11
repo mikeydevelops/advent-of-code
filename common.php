@@ -8,9 +8,10 @@ require_once __DIR__ . '/vendor/autoload.php';
  *
  * @param  integer|null  $year
  * @param  integer|null  $day
+ * @param  boolean  $verbose  Whether to print status of download.
  * @return string
  */
-function getInput(int $year = null, int $day = null)
+function getInput(int $year = null, int $day = null, bool $verbose = true) : string
 {
     if (is_null($year) or is_null($day)) {
         $src = debug_backtrace()[0];
@@ -42,7 +43,7 @@ function getInput(int $year = null, int $day = null)
         return $input;
     }
 
-    return fetchInput($year, $day);
+    return fetchInput($year, $day, $verbose);
 }
 
 /**
@@ -50,9 +51,10 @@ function getInput(int $year = null, int $day = null)
  *
  * @param  integer  $year
  * @param  integer  $day
+ * @param  boolean  $verbose  Whether to print status of download.
  * @return string
  */
-function fetchInput(int $year, int $day) : string
+function fetchInput(int $year, int $day, bool $verbose = true) : string
 {
     getSession();
 
@@ -73,7 +75,9 @@ function fetchInput(int $year, int $day) : string
 
     curl_setopt_array($ch, $options);
 
-    line("Fetching input for $year-12-$day from {$url}...");
+    if ($verbose) {
+        line("Fetching input for $year-12-$day from {$url}...");
+    }
 
     $input = curl_exec($ch);
 
@@ -82,7 +86,9 @@ function fetchInput(int $year, int $day) : string
     if ($input === false) {
         return error("Unable to fetch input $year-12-$day. Reason: %s", curl_error($ch));
     } else {
-        line("Input fetched for $year-12-$day.");
+        if ($verbose) {
+            line("Input fetched for $year-12-$day.");
+        }
 
         $input = trim($input);
     }
@@ -307,13 +313,13 @@ function saveCachedInput(int $year, int $day, string $input) : bool
  */
 function getCachedInputPath(int $year, int $day) : string
 {
-    $path = explode(DIRECTORY_SEPARATOR, dirname(__FILE__));
+    $path = storage_path(sprintf('inputs/%d/day-%02d', $year, $day));
 
-    $path[] = $year;
-    $path[] = "day-$day";
-    $path[] = 'input.txt';
+    if (! is_dir($dir = dirname($path))) {
+        mkdir($dir, 0777, true);
+    }
 
-    return implode(DIRECTORY_SEPARATOR, $path);
+    return $path;
 }
 
 /**
@@ -323,11 +329,13 @@ function getCachedInputPath(int $year, int $day) : string
  */
 function getSessionPath() : string
 {
-    $path = explode(DIRECTORY_SEPARATOR, dirname(__FILE__));
+    $path = storage_path('session.aoc');
 
-    $path[] = 'session.aoc';
+    if (! is_dir($dir = dirname($path))) {
+        mkdir($dir, 0777, true);
+    }
 
-    return implode(DIRECTORY_SEPARATOR, $path);
+    return $path;
 }
 
 /**
@@ -542,4 +550,105 @@ function array_filter_recursive(array $array, ?callable $callback, int $mode = 0
     });
 
     return array_filter($array, $callback, $mode);
+}
+
+/**
+ * Get the path to the storage folder.
+ *
+ * @param  string  $append...
+ * @return string
+ */
+function storage_path(string $append = null) : string
+{
+    $ds = DIRECTORY_SEPARATOR;
+    $dir = __DIR__;
+    $path = "$dir{$ds}storage{$ds}" . implode($ds, array_filter(func_get_args(), 'is_string'));
+
+    return preg_replace('/[\\\\\/]+/', $ds, $path);
+}
+
+/**
+ * Get the last valid year for Advent of Code.
+ *
+ * @return integer
+ */
+function getEndYear() : int
+{
+    $year = date('Y');
+
+    if (date('m') < 12) {
+        $year --;
+    }
+
+    return $year;
+}
+
+/**
+ * Helper function to print the usage when year and date are needed.
+ *
+ * @return void
+ */
+function printYearDayUsage(string $type = null)
+{
+    global $argv;
+
+    if (is_null($type) || $type === 'args') {
+        line("Usage: php $argv[0] <year> <day>");
+    }
+
+    if (is_null($type) || $type === 'single') {
+        line("Usage: php $argv[0] <year-day> Ex: 2015-09, 2017-1");
+    }
+
+    $endYear = getEndYear();
+
+    line("Usage: Where year can be from 2015 to $endYear.");
+    line("Usage: Where day can be from 1 to 25.");
+}
+
+/**
+ * Parse the year and day from argv.
+ *
+ * @return int[]
+ */
+function parseYearAndDayFromArgv() : array
+{
+    global $argv;
+
+    $year = $argv[1] ?? null;
+
+    if (is_null($year)) {
+        printYearDayUsage();
+
+        return exit(1);
+    }
+
+    $day = $argv[2] ?? null;
+
+    $format = strpos($year, '-') === false ? 'args' : 'single';
+
+    if ($format == 'single') {
+        [$year, $day] = explode('-', $year);
+
+        if (! is_numeric($day)) {
+            $day = null;
+        }
+    }
+
+    if (is_null($day)) {
+        printYearDayUsage($format);
+
+        return exit(1);
+    }
+
+    $endYear = getEndYear();
+
+    if ($year < 2015 || $year > $endYear || $day < 1 || $day > 25) {
+        printYearDayUsage($format);
+        line('Error: Invalid value for year or day.');
+
+        return exit(2);
+    }
+
+    return [intval($year), intval($day)];
 }
