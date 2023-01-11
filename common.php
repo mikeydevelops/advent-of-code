@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/vendor/autoload.php';
+
 /**
  * Get the input for given year and day or
  * auto detect year and day from debug_backtrace()

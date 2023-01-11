@@ -1,0 +1,25 @@
+{
+    "name": "mike/advent-of-code",
+    "description": "My Advent of Code solutions in PHP.",
+    "type": "project",
+    "require": {
+        "psy/psysh": "^0.11.10",
+        "symfony/var-dumper": "^6.2",
+        "guzzlehttp/guzzle": "^7.5"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Mike\\AdventOfCode\\": "aoc/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Michael Goodman",
+            "email": "bulgedition@gmail.com"
+        }
+    ],
+    "config": {
+        "optimize-autoloader": true
+    }
+}

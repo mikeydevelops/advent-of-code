@@ -1,2 +1,5 @@
-input.txt
-session.aoc
+storage/cache/
+storage/inputs/
+storage/session.aoc
+
+/vendor/
