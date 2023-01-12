@@ -2,6 +2,38 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Cookie\CookieJar;
+use League\CommonMark\Environment\Environment;
+use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\CommonMark\Parser\Block\HtmlBlockParser;
+use League\CommonMark\Extension\GithubFlavoredMarkdownExtension;
+use Symfony\Component\DomCrawler\Crawler;
+
+$_http = null;
+
+/**
+ * Get the http client for Advent of Code.
+ *
+ * @return \GuzzleHttp\Client
+ */
+function getClient() : Client
+{
+    global $_http;
+
+    if (is_null($_http)) {
+        $_http = new Client([
+            'base_uri' => 'https://adventofcode.com',
+            'headers' => [
+                'User-Agent' => 'Mikey Develops/1.0',
+            ],
+            'cookies' => getAdventOfCodeCookieJar(),
+        ]);
+    }
+
+    return $_http;
+}
+
 /**
  * Get the input for given year and day or
  * auto detect year and day from debug_backtrace()
@@ -56,41 +88,24 @@ function getInput(int $year = null, int $day = null, bool $verbose = true) : str
  */
 function fetchInput(int $year, int $day, bool $verbose = true) : string
 {
-    getSession();
+    $client = getClient();
 
-    $ch = curl_init();
-
-    $url = "https://adventofcode.com/$year/day/$day/input";
-
-    $cookieJarFile = getSessionPath();
-
-    $options = [
-        CURLOPT_URL => $url,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_USERAGENT => 'Mikey Develops Advent of Code Input Fetcher/1.0',
-        CURLOPT_COOKIEFILE => $cookieJarFile,
-        CURLOPT_COOKIEJAR => $cookieJarFile,
-        CURLOPT_TIMEOUT => 10,
-    ];
-
-    curl_setopt_array($ch, $options);
+    $uri = "/$year/day/$day/input";
 
     if ($verbose) {
-        line("Fetching input for $year-12-$day from {$url}...");
+        line("Fetching input for $year-12-$day from {$uri}...");
     }
 
-    $input = curl_exec($ch);
+    try {
+        $response = $client->get($uri);
 
-    curl_close($ch);
+        $input = $response->getBody()->getContents();
+    } catch (Throwable $ex) {
+        throw new Exception(sprintf("Unable to fetch input $year-12-$day. Reason: %s", $ex->getMessage()), $ex->getCode(), $ex);
+    }
 
-    if ($input === false) {
-        return error("Unable to fetch input $year-12-$day. Reason: %s", curl_error($ch));
-    } else {
-        if ($verbose) {
-            line("Input fetched for $year-12-$day.");
-        }
-
-        $input = trim($input);
+    if ($verbose) {
+        line("Input fetched for $year-12-$day.");
     }
 
     saveCachedInput($year, $day, $input);
@@ -115,6 +130,66 @@ function getSession() : string
     }
 
     return askForSession();
+}
+
+/**
+ * Get the cookie jar for Advent of Code.
+ *
+ * @return \GuzzleHttp\Cookie\CookieJar
+ * @throws \Exception
+ */
+function getAdventOfCodeCookieJar() : CookieJar
+{
+    getSession();
+
+    return new CookieJar(true, parseNetscapeCookies(file_get_contents(getSessionPath())));
+}
+
+/**
+ * Extract any cookies found from Netscape formatted cookie string.
+ *
+ * @param string $string Netscape formatted cookies string.
+ *
+ * @return array The array of cookies as extracted from the string.
+ */
+function parseNetscapeCookies(string $string) : array
+{
+    $cookies = [];
+
+    $lines = preg_split("/\r?\n/", $string);
+
+    // iterate over lines
+    foreach ($lines as $line) {
+
+        // we only care for valid cookie def lines
+        if (isset($line[0]) && substr_count($line, "\t") == 6) {
+
+            // get tokens in an array
+            $tokens = explode("\t", $line);
+
+            // trim the tokens
+            $tokens = array_map('trim', $tokens);
+
+            $cookie = [];
+
+            // Extract the data
+            $cookie['Domain'] = $tokens[0];
+            // $cookie['flag'] = $tokens[1];
+            $cookie['Path'] = $tokens[2];
+            $cookie['Secure'] = $tokens[3];
+
+            // Convert date to a readable format
+            $cookie['Expires'] = intval($tokens[4]);
+
+            $cookie['Name'] = $tokens[5];
+            $cookie['Value'] = $tokens[6];
+
+            // Record the cookie.
+            $cookies[] = $cookie;
+        }
+    }
+
+    return $cookies;
 }
 
 /**
@@ -651,4 +726,22 @@ function parseYearAndDayFromArgv() : array
     }
 
     return [intval($year), intval($day)];
+}
+
+function getPage(int $year, int $day) : string
+{
+    return '';
+}
+
+function getMarkdown(int $year, int $day) : string
+{
+    $page = new Crawler(getPage($year, $day));
+
+    $env = new Environment([]);
+    $env->addExtension(new CommonMarkCoreExtension);
+    $env->addExtension(new GithubFlavoredMarkdownExtension);
+
+    $parser = new HtmlBlockParser(1);
+
+    return '';
 }
