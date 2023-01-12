@@ -13,3 +13,4 @@
 - [Day 11: Corporate Policy](day-11)
 - [Day 12: JSAbacusFramework.io](day-12)
 - [Day 13: Knights of the Dinner Table](day-13)
+- [Day 14: Reindeer Olympics](day-14)
