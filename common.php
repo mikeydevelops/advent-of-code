@@ -72,7 +72,7 @@ function getInput(int $year = null, int $day = null, bool $verbose = true) : str
     }
 
     if ($input = getCachedInput($year, $day)) {
-        return $input;
+        return trim($input);
     }
 
     return fetchInput($year, $day, $verbose);
@@ -107,6 +107,8 @@ function fetchInput(int $year, int $day, bool $verbose = true) : string
     if ($verbose) {
         line("Input fetched for $year-12-$day.");
     }
+
+    $input = trim($input);
 
     saveCachedInput($year, $day, $input);
 
