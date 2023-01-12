@@ -31,4 +31,4 @@ After the 1000th second, Dancer has accumulated `689` points, while poor Comet, 
 
 Again given the descriptions of each reindeer (in your puzzle input), after exactly `2503` seconds, **how many points does the winning reindeer have**?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `1102`.
