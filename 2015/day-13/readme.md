@@ -49,4 +49,4 @@ So, add yourself to the list, and give all happiness relationships that involve 
 
 What is the **total change in happiness** for the optimal seating arrangement that actually includes yourself?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `668`.
