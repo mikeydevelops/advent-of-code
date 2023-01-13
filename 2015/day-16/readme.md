@@ -37,4 +37,4 @@ You make a list of the things you can remember about each Aunt Sue. Things missi
 
 What is the **number** of the Sue that got you the gift?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `40`.
