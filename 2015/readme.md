@@ -15,3 +15,4 @@
 - [Day 13: Knights of the Dinner Table](day-13)
 - [Day 14: Reindeer Olympics](day-14)
 - [Day 15: Science for Hungry People](day-15)
+- [Day 16: Aunt Sue](day-16)
