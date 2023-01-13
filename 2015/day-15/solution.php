@@ -28,12 +28,11 @@ function getIngredients() : array
 /**
  * Advent of Code 2015
  * Day 15: Science for Hungry People
- * Part One
  *
- * @return integer
+ * @return array{integer,integer}
  * @throws \Exception
  */
-function aoc2015day15part1(): int
+function aoc2015day15(): array
 {
     $ingredients = getIngredients();
     $names = array_keys($ingredients);
@@ -45,6 +44,7 @@ function aoc2015day15part1(): int
         $durability = 0;
         $flavor = 0;
         $texture = 0;
+        $calories = 0;
 
         $combination = array_combine($names, $teaspoons);
 
@@ -55,24 +55,31 @@ function aoc2015day15part1(): int
             $durability += $teaspoons * $ingredient['durability'];
             $flavor += $teaspoons * $ingredient['flavor'];
             $texture += $teaspoons * $ingredient['texture'];
+            $calories += $teaspoons * $ingredient['calories'];
         }
 
         // we will scrap the whole cookie if
         // an ingredient has a negative score.
         if (min($capacity, $durability, $flavor, $texture) < 0) {
-            $cookies[] = 0;
-
             continue;
         }
 
-        $cookies[] = $capacity * $durability * $flavor * $texture;
+        $score = $capacity * $durability * $flavor * $texture;
+
+        $cookies[] = $score;
+
+        if ($calories == 500) {
+            $calorieCookies[] = $score;
+        }
+
     }
 
-    return max($cookies);
+    return [max($cookies), max($calorieCookies)];
 }
 
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
-    $cookieScore = aoc2015day15part1();
+    [$cookieScore, $calorieScore] = aoc2015day15();
 
     line("1. The score of the highest-scoring cookie is: $cookieScore");
+    line("2. The score of the highest-scoring cookie with max 500 calories is: $calorieScore");
 }
