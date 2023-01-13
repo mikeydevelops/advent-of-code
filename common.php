@@ -543,6 +543,33 @@ function combinations($array, $size = 3, $combinations = [])
 }
 
 /**
+ * Generate all possible combinations for $size numbers that sum to $sum starting from $min.
+ *
+ * @param  integer  $sum
+ * @param  integer  $size
+ * @param  integer  $min
+ * @return array<int[]>
+ */
+function numberCombinations(int $sum, int $size, int $min = 1) : array
+{
+    if ($size <= 1) {
+        return [ [ $sum ] ];
+    }
+
+    $combinations = [];
+
+    for ($i = $min; $i < $sum; $i++) {
+        $partial = numberCombinations($sum - $i, $size - 1, $min);
+
+        $combinations = array_merge($combinations, array_map(function ($combination) use ($i) {
+            return array_merge([$i], $combination);
+        }, $partial));
+    }
+
+    return array_unique($combinations, SORT_REGULAR);
+}
+
+/**
  * Create chunks representing a "sliding window" view of the items in the collection.
  *
  * @param  array  $array
