@@ -32,4 +32,4 @@ Multiplying these together (`68 * 80 * 152 * 76`, ignoring `calories` for now) r
 
 Given the ingredients in your kitchen and their properties, what is the **total score** of the highest-scoring cookie you can make?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `222870`.
