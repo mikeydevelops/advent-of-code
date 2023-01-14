@@ -1,5 +1,7 @@
 <?php
 
+use Psy\Readline\Hoa\IStream;
+
 require_once __DIR__ . '/../../common.php';
 
 /**
@@ -28,14 +30,47 @@ function getAunts() : array
 }
 
 /**
+ * Do a check for part two.
+ *
+ * @param  integer[]  $match
+ * @param  integer[]  $compounds
+ * @return boolean
+ */
+function check(array $match, array $compounds) : bool
+{
+    foreach ($match as $prop => $value) {
+        if (in_array($prop, ['cats', 'trees'])) {
+            if ($value > $compounds[$prop]) {
+                return false;
+            }
+
+            continue;
+        }
+
+        if (in_array($prop, ['pomeranians', 'goldfish'])) {
+            if ($value < $compounds[$prop]) {
+                return false;
+            }
+
+            continue;
+        }
+
+        if ($compounds[$prop] != $value) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/**
  * Advent of Code 2015
  * Day 16: Aunt Sue
- * Part One
  *
- * @return integer
+ * @return integer[]
  * @throws \Exception
  */
-function aoc2015day16part1(): int
+function aoc2015day16(): array
 {
     $aunts = getAunts();
 
@@ -54,23 +89,28 @@ function aoc2015day16part1(): int
 
     ksort($tickerTape);
 
-    $auntNo = 0;
+    $impostorAuntNo = 0;
+    $realAuntNo = 0;
 
     foreach ($aunts as $aunt => $compounds) {
         $match = array_intersect_key($tickerTape, $compounds);
 
         if ($match == $compounds) {
-            $auntNo = intval(substr($aunt, strpos($aunt, ' ')));
+            $impostorAuntNo = intval(substr($aunt, strpos($aunt, ' ')));
+        }
 
-            break;
+        if (check($match, $compounds)) {
+
+            $realAuntNo = intval(substr($aunt, strpos($aunt, ' ')));
         }
     }
 
-    return $auntNo;
+    return [$impostorAuntNo, $realAuntNo];
 }
 
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
-    $auntNo = aoc2015day16part1();
+    [$impostorAuntNo, $realAuntNo] = aoc2015day16();
 
-    line("1. The aunt that gave me the gift is Sue: $auntNo");
+    line("1. The impostor aunt that gave me the gift is Sue: $impostorAuntNo");
+    line("2. The real aunt that gave me the gift is Sue: $realAuntNo");
 }
