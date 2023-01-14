@@ -657,6 +657,27 @@ function array_filter_recursive(array $array, ?callable $callback, int $mode = 0
 }
 
 /**
+ * Unset a key from an array returning its value if set else return default.
+ *
+ * @param  array  $array
+ * @param  string|integer  $key
+ * @param  mixed  $default
+ * @return mixed
+ */
+function array_unset(array &$array, string|int $key, $default = null) : mixed
+{
+    $value = $default;
+
+    if (isset($array[$key])) {
+        $value = $array[$key];
+
+        unset($array[$key]);
+    }
+
+    return $value;
+}
+
+/**
  * Get the path to the storage folder.
  *
  * @param  string  $append...

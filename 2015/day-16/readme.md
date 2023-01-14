@@ -47,4 +47,4 @@ In particular, the `cats` and `trees` readings indicates that there are **greate
 
 What is the **number** of the real Aunt Sue?
 
-Your puzzle answer was `40`.
+Your puzzle answer was `241`.
