@@ -77,3 +77,63 @@ After `4` steps, this example has four lights on.
 In your grid of 100x100 lights, given your initial configuration, **how many lights are on after 100 steps**?
 
 Your puzzle answer was `768`.
+
+## Part Two
+
+You flip the instructions over; Santa goes on to point out that this is all just an implementation of [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway's_Game_of_Life). At least, it was, until you notice that something's wrong with the grid of lights you bought: four lights, one in each corner, are **stuck on** and can't be turned off. The example above will actually run like this:
+
+```text
+Initial state:
+##.#.#
+...##.
+#....#
+..#...
+#.#..#
+####.#
+
+After 1 step:
+#.##.#
+####.#
+...##.
+......
+#...#.
+#.####
+
+After 2 steps:
+#..#.#
+#....#
+.#.##.
+...##.
+.#..##
+##.###
+
+After 3 steps:
+#...##
+####.#
+..##.#
+......
+##....
+####.#
+
+After 4 steps:
+#.####
+#....#
+...#..
+.##...
+#.....
+#.#..#
+
+After 5 steps:
+##.###
+.##..#
+.##...
+.##...
+#.#...
+##...#
+```
+
+After `5` steps, this example now has `17` lights on.
+
+In your grid of 100x100 lights, given your initial configuration, but with the four corners always in the **on** state, **how many lights are on after 100 steps**?
+
+Your puzzle answer was `?`.
