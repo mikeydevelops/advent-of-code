@@ -17,3 +17,4 @@
 - [Day 15: Science for Hungry People](day-15)
 - [Day 16: Aunt Sue](day-16)
 - [Day 17: No Such Thing as Too Much](day-17)
+- [Day 18: Like a GIF For Your Yard](day-18)
