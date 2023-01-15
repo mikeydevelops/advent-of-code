@@ -13,4 +13,4 @@ For example, suppose you have containers of size `20`, `15`, `10`, `5`, and `5` 
 
 Filling all containers entirely, how many different **combinations of containers** can exactly fit all `150` liters of eggnog?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `1638`.
