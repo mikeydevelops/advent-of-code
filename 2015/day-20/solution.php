@@ -13,7 +13,6 @@ require_once __DIR__ . '/../../common.php';
 function aoc2015day20part1(): int
 {
     $target = intval(getInput());
-    $search = 0;
 
     $end = round($target / 10);
 
