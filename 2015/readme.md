@@ -19,3 +19,4 @@
 - [Day 17: No Such Thing as Too Much](day-17)
 - [Day 18: Like a GIF For Your Yard](day-18)
 - [Day 19: Medicine for Rudolph](day-19)
+- [Day 20: Infinite Elves and Infinite Houses](day-20)
