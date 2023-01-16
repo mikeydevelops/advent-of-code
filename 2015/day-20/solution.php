@@ -15,49 +15,49 @@ function aoc2015day20part1(): int
     $target = intval(getInput());
     $search = 0;
 
-    // Fast but memory hog
-    // $houses = [];
+    $end = round($target / 10);
 
-    // took 6g for 34M items in the array lol.
-    // ini_set('memory_limit', '6G');
+    $houses = array_fill(1, $end, 0);
 
-    // foreach (range(1, $target / 10) as $elf) {
-    //     foreach (range($elf, $target, $elf) as $house) {
-    //         if (! isset($houses[$house])) {
-    //             $houses[$house] = 0;
-    //         }
-
-    //         $houses[$house] += $elf * 10;
-    //     }
-    // }
-
-    // return min(array_keys(array_filter($houses, fn ($i) => $i >= $target)));
-
-    // slow, really slow, but doesn't hog memory.
-    // could use range(range($target / 44), $target / 10)
-    // 44 seems to be the divider to find the right house number.
-    foreach (range(1, $target / 10) as $house) {
-        $sum = 0;
-
-        foreach (range(1, $house) as $elf) {
-            if ($house % $elf == 0) {
-                $sum += $elf * 10;
-            }
-        }
-
-        if ($sum >= $target) {
-            $search = $house;
-
-            break;
+    for($i = 1; $i < $end; $i++) {
+        for($j = $i, $k = 0; $j < $end && $k < $end; $j += $i, $k++) {
+            $houses[$j] += $i * 10;
         }
     }
 
-    return $search;
+    return min(array_keys(array_filter($houses, fn ($i) => $i >= $target)));
 }
 
 
+/**
+ * Advent of Code 2015
+ * Day 20: Infinite Elves and Infinite Houses
+ * Part Two
+ *
+ * @return integer
+ * @throws \Exception
+ */
+function aoc2015day20part2(): int
+{
+    $target = intval(getInput());
+
+    $end = round($target / 11);
+
+    $houses = array_fill(1, $end, 0);
+
+    for($i = 1; $i < $end; $i++) {
+        for($j = $i, $k = 0; $j < $end && $k < 50; $j += $i, $k++) {
+            $houses[$j] += $i * 11;
+        }
+    }
+
+    return min(array_keys(array_filter($houses, fn ($i) => $i >= $target)));
+}
+
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
     $house = aoc2015day20part1();
-
     line("1. The number of the house is: $house");
+
+    $house = aoc2015day20part2();
+    line("2. The number of the house is: $house");
 }
