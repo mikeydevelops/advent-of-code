@@ -187,29 +187,32 @@ function fight(array $player1, array $player2): bool
 
 /**
  * Advent of Code 2015
- * Day 8: Matchsticks
- * Part One
+ * Day 21: RPG Simulator 20XX
  *
- * @return integer
+ * @return integer[]
  * @throws \Exception
  */
-function aoc2015day21part1(): int
+function aoc2015day21(): array
 {
     $boss = getBoss();
 
-    $costs = [];
+    $winCosts = [];
+    $loseCosts = [];
 
     foreach (getScenarios() as $player) {
         if (fight($player, $boss)) {
-            $costs[] = $player['cost'];
+            $winCosts[] = $player['cost'];
+        } else {
+            $loseCosts[] = $player['cost'];
         }
     }
 
-    return min($costs);
+    return [min($winCosts), max($loseCosts)];
 }
 
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
-    $gold = aoc2015day21part1();
+    [$winCosts, $loseCosts] = aoc2015day21();
 
-    line("1. The cheapest the boss died for is: $gold");
+    line("1. The least amount of gold spent is: $winCosts");
+    line("2. The most amount of gold spent is: $loseCosts");
 }

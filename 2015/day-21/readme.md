@@ -60,4 +60,4 @@ Turns out the shopkeeper is working with the boss, and can persuade you to buy w
 
 What is the **most** amount of gold you can spend and still **lose** the fight?
 
-Your puzzle answer was `111`.
+Your puzzle answer was `188`.
