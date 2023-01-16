@@ -52,4 +52,4 @@ In this scenario, the player wins! (Barely.)
 
 You have **100 hit points**. The boss's actual stats are in your puzzle input. What is **the least amount of gold you can spend** and still win the fight?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `111`.
