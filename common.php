@@ -678,6 +678,27 @@ function array_unset(array &$array, string|int $key, $default = null) : mixed
 }
 
 /**
+ * Create combinations for 2d array.
+ *
+ * @param  array  $data
+ * @return \Generator<array>
+ */
+function array_combinations(array $data) : Generator
+{
+    if (! empty($data)) {
+        if ($u = array_pop($data)) {
+            foreach (array_combinations($data) as $p) {
+                foreach ($u as $v) {
+                    yield array_merge($p, [$v]);
+                }
+            }
+        }
+    } else {
+        yield [];
+    }
+}
+
+/**
  * Get the path to the storage folder.
  *
  * @param  string  $append...
