@@ -32,4 +32,4 @@ The machine replaces without regard for the surrounding characters. For example,
 
 Your puzzle input describes all of the possible replacements and, at the bottom, the medicine molecule for which you need to calibrate the machine. **How many distinct molecules can be created** after all the different ways you can do one replacement on the medicine molecule?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `509`.
