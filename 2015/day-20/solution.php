@@ -17,11 +17,11 @@ function aoc2015day20part1(): int
 
     $end = round($target / 10);
 
-    $houses = array_fill(1, $end, 0);
+    $houses = array_fill(1, $end, 10);
 
-    for($i = 1; $i < $end; $i++) {
-        for($j = $i, $k = 0; $j < $end && $k < $end; $j += $i, $k++) {
-            $houses[$j] += $i * 10;
+    for($e = 2; $e < $end; $e++) {
+        for($h = $e; $h < $end; $h += $e) {
+            $houses[$h] += $e * 10;
         }
     }
 
@@ -43,11 +43,11 @@ function aoc2015day20part2(): int
 
     $end = round($target / 11);
 
-    $houses = array_fill(1, $end, 0);
+    $houses = array_fill(1, $end, 10);
 
-    for($i = 1; $i < $end; $i++) {
-        for($j = $i, $k = 0; $j < $end && $k < 50; $j += $i, $k++) {
-            $houses[$j] += $i * 11;
+    for($e = 2; $e < $end; $e++) {
+        for($h = $e, $k = 0; $h < $end && $k < 50; $h += $e, $k++) {
+            $houses[$h] += $e * 11;
         }
     }
 
