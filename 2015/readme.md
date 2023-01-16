@@ -20,3 +20,4 @@
 - [Day 18: Like a GIF For Your Yard](day-18)
 - [Day 19: Medicine for Rudolph](day-19)
 - [Day 20: Infinite Elves and Infinite Houses](day-20)
+- [Day 21: RPG Simulator 20XX](day-21)
