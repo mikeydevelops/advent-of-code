@@ -21,3 +21,4 @@
 - [Day 19: Medicine for Rudolph](day-19)
 - [Day 20: Infinite Elves and Infinite Houses](day-20)
 - [Day 21: RPG Simulator 20XX](day-21)
+- [Day 22: Wizard Simulator 20XX](day-22)
