@@ -4,6 +4,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
+use NunoMaduro\Collision\Provider;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\CommonMark\Parser\Block\HtmlBlockParser;
@@ -11,6 +12,9 @@ use League\CommonMark\Extension\GithubFlavoredMarkdownExtension;
 use Symfony\Component\DomCrawler\Crawler;
 
 $_http = null;
+
+
+(new Provider())->register();
 
 /**
  * Get the http client for Advent of Code.
