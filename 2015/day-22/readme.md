@@ -125,4 +125,4 @@ At the start of each **player turn** (before any other effects apply), you lose 
 
 With the same starting stats for you and the boss, what is the **least amount of mana** you can spend and still win the fight?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `1216`.

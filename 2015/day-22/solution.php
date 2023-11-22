@@ -54,7 +54,7 @@ function applyEffects(array $state, string $turn = 'player'): array
 }
 
 /** Simulate fight. */
-function battle(): int
+function battle(bool $hard = false): int
 {
     $spells = [
         ['Magic Missile',   53,  4, 0, 0,   0, 0],
@@ -87,6 +87,12 @@ function battle(): int
 
     while (! empty($probabilities)) {
         $state = array_pop($probabilities);
+
+        $state['health'] -= intval($hard);
+
+        if ($state['health'] <= 0) {
+            continue;
+        }
 
         $state = applyEffects($state, turn: 'player');
 
@@ -148,8 +154,22 @@ function aoc2015day22part1(): int
     return battle();
 }
 
+/**
+ * Advent of Code 2015
+ * Day 22: Wizard Simulator 20XX
+ * Part Two
+ *
+ * @return integer
+ */
+function aoc2015day22part2(): int
+{
+    return battle(hard: true);
+}
+
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
     $leastMana = aoc2015day22part1();
+    $leastManaHard = aoc2015day22part2();
 
     line("1. The least amount of mana spent is: $leastMana.");
+    line("2. The least amount of mana spent on hard mode is: $leastManaHard.");
 }
