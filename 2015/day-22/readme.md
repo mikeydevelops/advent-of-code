@@ -115,4 +115,4 @@ Poison deals 3 damage. This kills the boss, and the player wins.
 
 You start with **50 hit points** and **500 mana points**. The boss's actual stats are in your puzzle input. What is the **least amount of mana** you can spend and still win the fight? (Do not include mana recharge effects as "spending" negative mana.)
 
-Your puzzle answer was `?`.
+Your puzzle answer was `900`.
