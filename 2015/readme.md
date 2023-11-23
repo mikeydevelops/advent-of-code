@@ -23,3 +23,4 @@
 - [Day 21: RPG Simulator 20XX](day-21)
 - [Day 22: Wizard Simulator 20XX](day-22)
 - [Day 23: Opening the Turing Lock](day-23)
+- [Day 24: It Hangs in the Balance](day-24)
