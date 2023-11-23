@@ -5,15 +5,12 @@ require_once __DIR__ . '/../../common.php';
 /**
  * Advent of Code 2015
  * Day 23: Opening the Turing Lock
- * Part One
  *
- * @return integer
+ * @return array<string,integer>
  */
-function aoc2015day23part1(): int
+function aoc2015day23(array $registers = []): array
 {
     $instructions = explode("\n", getInput());
-
-    $registers = [];
 
     $idx = 0;
 
@@ -74,11 +71,15 @@ function aoc2015day23part1(): int
         }
     }
 
-    return $registers['b'];
+    return $registers;
 }
 
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
-    $registerB = aoc2015day23part1();
+    $part1 = aoc2015day23()['b'];
+    $part2 = aoc2015day23(registers: [
+        'a' => 1,
+    ])['b'];
 
-    line("1. Value in register b: $registerB.");
+    line("1. Value in register b: $part1.");
+    line("2. Value in register b when register a starts with 1: $part2.");
 }
