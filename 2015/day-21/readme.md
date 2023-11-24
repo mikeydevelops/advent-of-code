@@ -1,5 +1,7 @@
 # Day 21: RPG Simulator 20XX
 
+[https://adventofcode/2015/day/21](https://adventofcode/2015/day/21)
+
 ## Part One
 
 Little Henry Case got a new video game for Christmas. It's an [RPG](https://en.wikipedia.org/wiki/Role-playing_video_game), and he's stuck on a boss. He needs to know what equipment to buy at the shop. He hands you the [controller](https://en.wikipedia.org/wiki/Game_controller).

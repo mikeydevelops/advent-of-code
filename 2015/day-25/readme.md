@@ -1,5 +1,7 @@
 # Day 25: Let It Snow
 
+[https://adventofcode/2015/day/25](https://adventofcode/2015/day/25)
+
 ## Part One
 
 Merry Christmas! Santa is booting up his weather machine; looks like you might get a [white Christmas](/2015/day-1) after all.

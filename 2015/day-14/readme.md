@@ -1,5 +1,7 @@
 # Day 14: Reindeer Olympics
 
+[https://adventofcode/2015/day/14](https://adventofcode/2015/day/14)
+
 ## Part One
 
 This year is the Reindeer Olympics! Reindeer can fly at high speeds, but must rest occasionally to recover their energy. Santa would like to know which of his reindeer is fastest, and so he has them race.
