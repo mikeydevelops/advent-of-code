@@ -50,4 +50,4 @@ So, to find the second code (which ends up in row `2`, column `1`), start with t
 
 Santa looks nervous. Your puzzle input contains the message on the machine's console. **What code do you give the machine?**
 
-Your puzzle answer was `?`.
+Your puzzle answer was `19980801`.
