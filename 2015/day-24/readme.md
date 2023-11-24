@@ -35,4 +35,4 @@ Of these, although `10 9 1` has the smallest quantum entanglement (`90`), the co
 
 What is the **quantum entanglement** of the first group of packages in the ideal configuration?
 
-The puzzle answer was `?`.
+The puzzle answer was `11266889531`.
