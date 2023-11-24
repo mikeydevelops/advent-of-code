@@ -61,4 +61,4 @@ Of these, there are three arrangements that put the minimum (two) number of pack
 
 Now, what is the *quantum entanglement* of the first group of packages in the ideal configuration?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `77387711`.
