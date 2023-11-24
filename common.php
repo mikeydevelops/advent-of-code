@@ -521,29 +521,20 @@ function string_contains(string $haystack, $needles, bool $ignoreCase = false) :
  */
 function combinations($array, $size = 3, $combinations = [])
 {
-    if (empty($combinations)) {
-        $combinations = $array;
-    }
+    for ($i = 0; count($array) - $size >= $i; ++$i) {
+        if ($size == 1) {
+            yield [$array[$i]];
 
-    if ($size == 1) {
-        return $combinations;
-    }
+            continue;
+        }
 
-    $newCombination = [];
+        /** @var array<int, T> $permutation */
+        foreach (combinations(array_slice($array, $i + 1), $size - 1) as $permutation) {
+            array_unshift($permutation, $array[$i]);
 
-    foreach ($array as $key => $val) {
-        foreach ($combinations as $item) {
-            $item = array_wrap($item);
-
-            if(in_array($val, $item)) {
-                continue;
-            }
-
-            $newCombination[] = array_merge(array_wrap($val), $item);
+            yield $permutation;
         }
     }
-
-    return combinations($array, $size - 1, $newCombination);
 }
 
 /**
@@ -594,6 +585,27 @@ function array_sliding(array $array, $size = 2, $step = 1)
     return $windows;
 }
 
+/**
+ * Find the closest value to given needle in given array of integers.
+ *
+ * @param  integer[]  $haystack
+ * @param  integer $needle
+ * @return integer
+ */
+function array_closest(array $haystack, int $needle): int
+{
+    $closest = null;
+
+    sort($haystack);
+
+    foreach ($haystack as $item) {
+        if ($closest === null || abs($needle - $closest) > abs($item - $needle)) {
+            $closest = $item;
+        }
+    }
+
+    return $closest;
+}
 
 /**
  * Find repeating items in an array.
