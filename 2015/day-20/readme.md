@@ -1,6 +1,6 @@
 # Day 20: Infinite Elves and Infinite Houses
 
-[https://adventofcode/2015/day/20](https://adventofcode/2015/day/20)
+[https://adventofcode.com/2015/day/20](https://adventofcode.com/2015/day/20)
 
 ## Part One
 

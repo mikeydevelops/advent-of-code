@@ -1,6 +1,6 @@
 # Day 19: Medicine for Rudolph
 
-[https://adventofcode/2015/day/19](https://adventofcode/2015/day/19)
+[https://adventofcode.com/2015/day/19](https://adventofcode.com/2015/day/19)
 
 ## Part One
 

@@ -1,6 +1,6 @@
 # Day 23: Opening the Turing Lock
 
-[https://adventofcode/2015/day/23](https://adventofcode/2015/day/23)
+[https://adventofcode.com/2015/day/23](https://adventofcode.com/2015/day/23)
 
 ## Part One
 

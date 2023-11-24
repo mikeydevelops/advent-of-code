@@ -1,6 +1,6 @@
 # Day 9: All in a Single Night
 
-[https://adventofcode/2015/day/9](https://adventofcode/2015/day/9)
+[https://adventofcode.com/2015/day/9](https://adventofcode.com/2015/day/9)
 
 ## Part One
 

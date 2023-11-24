@@ -1,6 +1,6 @@
 # Day 6: Probably a Fire Hazard
 
-[https://adventofcode/2015/day/6](https://adventofcode/2015/day/6)
+[https://adventofcode.com/2015/day/6](https://adventofcode.com/2015/day/6)
 
 ## Part One
 

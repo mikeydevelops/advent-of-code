@@ -1,6 +1,6 @@
 # Day 22: Wizard Simulator 20XX
 
-[https://adventofcode/2015/day/22](https://adventofcode/2015/day/22)
+[https://adventofcode.com/2015/day/22](https://adventofcode.com/2015/day/22)
 
 ## Part One
 

@@ -1,6 +1,6 @@
 # Day 25: Let It Snow
 
-[https://adventofcode/2015/day/25](https://adventofcode/2015/day/25)
+[https://adventofcode.com/2015/day/25](https://adventofcode.com/2015/day/25)
 
 ## Part One
 

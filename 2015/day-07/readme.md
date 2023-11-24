@@ -1,6 +1,6 @@
 # Day 7: Some Assembly Required
 
-[https://adventofcode/2015/day/7](https://adventofcode/2015/day/7)
+[https://adventofcode.com/2015/day/7](https://adventofcode.com/2015/day/7)
 
 ## Part One
 

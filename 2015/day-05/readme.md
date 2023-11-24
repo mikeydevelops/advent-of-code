@@ -1,6 +1,6 @@
 # Day 5: Doesn't He Have Intern-Elves For This?
 
-[https://adventofcode/2015/day/5](https://adventofcode/2015/day/5)
+[https://adventofcode.com/2015/day/5](https://adventofcode.com/2015/day/5)
 
 ## Part One
 

@@ -1,6 +1,6 @@
 # Day 8: Matchsticks
 
-[https://adventofcode/2015/day/8](https://adventofcode/2015/day/8)
+[https://adventofcode.com/2015/day/8](https://adventofcode.com/2015/day/8)
 
 ## Part One
 

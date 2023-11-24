@@ -1,6 +1,6 @@
 # Day 2: I Was Told There Would Be No Math
 
-[https://adventofcode/2015/day/2](https://adventofcode/2015/day/2)
+[https://adventofcode.com/2015/day/2](https://adventofcode.com/2015/day/2)
 
 ## Part One
 

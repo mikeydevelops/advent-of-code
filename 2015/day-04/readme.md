@@ -1,6 +1,6 @@
 # Day 4: The Ideal Stocking Stuffer
 
-[https://adventofcode/2015/day/4](https://adventofcode/2015/day/4)
+[https://adventofcode.com/2015/day/4](https://adventofcode.com/2015/day/4)
 
 ## Part One
 

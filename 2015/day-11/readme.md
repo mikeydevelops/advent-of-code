@@ -1,6 +1,6 @@
 # Day 11: Corporate Policy
 
-[https://adventofcode/2015/day/11](https://adventofcode/2015/day/11)
+[https://adventofcode.com/2015/day/11](https://adventofcode.com/2015/day/11)
 
 ## Part One
 

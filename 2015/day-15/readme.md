@@ -1,6 +1,6 @@
 # Day 15: Science for Hungry People
 
-[https://adventofcode/2015/day/15](https://adventofcode/2015/day/15)
+[https://adventofcode.com/2015/day/15](https://adventofcode.com/2015/day/15)
 
 ## Part One
 

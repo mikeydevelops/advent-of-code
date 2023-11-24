@@ -1,6 +1,6 @@
 # Day 12: JSAbacusFramework.io
 
-[https://adventofcode/2015/day/12](https://adventofcode/2015/day/12)
+[https://adventofcode.com/2015/day/12](https://adventofcode.com/2015/day/12)
 
 ## Part One
 

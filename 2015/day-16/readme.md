@@ -1,6 +1,6 @@
 # Day 16: Aunt Sue
 
-[https://adventofcode/2015/day/16](https://adventofcode/2015/day/16)
+[https://adventofcode.com/2015/day/16](https://adventofcode.com/2015/day/16)
 
 ## Part One
 
