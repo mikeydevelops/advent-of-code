@@ -48,7 +48,6 @@ Balance the sleigh again, but this time, separate the packages into **four group
 Given the example packages above, this would be some of the new unique first groups, their quantum entanglements, and one way to divide the remaining packages:
 
 ```txt
-
 11 4    (QE=44); 10 5;   9 3 2 1; 8 7
 10 5    (QE=50); 11 4;   9 3 2 1; 8 7
 9 5 1   (QE=45); 11 4;   10 3 2;  8 7
@@ -59,6 +58,6 @@ Given the example packages above, this would be some of the new unique first gro
 
 Of these, there are three arrangements that put the minimum (two) number of packages in the first group: `11 4`, `10 5`, and `8 7`. Of these, `11 4` has the lowest quantum entanglement, and so it is selected.
 
-Now, what is the *quantum entanglement* of the first group of packages in the ideal configuration?
+Now, what is the **quantum entanglement** of the first group of packages in the ideal configuration?
 
 Your puzzle answer was `77387711`.
