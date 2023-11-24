@@ -2,7 +2,7 @@
 
 ## Part One
 
-Merry Christmas! Santa is booting up his weather machine; looks like you might get a [white Christmas](https://adventofcode.com/2015/day/1) after all.
+Merry Christmas! Santa is booting up his weather machine; looks like you might get a [white Christmas](/2015/day-1) after all.
 
 The weather machine beeps! On the console of the machine is a copy protection message asking you to [enter a code from the instruction manual](https://en.wikipedia.org/wiki/Copy_protection#Early_video_games). Apparently, it refuses to run unless you give it that code. No problem; you'll just look up the code in the--
 
@@ -49,3 +49,5 @@ So, to find the second code (which ends up in row `2`, column `1`), start with t
 "Now remember", the voice continues, "that's not even all of the first few numbers; for example, you're missing the one at 7,1 that would come before 6,2. But, it should be enough to let your-- oh, it's time for lunch! Bye!" The call disconnects.
 
 Santa looks nervous. Your puzzle input contains the message on the machine's console. **What code do you give the machine?**
+
+Your puzzle answer was `?`.
