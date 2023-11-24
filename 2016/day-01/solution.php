@@ -23,9 +23,9 @@ function getDirections(): array
  *
  * Part One
  *
- * @return int
+ * @return array
  */
-function aoc2016day1part1(): int
+function aoc2016day1(): array
 {
     $directions = getDirections();
 
@@ -33,27 +33,45 @@ function aoc2016day1part1(): int
     $x = 0;
     $y = 0;
 
+    $first = null;
+    $visits = [];
+
     foreach ($directions as $dir) {
         $facing += $dir['direction'] == 'left' ? -1 : 1;
 
         $facing = $facing > 3 ? 0 : ($facing < 0 ? 3 : $facing);
 
-        $blocks = ($facing > 1 ? -1 : 1) * $dir['blocks'];
+        foreach (range(1, $dir['blocks']) as $_) {
+            $facing == 0 ? ($y ++) : null;
+            $facing == 1 ? ($x ++) : null;
+            $facing == 2 ? ($y --) : null;
+            $facing == 3 ? ($x --) : null;
 
-        if ($facing == 0 || $facing == 2) {
-            $y += $blocks;
+            if (isset($first)) {
+                continue;
+            }
 
-            continue;
+            $loc = "$x,$y";
+
+            if (! isset($visits[$loc])) {
+                $visits[$loc] = 0;
+            }
+
+            $visits[$loc] ++;
+
+            if ($visits[$loc] == 2) {
+                $first = abs($x) + abs($y);
+            }
         }
 
-        $x += $blocks;
     }
 
-    return abs($x) + abs($y);
+    return [abs($x) + abs($y), $first];
 }
 
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
-    $part1 = aoc2016day1part1();
+    [$blocks, $first] = aoc2016day1();
 
-    line("1. The Easter Bunny HQ is [$part1] blocks away.");
+    line("1. The Easter Bunny HQ is [$blocks] blocks away.");
+    line("2. The first location visited twice is [$first] blocks away.");
 }

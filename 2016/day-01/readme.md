@@ -32,4 +32,4 @@ For example, if your instructions are `R8, R4, R4, R8`, the first location you v
 
 How many blocks away is the **first location you visit twice** ?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `110`.
