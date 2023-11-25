@@ -9,6 +9,11 @@ My Advent of Code solutions in PHP.
 
 ## How to Use
 
+### Requirements
+
+- `php >= 8.1` - only tested on php 8.1, not guaranteeing it works on lower versions, but it probably will if the type declarations are removed.
+- `composer`
+
 ### Clone the repository
 
 ```bash
