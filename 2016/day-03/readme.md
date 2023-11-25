@@ -14,4 +14,4 @@ In a valid triangle, the sum of any two sides must be larger than the remaining 
 
 In your puzzle input, **how many** of the listed triangles are **possible** ?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `982`.
