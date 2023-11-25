@@ -110,5 +110,5 @@ if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
     $codeNewKeypad = aoc2016day2part2();
 
     line("1. The bathroom code is: $code.");
-    line("1. The bathroom code with new keypad is: $codeNewKeypad.");
+    line("2. The bathroom code with new keypad is: $codeNewKeypad.");
 }
