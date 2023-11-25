@@ -99,7 +99,6 @@ function aoc2016day4part1(): int
     return array_sum(array_column($realRooms, 'sector'));
 }
 
-
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
     $real = aoc2016day4part1();
 
