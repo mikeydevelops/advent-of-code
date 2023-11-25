@@ -832,3 +832,29 @@ function getMarkdown(int $year, int $day) : string
 
     return '';
 }
+
+/**
+ * Rotate a character using caesar's cipher.
+ *
+ * @param  string  $char
+ * @param  integer $n  The amount of times to rotate the character.
+ * @return string
+ */
+function caesar_char(string $char, int $n): string
+{
+    $code = ord($char);
+
+    // these help with upper or lower case characters.
+    $start = $code > 96 && $code < 123 ? 97 : 65;
+    $end = $start == 97 ? 122 : 90;
+
+    for ($i = 0; $i < $n; $i++) {
+        $code ++;
+
+        if ($code > $end) {
+            $code = $start;
+        }
+    }
+
+    return chr($code);
+}
