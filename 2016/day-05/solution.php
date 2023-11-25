@@ -10,7 +10,25 @@
  */
 function aoc2016day5part1(): string
 {
-    return '';
+    $doorId = getInput();
+
+    $password = '';
+
+    $i = 0;
+    while (strlen($password) < 8) {
+        $candidate = md5($doorId.$i);
+        $i++;
+
+        $sub = substr($candidate, 0, 5);
+
+        if ($sub !== '00000') {
+            continue;
+        }
+
+        $password .= $candidate[5];
+    }
+
+    return $password;
 }
 
 

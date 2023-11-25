@@ -20,4 +20,4 @@ In this example, after continuing this search a total of eight times, the passwo
 
 Given the actual Door ID, **what is the password** ?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `f77a0e6e` given the door id was `cxdnnyjw`.
