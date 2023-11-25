@@ -17,5 +17,5 @@ function aoc2016day5part1(): string
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
     $password = aoc2016day5part1();
 
-    line("1. The number of possible triangles is: $password.");
+    line("1. The password is: $password.");
 }
