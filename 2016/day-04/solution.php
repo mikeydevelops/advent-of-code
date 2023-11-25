@@ -11,7 +11,7 @@ function parseRoom(string $room): array
     preg_match('/^([a-z\-]+)\-(\d+)\[([a-z]+)\]$/i', $room, $matches);
 
     return [
-        'name' => $matches[1],
+        'encrypted_name' => $matches[1],
         'sector' => intval($matches[2]),
         'checksum' => $matches[3],
     ];
@@ -42,7 +42,7 @@ function getRooms(bool $example = false): array
  */
 function isRealRoom(array $room): bool
 {
-    return $room['checksum'] === getRoomChecksum($room['name']);
+    return $room['checksum'] === getRoomChecksum($room['encrypted_name']);
 }
 
 /**
@@ -83,6 +83,31 @@ function getRoomChecksum(string $name): string
 }
 
 /**
+ * Decrypt the name of the given room.
+ *
+ * @param  array  $room
+ * @return array
+ */
+function decryptRoom(array $room): array
+{
+    $name = '';
+
+    foreach (str_split($room['encrypted_name']) as $char) {
+        if ($char == '-') {
+            $name .= ' ';
+
+            continue;
+        }
+
+        $name .= caesar_char($char, $room['sector']);
+    }
+
+    $room['name'] = $name;
+
+    return $room;
+}
+
+/**
  * Advent of Code 2016
  * Day 4: Security Through Obscurity
  *
@@ -99,8 +124,33 @@ function aoc2016day4part1(): int
     return array_sum(array_column($realRooms, 'sector'));
 }
 
+/**
+ * Advent of Code 2016
+ * Day 4: Security Through Obscurity
+ *
+ * Part Two
+ *
+ * @return int
+ */
+function aoc2016day4part2(): int
+{
+    $rooms = getRooms();
+
+    $rooms = array_filter($rooms, 'isRealRoom');
+
+    $rooms = array_map('decryptRoom', $rooms);
+
+    $storage = array_values(array_filter($rooms, function ($room) {
+        return $room['name'] == 'northpole object storage';
+    }))[0];
+
+    return $storage['sector'];
+}
+
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
     $real = aoc2016day4part1();
+    $sectorId = aoc2016day4part2();
 
     line("1. The real rooms are: $real.");
+    line("2. The sector id for North Pole objects room is: $sectorId.");
 }
