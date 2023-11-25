@@ -61,4 +61,4 @@ So, given the actual keypad layout, the code would be `5DB3`.
 
 Using the same instructions in your puzzle input, what is the correct **bathroom code** ?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `AC8C8`.
