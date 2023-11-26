@@ -34,4 +34,4 @@ For example:
 
 **How many IPs** in your puzzle input support SSL?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `231`.
