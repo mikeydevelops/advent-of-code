@@ -11,8 +11,8 @@ function parseIpv7(string $ip): array
     preg_match_all('/([a-z]+)(?:\[([a-z]+)\])?/i', $ip, $matches);
 
     return [
-        'strings' => $matches[1],
-        'hypernets' => array_filter($matches[2]),
+        'string' => implode(':-', $matches[1]),
+        'hypernet' => implode(':-', array_filter($matches[2])),
     ];
 }
 
@@ -66,19 +66,7 @@ function ipv7SupportsTls(string $ip): bool
 {
     $parts = parseIpv7($ip);
 
-    foreach ($parts['hypernets'] as $hyper) {
-        if (hasAbba($hyper)) {
-            return false;
-        }
-    }
-
-    foreach ($parts['strings'] as $str) {
-        if (hasAbba($str)) {
-            return true;
-        }
-    }
-
-    return false;
+    return !hasAbba($parts['hypernet']) && hasAbba($parts['string']);
 }
 
 /**
