@@ -45,4 +45,4 @@ In the above example, the least common character in the first column is `a`; in 
 
 Given the recording in your puzzle input and this new decoding methodology, **what is the original message** that Santa is trying to send?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `jucfoary`.
