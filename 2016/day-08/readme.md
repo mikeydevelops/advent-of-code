@@ -25,7 +25,6 @@ For example, here is a simple sequence on a smaller screen:
   ###....
   .......
   ```
-
 * `rotate column x=1 by 1` rotates the second column down by one pixel:
 
   ```txt
@@ -33,7 +32,6 @@ For example, here is a simple sequence on a smaller screen:
   ###....
   .#.....
   ```
-
 * `rotate row y=0 by 4` rotates the top row right by four pixels:
 
   ```txt
@@ -41,7 +39,6 @@ For example, here is a simple sequence on a smaller screen:
   ###....
   .#.....
   ```
-
 * `rotate column x=1 by 1` again rotates the second column down by one pixel, causing the bottom pixel to wrap back to the top:
 
   ```txt
@@ -55,3 +52,11 @@ As you can see, this display technology is extremely powerful, and will soon dom
 There seems to be an intermediate check of the voltage used by the display: after you swipe your card, if the screen did work, **how many pixels should be lit?**
 
 Your puzzle answer was `123`.
+
+## Part Two
+
+You notice that the screen is only capable of displaying capital letters; in the font it uses, each letter is `5` pixels wide and `6` tall.
+
+After you swipe your card, **what code is the screen trying to display?**
+
+Your puzzle answer was `AFBUPZBJPS`.
