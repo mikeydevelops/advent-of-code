@@ -858,3 +858,19 @@ function caesar_char(string $char, int $n): string
 
     return chr($code);
 }
+
+/**
+ * Rotate array elements $amount times to the right.
+ *
+ * @param  array  $array
+ * @param  integer  $amount
+ * @return array
+ */
+function array_rotate(array $array, int $amount = 1): array
+{
+    for ($i = 0; $i < $amount; $i ++) {
+        array_unshift($array, array_pop($array));
+    }
+
+    return $array;
+}
