@@ -33,4 +33,4 @@ The most common character in the first column is `e`; in the second, `a`; in the
 
 Given the recording in your puzzle input, **what is the error-corrected version** of the message being sent?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `gyvwpxaz`.
