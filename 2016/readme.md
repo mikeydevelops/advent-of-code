@@ -7,3 +7,4 @@
 - [Day 05: How About a Nice Game of Chess?](day-05)
 - [Day 06: Signals and Noise](day-06)
 - [Day 07: Internet Protocol Version 7](day-07)
+- [Day 08: Two-Factor Authentication](day-08)
