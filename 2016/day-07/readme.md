@@ -17,4 +17,4 @@ For example:
 
 **How many IPs** in your puzzle input support TLS?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `115`.
