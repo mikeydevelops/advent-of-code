@@ -54,12 +54,9 @@ function getInstructions(bool $example = false): array
  * @param  array  $display
  * @return void
  */
-function renderDisplay(array $display): void
+function renderDisplay(array $display, array $replacers = null): void
 {
-    $replacers = [
-        0 => '.',
-        1 => '#',
-    ];
+    $replacers = $replacers ?? [ '.', '#', ];
 
     foreach ($display as $row) {
         $line = '';
@@ -73,19 +70,14 @@ function renderDisplay(array $display): void
 }
 
 /**
- * Advent of Code 2016
- * Day 8: Two-Factor Authentication
+ * Compute image from given instructions.
  *
- * Part One
- *
- * @return int
+ * @param  array  $display
+ * @param  array  $instructions
+ * @return array
  */
-function aoc2016day8part1(): int
+function computeImage(array $display, array $instructions): array
 {
-    $instructions = getInstructions(example: false);
-
-    $display = makeGrid(6, 50, 0);
-
     foreach ($instructions as $i) {
         $cmd = $i['command'];
         $args = $i['args'];
@@ -113,11 +105,51 @@ function aoc2016day8part1(): int
         }
     }
 
+    return $display;
+}
+
+/**
+ * Advent of Code 2016
+ * Day 8: Two-Factor Authentication
+ *
+ * Part One
+ *
+ * @return int
+ */
+function aoc2016day8part1(): int
+{
+    $instructions = getInstructions(example: false);
+
+    $display = makeGrid(6, 50, 0);
+
+    $display = computeImage($display, $instructions);
+
     return array_sum(array_map('array_sum', $display));
+}
+
+/**
+ * Advent of Code 2016
+ * Day 8: Two-Factor Authentication
+ *
+ * Part Two
+ *
+ * @return void
+ */
+function aoc2016day8part2(): void
+{
+    $instructions = getInstructions(example: false);
+
+    $display = makeGrid(6, 50, 0);
+
+    $display = computeImage($display, $instructions);
+
+    renderDisplay($display, [' ', '#']);
 }
 
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
     $litPixels = aoc2016day8part1();
 
     line("1. The lit pixels are: $litPixels.");
+
+    aoc2016day8part2();
 }
