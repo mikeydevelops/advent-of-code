@@ -109,6 +109,41 @@ function computeImage(array $display, array $instructions): array
 }
 
 /**
+ * Try to read the given display.
+ *
+ * @param  array  $display
+ * @return string
+ */
+function readDisplay(array $display): string
+{
+    $result = '';
+    $display = array_flip_row_column($display);
+
+    $letters = array_sliding($display, 5, 5);
+
+    $alphabet = [
+        'A' => [5, 2, 2, 5, 0],
+        'B' => [6, 3, 3, 3, 0],
+        'F' => [6, 2, 2, 1, 0],
+        'J' => [1, 1, 2, 5, 0],
+        'U' => [5, 1, 1, 5, 0],
+        'P' => [6, 2, 2, 2, 0],
+        'S' => [3, 3, 3, 2, 0],
+        'Z' => [3, 3, 3, 3, 0],
+    ];
+
+    foreach ($letters as $letter) {
+        array_flip_row_column($letter);
+
+        $pattern = array_map('array_sum', $letter);
+
+        $result .= array_search($pattern, $alphabet) ?: '?';
+    }
+
+    return $result;
+}
+
+/**
  * Advent of Code 2016
  * Day 8: Two-Factor Authentication
  *
@@ -133,9 +168,9 @@ function aoc2016day8part1(): int
  *
  * Part Two
  *
- * @return void
+ * @return string
  */
-function aoc2016day8part2(): void
+function aoc2016day8part2(): string
 {
     $instructions = getInstructions(example: false);
 
@@ -144,12 +179,16 @@ function aoc2016day8part2(): void
     $display = computeImage($display, $instructions);
 
     renderDisplay($display, [' ', '#']);
+
+    return readDisplay($display);
 }
 
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
     $litPixels = aoc2016day8part1();
 
-    line("1. The lit pixels are: $litPixels.");
+    $code = aoc2016day8part2();
+    line('');
 
-    aoc2016day8part2();
+    line("1. The lit pixels are: $litPixels.");
+    line("2. The code is: $code.");
 }

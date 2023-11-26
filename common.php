@@ -874,3 +874,22 @@ function array_rotate(array $array, int $amount = 1): array
 
     return $array;
 }
+
+/**
+ * Flip the rows and columns in 2d array.
+ *
+ * i.e. if array is accessed as array[y][x] it will become array[x][y].
+ *
+ * @param  array  $array
+ * @return array
+ */
+function array_flip_row_column(array $array): array
+{
+    $result = [];
+
+    for ($i = 0; $i < count($array[0]); $i++) {
+        $result[] = array_column($array, $i);
+    }
+
+    return $result;
+}
