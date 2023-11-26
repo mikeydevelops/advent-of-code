@@ -5,3 +5,4 @@
 - [Day 03: Squares With Three Sides](day-03)
 - [Day 04: Security Through Obscurity](day-04)
 - [Day 05: How About a Nice Game of Chess?](day-05)
+- [Day 06: Signals and Noise](day-06)
