@@ -23,16 +23,24 @@ function getFile(bool $example = false): string
  * Decompress the given string using the algo provided by the challenge.
  *
  * @param  string  $input
- * @return string
+ * @return string|integer
  */
-function decompress(string $input): string
+function decompress(string $input, bool $countOnly = false, bool $improved = false): string|int
 {
-    $result = '';
+    $result = $countOnly ? 0 : '';
 
     for ($i = 0; $i < strlen($input); $i++) {
         $char = $input[$i];
 
         if ($char != '(') {
+            if ($countOnly) {
+                if (trim($char)) {
+                    $result += 1;
+                }
+
+                continue;
+            }
+
             $result .= $char;
 
             continue;
@@ -44,7 +52,11 @@ function decompress(string $input): string
 
         $data = str_repeat(substr($input, $end+1, $len), $repeat);
 
-        $result .= $data;
+        if ($countOnly) {
+            $result += $improved ? decompress($data, $countOnly, $improved) : strlen(preg_replace('/[\s|\n|\r|\t|\v|\0]+/', '', $data));
+        } else {
+            $result .= $improved ? decompress($data, $countOnly, $improved) : $data;
+        }
 
         $i = $end + $len;
     }
@@ -62,11 +74,27 @@ function decompress(string $input): string
  */
 function aoc2016day9part1(): int
 {
-    return strlen(preg_replace('/[\s|\n|\r|\t|\v|\0]+/', '', decompress(getFile())));
+    return decompress(getFile(), countOnly: true);
+}
+
+/**
+ * Advent of Code 2016
+ * Day 9: Explosives in Cyberspace
+ *
+ * Part Two
+ *
+ * @return int
+ */
+function aoc2016day9part2(): int
+{
+    // ! Takes very long time, needs some optimisation, lol!
+    return decompress(getFile(), improved: true, countOnly: true);
 }
 
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
     $length = aoc2016day9part1();
-
     line("1. The decompressed length is: $length.");
+
+    $improved = aoc2016day9part2();
+    line("2. The decompressed length with improved algo is: $improved.");
 }
