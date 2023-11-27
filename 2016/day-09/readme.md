@@ -40,4 +40,4 @@ Unfortunately, the computer you brought probably doesn't have enough memory to a
 
 What is the **decompressed length** of the file using this improved format?
 
-Your puzzle answer was `?`.
+Your puzzle answer was `10931789799`.
