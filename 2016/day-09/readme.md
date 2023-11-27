@@ -21,4 +21,4 @@ For example:
 
 What is the **decompressed length** of the file (your puzzle input)? Don't count whitespace.
 
-Your puzzle answer was `?`.
+Your puzzle answer was `112830`.
