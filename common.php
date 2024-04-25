@@ -209,14 +209,13 @@ function askForSession(bool $describe = true) : string
     if ($describe) {
         $lines = [
             'To get the session follow these steps:',
-            '1. Visit https://adventofcode.com/',
-            '2. Click on the padlock on the left of the url in your browser.',
-            '3. Click on Cookies.',
-            '4. On the popup that opened. In the site list, expand adventofcode.com',
-            '5. Expand Cookies folder.',
-            '6. Click on session cookie.',
-            '7. Copy the value of Content field under the site list.',
-            '8. Paste the value in the terminal.',
+            '1. Visit https://adventofcode.com',
+            '2. After the site has loaded, press F12 or CTRL+SHIFT+I on your keyboard.',
+            '3. After developer tools open, click on [Application] tab,',
+            '   for chromium based browsers, or [Storage] tab for firefox.',
+            '4. Expand Cookies from the left sidebar and click on https://adventofcode.com',
+            '5. Copy the value from the cookie row with name session.',
+            '6. Paste the value in the terminal.',
         ];
 
         print(implode(PHP_EOL, $lines) . PHP_EOL . PHP_EOL);
