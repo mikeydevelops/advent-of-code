@@ -10,3 +10,4 @@
 - [Day 08: Two-Factor Authentication](day-08)
 - [Day 09: Explosives in Cyberspace](day-09)
 - [Day 10: Balance Bots](day-10)
+- [Day 11: Radioisotope Thermoelectric Generators](day-11)
