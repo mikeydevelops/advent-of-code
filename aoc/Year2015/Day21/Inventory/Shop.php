@@ -1,17 +1,17 @@
 <?php
 
-namespace RPGSimulator20XX\Inventory;
+namespace Mike\AdventOfCode\Year2015\Day21\Inventory;
 
 use Exception;
-use RPGSimulator20XX\Inventory\Items\Item;
-use RPGSimulator20XX\Inventory\Items\ItemCollection;
+use Mike\AdventOfCode\Year2015\Day21\Inventory\Items\Item;
+use Mike\AdventOfCode\Year2015\Day21\Inventory\Items\ItemCollection;
 
 class Shop
 {
     /**
      * The items that can be sold.
      *
-     * @var \RPGSimulator20XX\Inventory\Items\ItemCollection
+     * @var \Mike\AdventOfCode\Year2015\Day21\Inventory\Items\ItemCollection
      */
     protected ItemCollection $items;
 
@@ -36,7 +36,7 @@ class Shop
      * Purchase an item.
      *
      * @param  string  $itemName
-     * @return \RPGSimulator20XX\Inventory\Items\Item
+     * @return \Mike\AdventOfCode\Year2015\Day21\Inventory\Items\Item
      * @throws \Exception
      */
     public function purchase(string $itemName): Item

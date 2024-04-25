@@ -1,16 +1,16 @@
 <?php
 
-namespace RPGSimulator20XX\Inventory\Items;
+namespace Mike\AdventOfCode\Year2015\Day21\Inventory\Items;
 
 use Countable;
-use RPGSimulator20XX\Inventory\Items\Item;
+use Mike\AdventOfCode\Year2015\Day21\Inventory\Items\Item;
 
 class ItemCollection implements Countable
 {
     /**
      * The items.
      *
-     * @var \RPGSimulator20XX\Inventory\Items\Item[]
+     * @var \Mike\AdventOfCode\Year2015\Day21\Inventory\Items\Item[]
      */
     protected array $items = [];
 
@@ -57,7 +57,7 @@ class ItemCollection implements Countable
     /**
      * Add new item to the array.
      *
-     * @param  \RPGSimulator20XX\Inventory\Items\Item  $item
+     * @param  \Mike\AdventOfCode\Year2015\Day21\Inventory\Items\Item  $item
      * @return static
      */
     public function push(Item $item): static
@@ -72,7 +72,7 @@ class ItemCollection implements Countable
      * Get the first item in the collection.s
      *
      * @param  mixed  $default
-     * @return \RPGSimulator20XX\Inventory\Items\Item|null|mixed
+     * @return \Mike\AdventOfCode\Year2015\Day21\Inventory\Items\Item|null|mixed
      */
     public function first($default = null): mixed
     {

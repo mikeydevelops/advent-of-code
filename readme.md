@@ -4,8 +4,8 @@ My Advent of Code solutions in PHP.
 
 ## Solutions
 
-- [Year 2015](2015)
-- [Year 2016](2016)
+- [Year 2015](aoc/Year2015)
+- [Year 2016](aoc/Year2016)
 
 ## How to Use
 

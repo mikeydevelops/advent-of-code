@@ -1,17 +1,17 @@
 <?php
 
-namespace RPGSimulator20XX\Inventory;
+namespace Mike\AdventOfCode\Year2015\Day21\Inventory;
 
 use Exception;
-use RPGSimulator20XX\Inventory\Items\Item;
-use RPGSimulator20XX\Inventory\Items\ItemCollection;
+use Mike\AdventOfCode\Year2015\Day21\Inventory\Items\Item;
+use Mike\AdventOfCode\Year2015\Day21\Inventory\Items\ItemCollection;
 
 class PlayerInventory extends ItemCollection
 {
     /**
      * Add an item to the array.
      *
-     * @param  \RPGSimulator20XX\Inventory\Items\Item  $item
+     * @param  \Mike\AdventOfCode\Year2015\Day21\Inventory\Items\Item  $item
      * @return static
      */
     public function add(Item $item): static

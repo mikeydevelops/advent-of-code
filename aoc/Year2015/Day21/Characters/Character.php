@@ -1,6 +1,6 @@
 <?php
 
-namespace RPGSimulator20XX\Characters;
+namespace Mike\AdventOfCode\Year2015\Day21\Characters;
 
 abstract class Character
 {

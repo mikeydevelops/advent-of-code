@@ -1,5 +1,9 @@
 <?php
 
+namespace Mike\AdventOfCode\Year2015\Day09;
+
+use Exception;
+
 class Distance
 {
     /**

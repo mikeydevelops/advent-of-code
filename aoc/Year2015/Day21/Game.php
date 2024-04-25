@@ -1,24 +1,10 @@
 <?php
 
-namespace RPGSimulator20XX;
-
-require_once __DIR__ . '/Characters/Character.php';
-require_once __DIR__ . '/Characters/Boss.php';
-require_once __DIR__ . '/Characters/Player.php';
-
-require_once __DIR__ . '/Inventory/Items/ItemCollection.php';
-require_once __DIR__ . '/Inventory/Items/Item.php';
-require_once __DIR__ . '/Inventory/Items/Armor.php';
-require_once __DIR__ . '/Inventory/Items/Ring.php';
-require_once __DIR__ . '/Inventory/Items/Weapon.php';
-
-require_once __DIR__ . '/Inventory/Shop.php';
-require_once __DIR__ . '/Inventory/PlayerInventory.php';
-
+namespace Mike\AdventOfCode\Year2015\Day21;
 
 use Exception;
-use RPGSimulator20XX\Characters\Character;
-use RPGSimulator20XX\Inventory\Shop;
+use Mike\AdventOfCode\Year2015\Day21\Characters\Character;
+use Mike\AdventOfCode\Year2015\Day21\Inventory\Shop;
 
 class Game
 {
@@ -32,43 +18,43 @@ class Game
     /**
      * The first player.
      *
-     * @var \RPGSimulator20XX\Characters\Character
+     * @var \Mike\AdventOfCode\Year2015\Day21\Characters\Character
      */
     protected Character $player1;
 
     /**
      * The second player.
      *
-     * @var \RPGSimulator20XX\Characters\Character
+     * @var \Mike\AdventOfCode\Year2015\Day21\Characters\Character
      */
     protected Character $player2;
 
     /**
      * The player who won the game.
      *
-     * @var \RPGSimulator20XX\Characters\Character
+     * @var \Mike\AdventOfCode\Year2015\Day21\Characters\Character
      */
     protected Character $winner;
 
     /**
      * The player who lost the game.
      *
-     * @var \RPGSimulator20XX\Characters\Character
+     * @var \Mike\AdventOfCode\Year2015\Day21\Characters\Character
      */
     protected Character $loser;
 
     /**
      * The game shop.
      *
-     * @var \RPGSimulator20XX\Inventory\Shop
+     * @var \Mike\AdventOfCode\Year2015\Day21\Inventory\Shop
      */
     protected Shop $shop;
 
     /**
      * Create new instance of Game class.
      *
-     * @param  \RPGSimulator20XX\Characters\Character  $player1
-     * @param  \RPGSimulator20XX\Characters\Character  $player2
+     * @param  \Mike\AdventOfCode\Year2015\Day21\Characters\Character  $player1
+     * @param  \Mike\AdventOfCode\Year2015\Day21\Characters\Character  $player2
      * @return void
      */
     public function __construct()
@@ -79,7 +65,7 @@ class Game
     /**
      * Run the game.
      *
-     * @return \RPGSimulator20XX\Characters\Character
+     * @return \Mike\AdventOfCode\Year2015\Day21\Characters\Character
      */
     public function run() : Character
     {
@@ -134,7 +120,7 @@ class Game
     /**
      * Set the first player for the game.
      *
-     * @param  \RPGSimulator20XX\Characters\Character  $character
+     * @param  \Mike\AdventOfCode\Year2015\Day21\Characters\Character  $character
      * @return $this
      */
     public function setPlayer1(Character $character): static
@@ -147,7 +133,7 @@ class Game
     /**
      * Set the second player for the game.
      *
-     * @param  \RPGSimulator20XX\Characters\Character  $character
+     * @param  \Mike\AdventOfCode\Year2015\Day21\Characters\Character  $character
      * @return $this
      */
     public function setPlayer2(Character $character): static
@@ -160,7 +146,7 @@ class Game
     /**
      * Get the shop.
      *
-     * @return \RPGSimulator20XX\Inventory\Shop
+     * @return \Mike\AdventOfCode\Year2015\Day21\Inventory\Shop
      */
     public function getShop(): Shop
     {
@@ -170,7 +156,7 @@ class Game
     /**
      * Get the winner character.
      *
-     * @return \RPGSimulator20XX\Characters\Character
+     * @return \Mike\AdventOfCode\Year2015\Day21\Characters\Character
      * @throws \Exception
      */
     public function getWinner(): Character
@@ -185,7 +171,7 @@ class Game
     /**
      * Get the loser character.
      *
-     * @return \RPGSimulator20XX\Characters\Character
+     * @return \Mike\AdventOfCode\Year2015\Day21\Characters\Character
      * @throws \Exception
      */
     public function getLoser(): Character

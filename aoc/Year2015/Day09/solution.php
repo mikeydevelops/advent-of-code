@@ -1,7 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../../common.php';
-require_once __DIR__ . '/Distance.php';
+use Mike\AdventOfCode\Year2015\Day09\Distance;
 
 /**
  * Parse the raw distance string.

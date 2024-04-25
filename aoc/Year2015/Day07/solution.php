@@ -1,13 +1,14 @@
 <?php
 
-require_once __DIR__ . '/../../common.php';
-require_once __DIR__ . '/LogicGate.php';
-require_once __DIR__ . '/Wire.php';
+namespace Mike\AdventOfCode\Year2015\Day08;
+
+use Mike\AdventOfCode\Year2015\Day08\LogicGate;
+use Mike\AdventOfCode\Year2015\Day08\Wire;
 
 /**
  * Get the instructions parsed instructions.
  *
- * @return \LogicGate[]
+ * @return \Mike\AdventOfCode\Year2015\Day08\LogicGate[]
  * @throws \Exception
  */
 function getInstructions()

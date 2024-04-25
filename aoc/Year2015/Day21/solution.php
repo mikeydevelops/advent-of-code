@@ -1,20 +1,18 @@
 <?php
 
-require_once __DIR__ . '/../../common.php';
+namespace Mike\AdventOfCode\Year2015\Day21;
 
-require_once __DIR__ . '/Game.php';
-
-use RPGSimulator20XX\Characters\Boss;
-use RPGSimulator20XX\Characters\Player;
-use RPGSimulator20XX\Game;
-use RPGSimulator20XX\Inventory\Items\Item;
+use Mike\AdventOfCode\Year2015\Day21\Characters\Boss;
+use Mike\AdventOfCode\Year2015\Day21\Characters\Player;
+use Mike\AdventOfCode\Year2015\Day21\Game;
+use Mike\AdventOfCode\Year2015\Day21\Inventory\Items\Item;
 
 $boss = null;
 
 /**
  * Make a new instance of the boss.
  *
- * @return \RPGSimulator20XX\Characters\Boss
+ * @return \Mike\AdventOfCode\Year2015\Day21\Characters\Boss
  * @throws \Exception
  */
 function makeBoss(): Boss
@@ -39,10 +37,10 @@ function makeBoss(): Boss
 /**
  * Generate player inventory scenarios.
  *
- * @return \Generator<int,\RPGSimulator20XX\Game>
+ * @return \Generator<int,\Mike\AdventOfCode\Year2015\Day21\Game>
  * @throws \Exception
  */
-function getScenarios(): Generator
+function getScenarios(): \Generator
 {
     $parameters = [
         'weapon' => Item::listWeapons(),

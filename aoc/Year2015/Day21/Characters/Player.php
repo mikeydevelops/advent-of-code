@@ -1,25 +1,25 @@
 <?php
 
-namespace RPGSimulator20XX\Characters;
+namespace Mike\AdventOfCode\Year2015\Day21\Characters;
 
 use Exception;
-use RPGSimulator20XX\Characters\Character;
-use RPGSimulator20XX\Inventory\Shop;
-use RPGSimulator20XX\Inventory\PlayerInventory;
+use Mike\AdventOfCode\Year2015\Day21\Characters\Character;
+use Mike\AdventOfCode\Year2015\Day21\Inventory\Shop;
+use Mike\AdventOfCode\Year2015\Day21\Inventory\PlayerInventory;
 
 class Player extends Character
 {
     /**
      * The shop from where the player can buy items.
      *
-     * @var \RPGSimulator20XX\Inventory\Shop
+     * @var \Mike\AdventOfCode\Year2015\Day21\Inventory\Shop
      */
     protected Shop $shop;
 
     /**
      * The inventory where the player will store items.
      *
-     * @var \RPGSimulator20XX\Inventory\PlayerInventory
+     * @var \Mike\AdventOfCode\Year2015\Day21\Inventory\PlayerInventory
      */
     protected PlayerInventory $inventory;
 
@@ -38,7 +38,7 @@ class Player extends Character
     /**
      * Get the inventory of the player.
      *
-     * @return \RPGSimulator20XX\Inventory\PlayerInventory
+     * @return \Mike\AdventOfCode\Year2015\Day21\Inventory\PlayerInventory
      */
     public function getInventory(): PlayerInventory
     {
@@ -48,7 +48,7 @@ class Player extends Character
     /**
      * Get the player shop.
      *
-     * @return \RPGSimulator20XX\Inventory\Shop
+     * @return \Mike\AdventOfCode\Year2015\Day21\Inventory\Shop
      * @throws \Exception
      */
     public function getShop(): Shop
@@ -61,7 +61,7 @@ class Player extends Character
     /**
      * Set the shop where the player can buy items from.
      *
-     * @param  \RPGSimulator20XX\Inventory\Shop  $shop
+     * @param  \Mike\AdventOfCode\Year2015\Day21\Inventory\Shop  $shop
      * @return static
      */
     public function setShop(Shop $shop): static

@@ -1,5 +1,7 @@
 <?php
 
+namespace Mike\AdventOfCode\Year2015\Day08;
+
 class Wire
 {
     /** The name of the wire. */

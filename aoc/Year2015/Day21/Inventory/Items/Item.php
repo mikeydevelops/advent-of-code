@@ -1,12 +1,12 @@
 <?php
 
-namespace RPGSimulator20XX\Inventory\Items;
+namespace Mike\AdventOfCode\Year2015\Day21\Inventory\Items;
 
 use Exception;
 
-use RPGSimulator20XX\Inventory\Items\Armor;
-use RPGSimulator20XX\Inventory\Items\Ring;
-use RPGSimulator20XX\Inventory\Items\Weapon;
+use Mike\AdventOfCode\Year2015\Day21\Inventory\Items\Armor;
+use Mike\AdventOfCode\Year2015\Day21\Inventory\Items\Ring;
+use Mike\AdventOfCode\Year2015\Day21\Inventory\Items\Weapon;
 
 abstract class Item
 {
@@ -41,7 +41,7 @@ abstract class Item
     /**
      * The available items.
      *
-     * @var \RPGSimulator20XX\Inventory\Items\ItemCollection<\RPGSimulator20XX\Inventory\Items\Item>
+     * @var \Mike\AdventOfCode\Year2015\Day21\Inventory\Items\ItemCollection<\Mike\AdventOfCode\Year2015\Day21\Inventory\Items\Item>
      */
     protected static ItemCollection $items;
 

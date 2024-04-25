@@ -6,7 +6,7 @@ function main()
 {
     [$year, $day] = parseYearAndDayFromArgv();
 
-    $path = sprintf('/%d/day-%02d/solution.php', $year, $day);
+    $path = sprintf('/aoc/Year%d/Day%02d/solution.php', $year, $day);
     $solution = __DIR__ . $path;
 
     if (! file_exists($solution)) {
