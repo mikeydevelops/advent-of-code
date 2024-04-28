@@ -892,3 +892,20 @@ function array_flip_row_column(array $array): array
 
     return $result;
 }
+
+function array_group_by(array $array, callable|string|int $key): array
+{
+    $result = [];
+
+    foreach ($array as $idx => $item) {
+        $k = $key;
+
+        if (is_callable($k)) {
+            $k = $k($item, $idx, $array);
+        }
+
+        $result[$k][] = $item;
+    }
+
+    return $result;
+}
