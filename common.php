@@ -56,7 +56,7 @@ function getInput(int $year = null, int $day = null, bool $verbose = true) : str
 
         $dayPart = intval(preg_replace('/\D*/', '', basename($dir)));
 
-        $yearPart = intval(basename(dirname($dir)));
+        $yearPart = intval(preg_replace('/\D*/', '', basename(dirname($dir))));
 
         if (is_null($year)) {
             if ($yearPart < 2015 || $yearPart > date('Y')) {
