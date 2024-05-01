@@ -1,6 +1,6 @@
 <?php
 
-namespace Mike\AdventOfCode\Year2015\Day08;
+namespace Mike\AdventOfCode\Year2015\Day07;
 
 class Wire
 {
@@ -105,7 +105,7 @@ class Wire
     /**
      * Get an instance of the provided wire.
      *
-     * @param   string|\Wire $wire
+     * @param   string|\Mike\AdventOfCode\Year2015\Day07\Wire $wire
      * @return static
      */
     public static function wire(string|self $wire) : static

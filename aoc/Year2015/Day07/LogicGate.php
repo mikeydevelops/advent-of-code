@@ -1,8 +1,8 @@
 <?php
 
-namespace Mike\AdventOfCode\Year2015\Day08;
+namespace Mike\AdventOfCode\Year2015\Day07;
 
-use Mike\AdventOfCode\Year2015\Day08\Wire;
+use Mike\AdventOfCode\Year2015\Day07\Wire;
 
 class LogicGate
 {
@@ -16,21 +16,21 @@ class LogicGate
     /**
      * The first signal for the gate.
      *
-     * @var \Mike\AdventOfCode\Year2015\Day08\Wire|int
+     * @var \Mike\AdventOfCode\Year2015\Day07\Wire|int
      */
     protected Wire|int $input1;
 
     /**
      * The second signal for the gate.
      *
-     * @var \Mike\AdventOfCode\Year2015\Day08\Wire|int
+     * @var \Mike\AdventOfCode\Year2015\Day07\Wire|int
      */
     protected Wire|int|null $input2;
 
     /**
      * The output of the gate.
      *
-     * @var \Mike\AdventOfCode\Year2015\Day08\Wire
+     * @var \Mike\AdventOfCode\Year2015\Day07\Wire
      */
     protected Wire $output;
 
@@ -138,7 +138,7 @@ class LogicGate
     /**
      * Get the output of the gate.
      *
-     * @return \Mike\AdventOfCode\Year2015\Day08\Wire
+     * @return \Mike\AdventOfCode\Year2015\Day07\Wire
      */
     public function getOutput() : Wire
     {

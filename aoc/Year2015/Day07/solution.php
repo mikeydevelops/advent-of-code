@@ -1,14 +1,14 @@
 <?php
 
-namespace Mike\AdventOfCode\Year2015\Day08;
+namespace Mike\AdventOfCode\Year2015\Day07;
 
-use Mike\AdventOfCode\Year2015\Day08\LogicGate;
-use Mike\AdventOfCode\Year2015\Day08\Wire;
+use Mike\AdventOfCode\Year2015\Day07\LogicGate;
+use Mike\AdventOfCode\Year2015\Day07\Wire;
 
 /**
  * Get the instructions parsed instructions.
  *
- * @return \Mike\AdventOfCode\Year2015\Day08\LogicGate[]
+ * @return \Mike\AdventOfCode\Year2015\Day07\LogicGate[]
  * @throws \Exception
  */
 function getInstructions()
