@@ -147,7 +147,7 @@ trait SolutionYearAndDay
         $maxDays = $year == $currentYear && $currentDay < 26 ? $currentDay+1 : 26;
 
         for($i = 1; $i < $maxDays; $i ++) {
-            $dayClass = "$namespace\\Solutions\\Year$year\\Day$i";
+            $dayClass = "{$namespace}Solutions\\Year$year\\Day" . sprintf('%02d', $i);
 
             if (class_exists($dayClass) && is_subclass_of($dayClass, Solution::class)) {
                 $days[] = $i;
@@ -200,7 +200,7 @@ trait SolutionYearAndDay
         $maxDays = $year == $currentYear && $currentDay < 26 ? $currentDay+1 : 26;
 
         for($i = 1; $i < $maxDays; $i ++) {
-            $dayClass = "{$namespace}Solutions\\Year$year\\Day$i";
+            $dayClass = "{$namespace}Solutions\\Year$year\\Day" . sprintf('%02d', $i);
 
             if (! class_exists($dayClass) || !is_subclass_of($dayClass, Solution::class)) {
                 $remaining[] = $i;
