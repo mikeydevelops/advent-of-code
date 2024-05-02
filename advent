@@ -8,6 +8,6 @@ require_once __DIR__ . '/vendor/autoload.php';
 /** @var \Mike\AdventOfCode\Console\Application $app */
 $app = require __DIR__ . '/includes/app.php';
 
-$exitCode = $app->run($app->make('input'), $app->make('output'));
+$exitCode = $app->run($app->input, $app->output);
 
 exit($exitCode);

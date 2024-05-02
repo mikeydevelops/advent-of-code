@@ -2,14 +2,30 @@
 
 namespace Mike\AdventOfCode\Console;
 
-use DI\Container;
-use Mike\AdventOfCode\Console\Command;
-use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use ReflectionClass;
 use RuntimeException;
+
+use DI\Container;
+use Dotenv\Dotenv;
+use Mike\AdventOfCode\Console\Command;
+use Mike\AdventOfCode\Support\Config;
+use Mike\AdventOfCode\Support\Env;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Application as SymfonyApplication;
+use Symfony\Component\Console\Formatter\OutputFormatter;
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Finder\Finder;
 
+/**
+ * @property  \Mike\AdventOfCode\Support\Config  $config The application configuration.
+ *
+ * @property  \Symfony\Component\Console\Input\ArgvInput  $input  The application input.
+ * @property  \Mike\AdventOfCode\Console\OutputStyle  $output  The application output.
+ * @property  \Symfony\Component\Console\Output\ConsoleOutput  $console  The application console.
+ * @property  \Symfony\Component\Console\Formatter\OutputFormatter  $formatter  The application output formatter.
+ */
 class Application extends SymfonyApplication
 {
     /**
@@ -52,11 +68,54 @@ class Application extends SymfonyApplication
      */
     public function bootstrap(): void
     {
+        $this->loadEnvironment();
+
+        $this->config = new Config(require $this->basePath('includes', 'config.php'));
+
+        $this->bootstrapIO();
+
         if (! $this->commandsLoaded) {
             $this->commands();
 
             $this->commandsLoaded = true;
         }
+    }
+
+    /**
+     * Load environment variables from .env file in base path.
+     */
+    protected function loadEnvironment()
+    {
+        $dotenv = Dotenv::create(
+            Env::getRepository(),
+            $this->basePath(),
+            '.env'
+        );
+
+        $dotenv->safeLoad();
+    }
+
+    /**
+     * Bootstrap the console application input and output.
+     */
+    protected function bootstrapIO(): void
+    {
+        $this->formatter = new OutputFormatter(styles: [
+            'info' => new OutputFormatterStyle('cyan'),
+            'success' => new OutputFormatterStyle('green'),
+            'warning' => new OutputFormatterStyle('yellow'),
+            'emergency' => new OutputFormatterStyle('white', 'red'),
+            'error' => new OutputFormatterStyle('red'),
+            'danger' => new OutputFormatterStyle('red'),
+            'comment' => new OutputFormatterStyle('gray'),
+            'question' => new OutputFormatterStyle('magenta'),
+            'white' => new OutputFormatterStyle('white'),
+            'black' => new OutputFormatterStyle('black'),
+        ]);
+
+        $this->input = new ArgvInput();
+        $this->console = new ConsoleOutput(formatter: $this->formatter);
+        $this->output = new OutputStyle($this->input, $this->console);
     }
 
     /**
@@ -200,4 +259,19 @@ class Application extends SymfonyApplication
         return $namespace.$classPath;
     }
 
+    /**
+     * Try to resolve the dynamic properties from the container.
+     */
+    public function __get(string $key)
+    {
+        return $this->make($key);
+    }
+
+    /**
+     * Set dynamic properties in the container.
+     */
+    public function __set(string $key, $value)
+    {
+        $this->container->set($key, $value);
+    }
 }
