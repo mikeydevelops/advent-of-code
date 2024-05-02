@@ -4,14 +4,8 @@ namespace Mike\AdventOfCode\Solutions;
 
 use Closure;
 use Mike\AdventOfCode\AdventOfCodeDay;
-use Mike\AdventOfCode\Console\Exceptions\ConsoleException;
-use Mike\AdventOfCode\Console\Exceptions\TerminateExceptionBuilder;
 use Mike\AdventOfCode\Console\IO;
-use Mike\AdventOfCode\Console\OutputStyle;
-use Mike\AdventOfCode\Console\Traits\InputOutput;
 use Mike\AdventOfCode\Support\Profiler;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
 use Throwable;
 
 abstract class Solution
