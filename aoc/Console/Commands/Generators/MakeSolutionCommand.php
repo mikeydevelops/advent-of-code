@@ -28,16 +28,6 @@ class MakeSolutionCommand extends GeneratorCommand
     protected string $generatorType = 'Solution';
 
     /**
-     * The year which the solution will be generated for.
-     */
-    protected int $year;
-
-    /**
-     * The day which the solution will be generated for.
-     */
-    protected int $day;
-
-    /**
      * Prepare the generator.
      */
     protected function prepare(): void
