@@ -8,6 +8,7 @@ use RuntimeException;
 use DI\Container;
 use Dotenv\Dotenv;
 use Mike\AdventOfCode\Console\Command;
+use Mike\AdventOfCode\Providers\Provider;
 use Mike\AdventOfCode\Support\Config;
 use Mike\AdventOfCode\Support\Env;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
@@ -35,7 +36,12 @@ class Application extends SymfonyApplication
     protected Container $container;
 
     /**
-     * Indicates if the Closure commands have been loaded.
+     * Indicates if the providers have been loaded.
+     */
+    protected bool $providersLoaded = false;
+
+    /**
+     * Indicates if the commands have been loaded.
      */
     protected bool $commandsLoaded = false;
 
@@ -48,6 +54,13 @@ class Application extends SymfonyApplication
      * The application namespace.
      */
     protected ?string $namespace = null;
+
+    /**
+     * Array of registered providers
+     *
+     * @var \Mike\AdventOfCode\Providers\Provider[]
+     */
+    protected array $providers = [];
 
     /**
      * Create new instance of console application.
@@ -69,17 +82,19 @@ class Application extends SymfonyApplication
      */
     public function bootstrap(): void
     {
+        $this->app = $this;
+        $this->singleton(static::class, $this);
+
         $this->bootstrapIO();
 
         $this->loadEnvironment();
 
         $this->config = new Config(require $this->basePath('includes', 'config.php'));
+        $this->singleton(Config::class, $this->config);
 
-        if (! $this->commandsLoaded) {
-            $this->commands();
+        $this->loadProviders();
 
-            $this->commandsLoaded = true;
-        }
+        $this->loadCommands();
     }
 
     /**
@@ -154,20 +169,18 @@ class Application extends SymfonyApplication
     }
 
     /**
-     * Register the commands for the application.
+     * Register the providers for the application.
      *
      * @return void
      */
-    protected function commands()
+    protected function loadProviders(): bool
     {
-        $this->load(__DIR__ . '/Commands');
-    }
+        if ($this->providersLoaded) {
+            return false;
+        }
 
-    /**
-     * Register all of the commands in the given directory.
-     */
-    protected function load(string|array $paths)
-    {
+        $paths = $this->path('Providers');
+
         $paths = array_unique(array_wrap($paths));
 
         $paths = array_filter($paths, function ($path) {
@@ -175,18 +188,78 @@ class Application extends SymfonyApplication
         });
 
         if (empty($paths)) {
-            return;
+            return false;
         }
 
         $namespace = $this->getNamespace();
 
         foreach (Finder::create()->in($paths)->files() as $file) {
-            $command = $this->getCommandFromPath($file->getRealPath(), $namespace);
+            $provider = $this->getClassFromPath($file->getRealPath(), $namespace);
 
-            if (is_subclass_of($command, Command::class) && ! (new ReflectionClass($command))->isAbstract()) {
-                $this->resolve($command);
+            if (is_subclass_of($provider, Provider::class) && ! (new ReflectionClass($provider))->isAbstract()) {
+                $this->registerProvider($provider);
             }
         }
+
+        return $this->providersLoaded = true;
+    }
+
+    /**
+     * Resolve the provider from the container, then register in the app.
+     */
+    public function registerProvider(string|Provider $provider): Provider
+    {
+        if (! $provider instanceof Provider) {
+            $provider = $this->container->make($provider);
+        }
+
+        $providerClass = get_class($provider);
+
+        if (! isset($this->providers[$providerClass])) {
+            $provider->setApp($this);
+
+            $provider->register();
+
+            $this->providers[$providerClass] = $provider;
+        }
+
+        return $provider;
+    }
+
+    /**
+     * Register the commands for the application.
+     *
+     * @return void
+     */
+    protected function loadCommands(): bool
+    {
+        if ($this->commandsLoaded) {
+            return false;
+        }
+
+        $paths = $this->path('Console', 'Commands');
+
+        $paths = array_unique(array_wrap($paths));
+
+        $paths = array_filter($paths, function ($path) {
+            return is_dir($path);
+        });
+
+        if (empty($paths)) {
+            return false;
+        }
+
+        $namespace = $this->getNamespace();
+
+        foreach (Finder::create()->in($paths)->files() as $file) {
+            $command = $this->getClassFromPath($file->getRealPath(), $namespace);
+
+            if (is_subclass_of($command, Command::class) && ! (new ReflectionClass($command))->isAbstract()) {
+                $this->addCommand($command);
+            }
+        }
+
+        return $this->commandsLoaded = true;
     }
 
     /**
@@ -206,7 +279,7 @@ class Application extends SymfonyApplication
     /**
      * Resolve the command from the container, then add it to the app.
      */
-    public function resolve(string|Command $command): SymfonyCommand
+    public function addCommand(string|Command $command): SymfonyCommand
     {
         if ($command instanceof Command) {
             return $this->add($command);
@@ -261,7 +334,7 @@ class Application extends SymfonyApplication
     /**
      * Extract the command class name from the given file path.
      */
-    protected function getCommandFromPath(string $path, string $namespace): string
+    protected function getClassFromPath(string $path, string $namespace): string
     {
         $classPath = str_replace([$this->path().DIRECTORY_SEPARATOR, '.php', '/'], ['', '', '\\'], $path);
 
