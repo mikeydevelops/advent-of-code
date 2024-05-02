@@ -3,6 +3,7 @@
 namespace Mike\AdventOfCode;
 
 use Exception;
+use Throwable;
 
 class AdventOfCodeException extends Exception
 {
@@ -20,5 +21,13 @@ class AdventOfCodeException extends Exception
     public static function invalidDay(int $year, int $day, int $maxDays): static
     {
         return new static("The specified day is invalid [$day] for year $year. The day must be >= 1 and <= $maxDays", 2);
+    }
+
+    /**
+     * Create new advent of code exception for failed fetching input.
+     */
+    public static function failedToFetchInput(int $year, int $day, Throwable $previous): static
+    {
+        return new static("Unable to fetch input for advent of code Year $year, Day $day.", 3, $previous);
     }
 }

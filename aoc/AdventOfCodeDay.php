@@ -2,8 +2,16 @@
 
 namespace Mike\AdventOfCode;
 
+use GuzzleHttp\Psr7\Response;
+use Throwable;
+
 class AdventOfCodeDay
 {
+    /**
+     * The advent of code client.
+     */
+    protected AdventOfCode $client;
+
     /**
      * The year of the solution.
      */
@@ -55,6 +63,24 @@ class AdventOfCodeDay
     }
 
     /**
+     * Fetch the input for the current day and cache it.
+     */
+    protected function fetchInput(): string
+    {
+        try {
+            $response = $this->request('input');
+
+            $input = trim($response->getBody()->getContents());
+        } catch (Throwable $ex) {
+            throw AdventOfCodeException::failedToFetchInput($this->year, $this->day, $ex);
+        }
+
+        $this->cacheInput($input);
+
+        return $input;
+    }
+
+    /**
      * Get the path of the day's input.
      */
     public function inputPath(): string
@@ -76,6 +102,31 @@ class AdventOfCodeDay
     public function getCachedInput(): string
     {
         return file_get_contents($this->inputPath());
+    }
+
+    /**
+     * Cache given input.
+     */
+    public function cacheInput(string $input): bool
+    {
+        $path = $this->inputPath();
+
+        if (! is_dir($dir = dirname($path))) {
+            mkdir($dir, 0777, true);
+        }
+
+        return file_put_contents($path, $input) !== false;
+    }
+
+    /**
+     * Make a request to the advent of code website,
+     * with setting base uri to this day's year and day.
+     */
+    public function request(string $method, string $uri = '', array $options = []): Response
+    {
+        $uri = $uri[0] == '/' ? $uri : "/$this->year/day/$this->day/$uri";
+
+        return $this->client->request($method, $uri, $options);
     }
 
     /**
@@ -134,6 +185,16 @@ class AdventOfCodeDay
     public function setDay(int $day): static
     {
         $this->day = $day;
+
+        return $this;
+    }
+
+    /**
+     * Set the advent of code client.
+     */
+    public function setClient(AdventOfCode $client): static
+    {
+        $this->client = $client;
 
         return $this;
     }

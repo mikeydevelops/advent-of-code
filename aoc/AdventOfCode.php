@@ -5,6 +5,7 @@ namespace Mike\AdventOfCode;
 use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Cookie\SetCookie;
+use GuzzleHttp\Psr7\Response;
 use Mike\AdventOfCode\Console\IO;
 
 class AdventOfCode
@@ -53,7 +54,11 @@ class AdventOfCode
     {
         $this->validateDayAndYear($year, $day);
 
-        return new AdventOfCodeDay($year, $day);
+        $day = new AdventOfCodeDay($year, $day);
+
+        $day->setClient($this);
+
+        return $day;
     }
 
     /**
@@ -111,6 +116,14 @@ class AdventOfCode
         }
 
         return $this->http;
+    }
+
+    /**
+     * Make a new request to the advent of code website.
+     */
+    public function request(string $method, string $uri = '', array $options = []): Response
+    {
+        return $this->http->request($method, $uri, $options);
     }
 
     /**
