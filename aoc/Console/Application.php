@@ -8,6 +8,7 @@ use RuntimeException;
 use DI\Container;
 use Dotenv\Dotenv;
 use Mike\AdventOfCode\Console\Command;
+use Mike\AdventOfCode\Console\Exceptions\ConsoleException;
 use Mike\AdventOfCode\Providers\Provider;
 use Mike\AdventOfCode\Support\Config;
 use Mike\AdventOfCode\Support\Env;
@@ -63,6 +64,13 @@ class Application extends SymfonyApplication
     protected array $providers = [];
 
     /**
+     * The current instance.
+     *
+     * @var \Mike\AdventOfCode\Console\Application
+     */
+    protected static ?Application $instance = null;
+
+    /**
      * Create new instance of console application.
      */
     public function __construct(string $basePath, string $version)
@@ -82,6 +90,7 @@ class Application extends SymfonyApplication
      */
     public function bootstrap(): void
     {
+        static::$instance = $this;
         $this->app = $this;
         $this->singleton(static::class, $this);
 
@@ -160,12 +169,14 @@ class Application extends SymfonyApplication
     /**
      * Get a binding from the application container.
      *
-     * @param  string  $abstract
-     * @return mixed
+     * @template T
+     * @param  class-string<T>  $abstract
+     * @param  array  $parameters
+     * @return T|mixed
      */
-    public function make(string $abstract)
+    public function make(string $abstract, array $parameters = [])
     {
-        return $this->container->make($abstract);
+        return $this->container->make($abstract, $parameters);
     }
 
     /**
@@ -355,5 +366,17 @@ class Application extends SymfonyApplication
     public function __set(string $key, $value)
     {
         $this->container->set($key, $value);
+    }
+
+    /**
+     * Get the static application instance.
+     */
+    public static function instance(): static
+    {
+        if (! isset(static::$instance)) {
+            throw new ConsoleException('Application static intance has not been set.');
+        }
+
+        return static::$instance;
     }
 }
