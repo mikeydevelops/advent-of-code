@@ -46,6 +46,39 @@ class AdventOfCode
     }
 
     /**
+     * Fetch the information for given day.
+     */
+    public function getDay(int $year, int $day): AdventOfCodeDay
+    {
+        $this->validateDayAndYear($year, $day);
+
+        return new AdventOfCodeDay($year, $day);
+    }
+
+    /**
+     * Validate given year and day.
+     *
+     * @throws \Mike\AdventOfCode\AdventOfCodeException
+     */
+    public function validateDayAndYear(int $year, int $day): static
+    {
+        [$currentYear, $currentMonth, $currentDay] = array_map('intval', explode('-', date('Y-m-d')));
+
+        $maxYear = $currentMonth < 12 ? $currentYear-1 : $currentYear;
+        $maxDays = $year == $currentYear && $currentDay < 26 ? $currentDay : 25;
+
+        if ($year < 2015 || $year > $maxYear) {
+            throw AdventOfCodeException::invalidYear($year, $maxYear);
+        }
+
+        if ($day < 1 || $day > $maxDays) {
+            throw AdventOfCodeException::invalidDay($year, $day, $maxDays);
+        }
+
+        return $this;
+    }
+
+    /**
      * Setup the http client for requests.
      */
     protected function setupHttp(): Client
