@@ -1,0 +1,28 @@
+<?php
+
+namespace @classNamespace;
+
+use @namespace\Console\Command;
+
+class @class extends Command
+{
+    /**
+     * The name and signature of the console command.
+     */
+    protected string $signature = '@command';
+
+    /**
+     * The console command description.
+     */
+    protected ?string $description = 'Command description';
+
+    /**
+     * Execute the console command.
+     */
+    public function handle(): int
+    {
+        //
+
+        return Command::FAILURE;
+    }
+}

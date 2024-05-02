@@ -3,3 +3,5 @@ storage/inputs/
 storage/session.aoc
 
 /vendor/
+
+.env

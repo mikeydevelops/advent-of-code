@@ -1,0 +1,52 @@
+<?php
+
+namespace @classNamespace;
+
+use @namespace\Solutions\Solution;
+
+class @class extends Solution
+{
+    /**
+     * The name of the day.
+     */
+    protected string $name = '@dayName';
+
+    /**
+     * Additional question to show when running part 1 of the solution.
+     */
+    protected ?string $part1Question = @part1Question;
+
+    /**
+     * Additional question to show when running part 2 of the solution.
+     */
+    protected ?string $part2Question = @part2Question;
+
+    /**
+     * The example input to be used to test the solution.
+     */
+    protected ?string $exampleInput = null;
+
+    /**
+     * Process the input from the challenge.
+     */
+    public function transformInput(string $input): mixed
+    {
+        return $input;
+    }
+
+    /**
+     * Run the first part of the challenge.
+     */
+    public function part1()
+    {
+        //
+    }
+
+    /**
+     * Run the second part of the challenge.
+     */
+    public function part2()
+    {
+        //
+    }
+}

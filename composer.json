@@ -8,10 +8,17 @@
         "symfony/var-dumper": "^6.3",
         "guzzlehttp/guzzle": "^7.5",
         "league/commonmark": "^2.3",
-        "symfony/dom-crawler": "^6.3"
+        "symfony/dom-crawler": "^6.3",
+        "symfony/console": "^6.4",
+        "php-di/php-di": "^7.0",
+        "symfony/finder": "^7.0",
+        "vlucas/phpdotenv": "^5.6"
     },
     "license": "MIT",
     "autoload": {
+        "files": [
+            "./includes/helpers.php"
+        ],
         "psr-4": {
             "Mike\\AdventOfCode\\": "aoc/"
         }

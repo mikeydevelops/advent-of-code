@@ -1,0 +1,55 @@
+<?php
+
+namespace @classNamespace;
+
+use @namespace\Console\GeneratorCommand;
+
+class @class extends GeneratorCommand
+{
+    /**
+     * The name and signature of the console command.
+     */
+    protected string $signature = '@command';
+
+    /**
+     * The console command description.
+     */
+    protected ?string $description = 'Command description';
+
+    /**
+     * Get the type of the generated class.
+     */
+    protected string $generatorType;
+
+    /**
+     * Prepare the generator.
+     */
+    protected function prepare(): void
+    {
+        //
+    }
+
+    /**
+     * Get the path to the stub for the new class.
+     */
+    protected function getStubPath(): string
+    {
+        return $this->app->basePath('stubs/@generator.stub');
+    }
+
+    /**
+     * Get the namespace for the class.
+     */
+    protected function getClassNamespace(string $baseNamespace): string
+    {
+        return $baseNamespace;
+    }
+
+    /**
+     * Get additional data to replace when the template is loaded.
+     */
+    protected function getClassData(array $data): array
+    {
+        return [];
+    }
+}

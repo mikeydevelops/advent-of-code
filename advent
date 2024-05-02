@@ -1,0 +1,13 @@
+#!/usr/bin/env php
+<?php
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+(new \NunoMaduro\Collision\Provider)->register();
+
+/** @var \Mike\AdventOfCode\Console\Application $app */
+$app = require __DIR__ . '/includes/app.php';
+
+$exitCode = $app->run($app->make('input'), $app->make('output'));
+
+exit($exitCode);
