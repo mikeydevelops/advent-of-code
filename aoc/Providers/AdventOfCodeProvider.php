@@ -12,6 +12,22 @@ class AdventOfCodeProvider extends Provider
      */
     public function register(): void
     {
+        if (empty($key = $this->app->config->get('aoc.session'))) {
+            AdventOfCode::promptEmptySession($this->app->io);
+
+            exit(1);
+
+            return;
+        }
+
+        if (! $this->validateSessionKey($key)) {
+            AdventOfCode::promptInvalidSessionKey($this->app->io);
+
+            exit(1);
+
+            return;
+        }
+
         $this->app->aoc = $client = $this->createClient();
         $this->app->singleton(AdventOfCode::class, $client);
     }
@@ -29,5 +45,13 @@ class AdventOfCodeProvider extends Provider
             $this->app->getName(),
             $this->app->getVersion(),
         );
+    }
+
+    /**
+     * Validate the configured session key.
+     */
+    protected function validateSessionKey(string $key): bool
+    {
+        return !!preg_match('/^[a-f0-9]{128}$/', $key);
     }
 }

@@ -5,6 +5,7 @@ namespace Mike\AdventOfCode;
 use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Cookie\SetCookie;
+use Mike\AdventOfCode\Console\IO;
 
 class AdventOfCode
 {
@@ -110,5 +111,58 @@ class AdventOfCode
         }
 
         return $this->http;
+    }
+
+    /**
+     * Show text when session has not been set in .env file.
+     */
+    public static function promptEmptySession(IO $io): void
+    {
+        $io->warn('Environment variable <white>AOC_SESSION</> is empty. Please fill it in in <white>.env</>.');
+        $io->newLine();
+
+        static::showSessionKeyInstructions($io);
+    }
+
+    /**
+     * Show text when session has expired.
+     */
+    public static function promptExpiredSession(IO $io): void
+    {
+        $io->warn('The session provided in <white>AOC_SESSION</> has expired. Please get a new one.');
+        $io->newLine();
+
+        static::showSessionKeyInstructions($io);
+    }
+
+
+    /**
+     * Print out instructions how to get the session key for advent of code.
+     */
+    public static function showSessionKeyInstructions(IO $io): void
+    {
+        $lines = [
+            'To get the session follow these steps:',
+            '1. Visit https://adventofcode.com',
+            '2. After the site has loaded, press F12 or CTRL+SHIFT+I on your keyboard.',
+            '3. After developer tools open, click on [Application] tab,',
+            '   for chromium based browsers, or [Storage] tab for firefox.',
+            '4. Expand Cookies from the left sidebar and click on https://adventofcode.com',
+            '5. Copy the value from the cookie row with name session.',
+            '6. Paste the value in the terminal.',
+        ];
+
+        array_map([$io, 'line'], $lines);
+    }
+
+    /**
+     * Show invalid session key message to user.
+     */
+    public static function promptInvalidSessionKey(IO $io): void
+    {
+        $io->error('Provided session key in <white>AOC_SESSION</> environment variable is invalid.');
+        $io->newLine();
+        $io->line('Session key must be <fg=cyan>128 characters long</> and contain');
+        $io->line('only <fg=cyan>lowercase letters <white>a</> through <white>f</></> and <fg=cyan>numbers <white>0</> through <white>9</></>.');
     }
 }
