@@ -287,6 +287,16 @@ trait InputOutput
     }
 
     /**
+     * Get the input implementation.
+     *
+     * @return \Symfony\Component\Console\Input\InputInterface
+     */
+    public function getInput(): InputInterface|null
+    {
+        return $this->input;
+    }
+
+    /**
      * Set the verbosity level.
      *
      * @param  string|int  $level
