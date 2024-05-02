@@ -25,6 +25,7 @@ use Symfony\Component\Finder\Finder;
  * @property  \Mike\AdventOfCode\Console\OutputStyle  $output  The application output.
  * @property  \Symfony\Component\Console\Output\ConsoleOutput  $console  The application console.
  * @property  \Symfony\Component\Console\Formatter\OutputFormatter  $formatter  The application output formatter.
+ * @property  \Mike\AdventOfCode\Console\IO  $io  Easier way to interact with console.
  */
 class Application extends SymfonyApplication
 {
@@ -68,11 +69,11 @@ class Application extends SymfonyApplication
      */
     public function bootstrap(): void
     {
+        $this->bootstrapIO();
+
         $this->loadEnvironment();
 
         $this->config = new Config(require $this->basePath('includes', 'config.php'));
-
-        $this->bootstrapIO();
 
         if (! $this->commandsLoaded) {
             $this->commands();
@@ -84,8 +85,12 @@ class Application extends SymfonyApplication
     /**
      * Load environment variables from .env file in base path.
      */
-    protected function loadEnvironment()
+    protected function loadEnvironment(): bool
     {
+        if (! file_exists($this->basePath('.env'))) {
+            return false;
+        }
+
         $dotenv = Dotenv::create(
             Env::getRepository(),
             $this->basePath(),
@@ -93,6 +98,8 @@ class Application extends SymfonyApplication
         );
 
         $dotenv->safeLoad();
+
+        return true;
     }
 
     /**
@@ -116,6 +123,8 @@ class Application extends SymfonyApplication
         $this->input = new ArgvInput();
         $this->console = new ConsoleOutput(formatter: $this->formatter);
         $this->output = new OutputStyle($this->input, $this->console);
+
+        $this->io = new IO($this->input, $this->output);
     }
 
     /**
