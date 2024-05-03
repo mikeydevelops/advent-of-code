@@ -30,4 +30,37 @@ class AdventOfCodeException extends Exception
     {
         return new static("Unable to fetch input for advent of code Year $year, Day $day.", 3, $previous);
     }
+
+    /**
+     * Create new advent of code exception for invalid solution part.
+     */
+    public static function invalidSolutionPartProvided(string $part, array $allowed = []): static
+    {
+        $parts = empty($parts) ? '' : (' Allowed parts: ' .implode(', ', $allowed));
+        return new static("Invalid solution part [$part].$parts", 4);
+    }
+
+    /**
+     * Create new advent of code exception for failed fetching information.
+     */
+    public static function failedToFetchInfo(int $year, int $day, Throwable $previous): static
+    {
+        return new static("Unable to fetch information for advent of code Year $year, Day $day.", 5, $previous);
+    }
+
+    /**
+     * Create new advent of code exception for failed fetching page.
+     */
+    public static function failedToFetchPage(int $year, int $day, Throwable $previous): static
+    {
+        return new static("Unable to fetch page for advent of code Year $year, Day $day.", 6, $previous);
+    }
+
+    /**
+     * Create new advent of code exception for expired session.
+     */
+    public static function promptExpiredSession(Throwable $previous = null): static
+    {
+        return new static('It seems your session has expired. Please provide new session key in your .env file.', 7, $previous);
+    }
 }

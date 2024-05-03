@@ -14,8 +14,8 @@ use Mike\AdventOfCode\Support\Config;
 use Mike\AdventOfCode\Support\Env;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Application as SymfonyApplication;
-use Symfony\Component\Console\Formatter\OutputFormatter;
-use Symfony\Component\Console\Formatter\OutputFormatterStyle;
+use Mike\AdventOfCode\Console\OutputFormatter;
+use Mike\AdventOfCode\Console\OutputFormatterStyle;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Finder\Finder;
@@ -26,7 +26,7 @@ use Symfony\Component\Finder\Finder;
  * @property  \Symfony\Component\Console\Input\ArgvInput  $input  The application input.
  * @property  \Mike\AdventOfCode\Console\OutputStyle  $output  The application output.
  * @property  \Symfony\Component\Console\Output\ConsoleOutput  $console  The application console.
- * @property  \Symfony\Component\Console\Formatter\OutputFormatter  $formatter  The application output formatter.
+ * @property  \Mike\AdventOfCode\Console\OutputFormatter  $formatter  The application output formatter.
  * @property  \Mike\AdventOfCode\Console\IO  $io  Easier way to interact with console.
  */
 class Application extends SymfonyApplication
@@ -142,6 +142,8 @@ class Application extends SymfonyApplication
             'question' => new OutputFormatterStyle('magenta'),
             'white' => new OutputFormatterStyle('white'),
             'black' => new OutputFormatterStyle('black'),
+
+            'em' => new OutputFormatterStyle(options: ['bold']),
         ]);
 
         $this->input = new ArgvInput();

@@ -2,7 +2,10 @@
 
 namespace Mike\AdventOfCode;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Response;
+use Symfony\Component\DomCrawler\Crawler;
 use Throwable;
 
 class AdventOfCodeDay
@@ -28,14 +31,14 @@ class AdventOfCodeDay
     protected ?string $input = null;
 
     /**
-     * The question for part one of this day's challenge.
+     * The day's information.
      */
-    protected ?string $part1Question = null;
+    protected array $info = [];
 
     /**
-     * The question for part two of this day's challenge.
+     * Indicates that the info array is dirty and needs to be saved.
      */
-    protected ?string $part2Question = null;
+    protected bool $infoChanged = false;
 
     /**
      * Create a new Advent of Code Day instance.
@@ -44,6 +47,16 @@ class AdventOfCodeDay
     {
         $this->year = $year;
         $this->day = $day;
+    }
+
+    /**
+     * Cleanup instance.
+     */
+    public function __destruct()
+    {
+        if ($this->infoChanged) {
+            $this->saveInfo();
+        }
     }
 
     /**
@@ -68,14 +81,24 @@ class AdventOfCodeDay
     protected function fetchInput(): string
     {
         try {
-            $response = $this->request('input');
+            $response = $this->request('GET', 'input');
 
             $input = trim($response->getBody()->getContents());
+
+            $this->cacheInput($input);
+        } catch (ClientException $ex) {
+            if ($ex->getResponse()->getStatusCode() == 400) {
+                $text = $ex->getResponse()->getBody()->getContents();
+
+                if (stripos($text, 'please log in') !== false) {
+                    throw AdventOfCodeException::promptExpiredSession($ex);
+                }
+            }
+
+            throw AdventOfCodeException::failedToFetchInput($this->year, $this->day, $ex);
         } catch (Throwable $ex) {
             throw AdventOfCodeException::failedToFetchInput($this->year, $this->day, $ex);
         }
-
-        $this->cacheInput($input);
 
         return $input;
     }
@@ -119,6 +142,269 @@ class AdventOfCodeDay
     }
 
     /**
+     * Make sure info about day is loaded.
+     */
+    protected function ensureInfoLoaded(): static
+    {
+        if (empty($this->info)) {
+            $this->info = $this->infoIsCached()
+                ? $this->getCachedInfo()
+                : $this->fetchInfo();
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get the day's information.
+     */
+    public function info(string $key = null, mixed $default = null): mixed
+    {
+        $this->ensureInfoLoaded();
+
+        if (is_null($key)) {
+            return $this->info;
+        }
+
+        return array_get_dot($this->info, $key, $default);
+    }
+
+    /**
+     * Set information about the day.
+     */
+    public function setInfo(string $key, mixed $value = null): static
+    {
+        $this->ensureInfoLoaded();
+
+        $info = $this->info;
+
+        array_set_dot($info, $key, $value);
+
+        if ($info !== $this->info) {
+            $this->info = $info;
+
+            $this->infoChanged = true;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Fetch the information for the current day and cache it.
+     */
+    protected function fetchInfo(bool $force = false): array
+    {
+        try {
+            $page = $this->getPage($force);
+
+            $info = $this->parseInfo($page);
+
+            $this->cacheInfo($info);
+        } catch (Throwable $ex) {
+            throw AdventOfCodeException::failedToFetchInfo($this->year, $this->day, $ex);
+        }
+
+        return $info;
+    }
+
+    /**
+     * Try to fetch additional information for part 2 of the challenge.
+     */
+    public function part2IsUnlocked(): static
+    {
+        if (! $this->info('part2.unlocked')) {
+            $this->fetchInfo(true);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Parse the information about the day.
+     *
+     * @param  string  $html
+     * @return array
+     */
+    protected function parseInfo(string $html): array
+    {
+        $cached = $this->infoIsCached() ? $this->getCachedInfo() : [];
+
+        $title = $cached['title'] ?? null;
+
+        $part1 = array_merge([
+            'question' => null,
+            'answer' => null,
+            'result' => null,
+            'time' => null,
+            'memory' => null,
+        ], $cached['part1'] ?? []);
+
+        $part1 = array_merge([
+            'unlocked' => false,
+            'question' => null,
+            'answer' => null,
+            'result' => null,
+            'time' => null,
+            'memory' => null,
+        ], $cached['part2'] ?? []);
+
+        $crawler = new Crawler($html);
+
+        $parts = $crawler->filter('body > main > article.day-desc');
+        $answers = $crawler->filter('body > main > article.day-desc + p');
+
+        $p1 = $parts->first();
+
+        $title = trim(trim($p1->filter('h2')->first()->text(), '-'));
+        $title = substr($title, strpos($title, ':') + 2);
+
+        $part1['question'] = $p1->filter('p')->last()->html();
+
+        if ($parts->count() == 2) {
+            $part1['answer'] = $answers->first()->filter('code')->first()->text();
+
+            $p2 = $parts->last();
+
+            $part2['unlocked'] = true;
+
+            $part2['question'] = $p2->filter('p')->last()->html();
+
+            if ($answers->count() == 2 && ($p2a = $answers->last()->filter('code'))->count()) {
+                $part2['answer'] = $p2a->first()->text();
+            }
+        }
+
+        return compact('title', 'part1', 'part2');
+    }
+
+    /**
+     * Get the path of the day's information.
+     */
+    public function infoPath(): string
+    {
+        return base_path('storage', 'cache', 'days', strval($this->year), sprintf('day-%02d.json', $this->day));
+    }
+
+    /**
+     * Check to see if the day's information has been downloaded and cached.
+     */
+    public function infoIsCached(): bool
+    {
+        return file_exists($this->infoPath());
+    }
+
+    /**
+     * Load the day's information from storage.
+     */
+    public function getCachedInfo(): array
+    {
+        return json_decode(file_get_contents($this->infoPath()), true, 512, JSON_BIGINT_AS_STRING);
+    }
+
+    /**
+     * Cache given information.
+     */
+    public function cacheInfo(array $info): bool
+    {
+        $path = $this->infoPath();
+
+        if (! is_dir($dir = dirname($path))) {
+            mkdir($dir, 0777, true);
+        }
+
+        return file_put_contents($path, json_encode($info, JSON_PRETTY_PRINT | JSON_BIGINT_AS_STRING)) !== false;
+    }
+
+    /**
+     * Save the current information
+     */
+    public function saveInfo(): bool
+    {
+        if (empty($this->info)) {
+            return true;
+        }
+
+        return $this->cacheInfo($this->info);
+    }
+
+    /**
+     * Get the html of the current day.
+     */
+    protected function getPage(bool $force = false): string
+    {
+        if (! $force && $this->pageIsCached()) {
+            return $this->getCachedPage();
+        }
+
+        try {
+            // this gets the html for the current day
+            // because the request automatically adds current year and day to the path.
+            $response = $this->request('GET', '');
+            $page = trim($response->getBody()->getContents());
+        } catch (Throwable $ex) {
+            throw AdventOfCodeException::failedToFetchPage($this->year, $this->day, $ex);
+        }
+
+        $this->verifyLoggedIn($page);
+
+        $this->cachePage($page);
+
+        return $page;
+    }
+
+    /**
+     * Throw an exception if the user element is not present in html of page request.
+     */
+    protected function verifyLoggedIn(string $html): static
+    {
+        $crawler = new Crawler($html);
+
+        if (! $crawler->filter('body > header .user')->count()) {
+            throw AdventOfCodeException::promptExpiredSession();
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get the path of the day's html page.
+     */
+    public function pagePath(): string
+    {
+        return base_path('storage', 'cache', 'pages', strval($this->year), sprintf('day-%02d.html', $this->day));
+    }
+
+    /**
+     * Check to see if the day's html page has been downloaded and cached.
+     */
+    public function pageIsCached(): bool
+    {
+        return file_exists($this->pagePath());
+    }
+
+    /**
+     * Load the day's html page from storage.
+     */
+    public function getCachedPage(): string
+    {
+        return file_get_contents($this->pagePath());
+    }
+
+    /**
+     * Cache given html page.
+     */
+    public function cachePage(string $html): bool
+    {
+        $path = $this->pagePath();
+
+        if (! is_dir($dir = dirname($path))) {
+            mkdir($dir, 0777, true);
+        }
+
+        return file_put_contents($path, $html) !== false;
+    }
+
+    /**
      * Make a request to the advent of code website,
      * with setting base uri to this day's year and day.
      */
@@ -127,22 +413,6 @@ class AdventOfCodeDay
         $uri = $uri[0] == '/' ? $uri : "/$this->year/day/$this->day/$uri";
 
         return $this->client->request($method, $uri, $options);
-    }
-
-    /**
-     * Get the question for this day's challenge for part one.
-     */
-    public function getPart1Question(): string
-    {
-        return $this->part1Question ?? 'Part 1 question has not been set.';
-    }
-
-    /**
-     * Get the question for this day's challenge for part one.
-     */
-    public function getPart2Question(): string
-    {
-        return $this->part2Question ?? 'Part 2 question has not been set.';
     }
 
     /**

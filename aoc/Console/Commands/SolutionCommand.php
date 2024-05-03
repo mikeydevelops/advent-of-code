@@ -19,7 +19,10 @@ class SolutionCommand extends Command
     protected string $signature = 'solution
                                         {--y|year= : The event year.}
                                         {--d|day= : The event day.}
-                                        {--t|test : Run in test mode, will use example input instead of challenge.}';
+                                        {--t|test : Run in test mode, will use example input instead of challenge.}
+                                        {--1|part1 : Run only part 1 of the solution.}
+                                        {--2|part2 : Run only part 2 of the solution.}
+                                        {--p|profile : Show time elapsed and memory used on each part of the solution.}';
 
     /**
      * The console command description.
@@ -54,7 +57,17 @@ class SolutionCommand extends Command
             ->setIO(new IO($this->getInput(), $this->getOutput()))
             ->testing($this->option('test'));
 
-        return $solution->execute() ? Command::SUCCESS : Command::FAILURE;
+        $part1 = $this->option('part1');
+        $part2 = $this->option('part2');
+
+        if (! $part1 && ! $part2) {
+            $part1 = true;
+            $part2 = false;
+        }
+
+        $profile = $this->option('profile');
+
+        return $solution->execute($part1, $part2, $profile) ? Command::SUCCESS : Command::FAILURE;
     }
 
     /**

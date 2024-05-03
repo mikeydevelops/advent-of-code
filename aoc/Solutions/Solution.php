@@ -4,9 +4,9 @@ namespace Mike\AdventOfCode\Solutions;
 
 use Closure;
 use Mike\AdventOfCode\AdventOfCodeDay;
+use Mike\AdventOfCode\AdventOfCodeException;
 use Mike\AdventOfCode\Console\IO;
 use Mike\AdventOfCode\Support\Profiler;
-use Throwable;
 
 abstract class Solution
 {
@@ -56,10 +56,10 @@ abstract class Solution
     /**
      * Run the solution.
      */
-    public function execute(): bool
+    public function execute(bool $part1 = true, bool $part2 = true, bool $profile = true): bool
     {
         if ($this->testing) {
-            $this->io->info('Testing Mode.');
+            $this->io->warn('Testing Mode.');
 
             if (! $this->exampleInput) {
                 $this->io->error(sprintf(
@@ -71,25 +71,82 @@ abstract class Solution
             }
         }
 
-        try {
-            $this->io->line(sprintf('<question>%s</>', $this->day->getPart1Question()));
-            $profiler = $this->measure(fn () => $this->part1Result = $this->part1());
-            $this->io->line(sprintf('> <white>%s</>', $this->part1Result));
-            $this->showProfilerResults($profiler, 'Part 1');
+        $this->io->info("Advent of Code {$this->day->getYear()}");
+        $this->io->info("Day {$this->day->getDay()}: {$this->day->info('title')}");
+        $this->io->newLine();
 
-            $this->io->newLine();
+        if ($part1) {
+            $this->runPart('part1', 'Part One', $profile);
+        } else {
+            // because this part was not run, but part two may use the result from part one,
+            // we will load the previously stored results.
+            $this->part1Result = $this->day->info('part1.result');
 
-            $profiler = $this->measure(fn () => $this->part2Result = $this->part2());
-            $this->io->line(sprintf('<question>%s</>', $this->day->getPart2Question()));
-            $this->io->line(sprintf('> <white>%s</>', $this->part2Result));
-            $this->showProfilerResults($profiler, 'Part 2');
-        } catch (Throwable $ex) {
-            throw $ex;
+            // maybe silently run part1 just in case it is needed for part2.
+            // or find a way to dynamically detect when result from part1 is
+            // needed and then run part1 solution silently showing a notice
+            // to the user.
+        }
 
-            return false;
+        if ($part2) {
+            if ($part1) {
+                $this->io->newLine();
+            }
+
+            $this->day->part2IsUnlocked();
+
+            $this->runPart('part2', 'Part Two', $profile);
+        } else {
+            $this->part2Result = $this->day->info('part2.result');
         }
 
         return true;
+    }
+
+    /**
+     * Run specified part of the day's solution.
+     */
+    public function runPart(string $part, string $label = null, bool $profile = true, bool $silent = false): void
+    {
+        $part = strtolower($part);
+        $parts = ['part1', 'part2'];
+
+        if (! in_array($part, $parts)) {
+            throw AdventOfCodeException::invalidSolutionPartProvided($part, $parts);
+        }
+
+        $label = $label ?? $part;
+
+        !$silent && $this->io->line(sprintf('<question>%s: %s</>', $label, $this->day->info("$part.question", $label.' question has not been set')));
+
+        $result = null;
+        $profiler = null;
+
+        if ($profile) {
+            $profiler = $this->profile(function () use ($part, &$result) {
+                $result = $this->{$part}();
+            });
+        } else {
+            $result = $this->{$part}();
+        }
+
+        $this->{"{$part}Result"} = $result;
+
+        ! $silent && $this->io->line(sprintf('> <white>%s</>', $result));
+
+        $this->day->setInfo("$part.result", $result);
+
+        if ($profile && !$silent) {
+            $this->io->newLine();
+            $this->io->info(sprintf(
+                "$part took <white>%s</> and used <white>%s</> memory.",
+                human_duration($time = $profiler->getTimeTaken()),
+                human_filesize($memory = $profiler->getMemoryUsage()),
+            ));
+
+            $this->day->setInfo("$part.time", $time);
+            $this->day->setInfo("$part.memory", $memory);
+        }
     }
 
     /**
@@ -101,9 +158,9 @@ abstract class Solution
     }
 
     /**
-     * Measure given closure and show time and memory usage.
+     * Profile given closure and show time and memory usage.
      */
-    protected function measure(Closure $callback): Profiler
+    protected function profile(Closure $callback): Profiler
     {
         $profiler = new Profiler;
 
@@ -111,22 +168,6 @@ abstract class Solution
 
         return $profiler;
     }
-
-    /**
-     * Print out the results from the given profiler.
-     */
-    protected function showProfilerResults(Profiler $profiler, string $label): static
-    {
-        $this->io->newLine();
-        $this->io->info(sprintf(
-            "$label took <white>%s</> and used <white>%s</> memory.",
-            human_duration($profiler->getTimeTaken()),
-            human_filesize($profiler->getMemoryUsage()),
-        ));
-
-        return $this;
-    }
-
     /**
      * Process the input from the challenge.
      */

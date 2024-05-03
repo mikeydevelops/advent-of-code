@@ -148,7 +148,6 @@ class AdventOfCode
         static::showSessionKeyInstructions($io);
     }
 
-
     /**
      * Print out instructions how to get the session key for advent of code.
      */
