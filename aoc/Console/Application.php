@@ -150,6 +150,8 @@ class Application extends SymfonyApplication
         $this->console = new ConsoleOutput(formatter: $this->formatter);
         $this->output = new OutputStyle($this->input, $this->console);
 
+        $this->configureIO($this->input, $this->output);
+
         $this->io = new IO($this->input, $this->output);
     }
 

@@ -12,6 +12,7 @@ return [
      *
      */
     'providers' => [
+        \Mike\AdventOfCode\Providers\WhoopsProvider::class,
         \Mike\AdventOfCode\Providers\AdventOfCodeProvider::class,
     ],
 
