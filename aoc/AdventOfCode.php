@@ -161,7 +161,7 @@ class AdventOfCode
             '   for chromium based browsers, or [Storage] tab for firefox.',
             '4. Expand Cookies from the left sidebar and click on https://adventofcode.com',
             '5. Copy the value from the cookie row with name session.',
-            '6. Paste the value in the terminal.',
+            '6. Paste the value in .env file setting the AOC_SESSION variable.',
         ];
 
         array_map([$io, 'line'], $lines);
