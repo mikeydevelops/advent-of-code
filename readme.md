@@ -56,6 +56,7 @@ If you want to test your code, you can use the `--test` or `-t` flag. Then only 
 If you want to profile your code, you can use the `--profile` or `-p` flag. Then after each part of the solution `time taken` and `memory usage` will be shown.
 
 Example output when running `./advent solution -y 2015 -d 1 -12pt`:
+
 ![Output when Day 1 of Year 2015 solutions are run](./storage/assets/year2015day1.png)
 
 That command runs solution for year 2015, day 1, shows first and second part, enables profiling, enables test mode.
