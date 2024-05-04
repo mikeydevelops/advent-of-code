@@ -75,6 +75,8 @@ abstract class Solution
         $this->io->info("Day {$this->day->getDay()}: {$this->day->info('title')}");
         $this->io->newLine();
 
+        $this->before();
+
         if ($part1) {
             $this->runPart('part1', 'Part One', $profile);
         } else {
@@ -100,6 +102,8 @@ abstract class Solution
             $this->part2Result = $this->day->info('part2.result');
         }
 
+        $this->after();
+
         return true;
     }
 
@@ -108,6 +112,8 @@ abstract class Solution
      */
     public function runPart(string $part, string $label = null, bool $profile = true, bool $silent = false): void
     {
+        $this->beforeEach($part);
+
         $part = strtolower($part);
         $parts = ['part1', 'part2'];
 
@@ -147,6 +153,8 @@ abstract class Solution
             $this->day->setInfo("$part.time", $time);
             $this->day->setInfo("$part.memory", $memory);
         }
+
+        $this->afterEach($part, $result);
     }
 
     /**
@@ -185,6 +193,38 @@ abstract class Solution
      * Run the second part of the challenge.
      */
     abstract function part2();
+
+    /**
+     * Hook before all parts are run.
+     */
+    protected function before(): void
+    {
+        //
+    }
+
+    /**
+     * Hook after all parts are run.
+     */
+    protected function after(): void
+    {
+        //
+    }
+
+    /**
+     * Hook before each part is run.
+     */
+    protected function beforeEach(string $part): void
+    {
+        //
+    }
+
+    /**
+     * Hook after each part is run.
+     */
+    protected function afterEach(string $part, $result): void
+    {
+        //
+    }
 
     /**
      * Make the solution in testing mode.
