@@ -3,7 +3,7 @@
 namespace Mike\AdventOfCode\Console;
 
 use InvalidArgumentException;
-use Mike\AdventOfCode\Console\Contracts\AccessibleOutputFormatterStyleInterface;
+use Mike\AdventOfCode\Console\Contracts\InheritsOutputFormatterStyleInterface;
 use Symfony\Component\Console\Formatter\OutputFormatterStyleInterface;
 use Symfony\Component\Console\Formatter\OutputFormatterStyleStack;
 use Symfony\Component\Console\Formatter\WrappableOutputFormatterInterface;
@@ -153,10 +153,10 @@ class OutputFormatter implements WrappableOutputFormatterInterface
             } elseif (null === $style = $this->createStyleFromString($tag)) {
                 $output .= $this->applyCurrentStyle($text, $output, $width, $currentLineLength);
             } elseif ($open) {
-                if ($style instanceof AccessibleOutputFormatterStyleInterface) {
-                    if ($style->hasOnlyOptions()) {
-                        $style->mergeColorsWith($this->styleStack->getCurrent());
-                    }
+                $current = $this->styleStack->getCurrent();
+
+                if ($style instanceof InheritsOutputFormatterStyleInterface && $current instanceof InheritsOutputFormatterStyleInterface) {
+                    $style->inheritFrom($current);
                 }
 
                 $this->styleStack->push($style);
@@ -178,7 +178,7 @@ class OutputFormatter implements WrappableOutputFormatterInterface
     /**
      * Tries to create new style instance from string.
      */
-    protected function createStyleFromString(string $string): AccessibleOutputFormatterStyleInterface|OutputFormatterStyleInterface|null
+    protected function createStyleFromString(string $string): InheritsOutputFormatterStyleInterface|OutputFormatterStyleInterface|null
     {
         if (isset($this->styles[$string])) {
             return $this->styles[$string];

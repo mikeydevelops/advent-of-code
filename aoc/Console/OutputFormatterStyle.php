@@ -3,10 +3,10 @@
 namespace Mike\AdventOfCode\Console;
 
 use Symfony\Component\Console\Color;
-use Mike\AdventOfCode\Console\Contracts\AccessibleOutputFormatterStyleInterface;
+use Mike\AdventOfCode\Console\Contracts\InheritsOutputFormatterStyleInterface;
 use Symfony\Component\Console\Formatter\OutputFormatterStyleInterface;
 
-class OutputFormatterStyle implements AccessibleOutputFormatterStyleInterface, OutputFormatterStyleInterface
+class OutputFormatterStyle implements InheritsOutputFormatterStyleInterface, OutputFormatterStyleInterface
 {
     protected Color $color;
     protected string $foreground;
@@ -16,14 +16,20 @@ class OutputFormatterStyle implements AccessibleOutputFormatterStyleInterface, O
     protected bool $handlesHrefGracefully;
 
     /**
+     * The properties to be inherited from previous style.
+     */
+    protected array $inherit;
+
+    /**
      * Initializes output formatter style.
      *
      * @param string|null $foreground The style foreground color name
      * @param string|null $background The style background color name
      */
-    public function __construct(?string $foreground = null, ?string $background = null, array $options = [])
+    public function __construct(?string $foreground = null, ?string $background = null, array $options = [], array $inherit = [])
     {
         $this->color = new Color($this->foreground = $foreground ?: '', $this->background = $background ?: '', $this->options = $options);
+        $this->inherit = $inherit;
     }
 
     /**
@@ -111,19 +117,18 @@ class OutputFormatterStyle implements AccessibleOutputFormatterStyleInterface, O
         return $this->options;
     }
 
-    public function hasOnlyOptions(): bool
+    public function inheritFrom(InheritsOutputFormatterStyleInterface $style): static
     {
-        return $this->foreground === '' && $this->background === '' && ! empty($this->options);
-    }
-
-    public function mergeColorsWith(AccessibleOutputFormatterStyleInterface $style): static
-    {
-        if (! empty($fg = $style->getForeground())) {
+        if (in_array('foreground', $this->inherit) && ! empty($fg = $style->getForeground())) {
             $this->setForeground($fg);
         }
 
-        if (! empty($bg = $style->getBackground())) {
+        if (in_array('background', $this->inherit) && ! empty($bg = $style->getBackground())) {
             $this->setBackground($bg);
+        }
+
+        if (in_array('options', $this->inherit) && ! empty($options = $style->getOptions())) {
+            $this->setOptions($options);
         }
 
         return $this;

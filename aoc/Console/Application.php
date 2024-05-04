@@ -143,7 +143,8 @@ class Application extends SymfonyApplication
             'white' => new OutputFormatterStyle('white'),
             'black' => new OutputFormatterStyle('black'),
 
-            'em' => new OutputFormatterStyle(options: ['bold']),
+            'em' => new OutputFormatterStyle(options: ['underscore'], inherit: ['foreground', 'background']),
+            'code' => new OutputFormatterStyle(options: ['bold'], inherit: ['foreground', 'background']),
         ]);
 
         $this->input = new ArgvInput();

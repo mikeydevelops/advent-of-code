@@ -226,9 +226,6 @@ class AdventOfCodeDay
      */
     protected function parseInfo(string $html): array
     {
-        // the html tags allowed when getting the html from the page.
-        $allowedTags = ['em'];
-
         $cached = $this->infoIsCached() ? $this->getCachedInfo() : [];
 
         $title = $cached['title'] ?? null;
@@ -260,14 +257,7 @@ class AdventOfCodeDay
         $title = trim(trim($p1->filter('h2')->first()->text(), '-'));
         $title = substr($title, strpos($title, ':') + 2);
 
-        $paragraphs = $p1->filter('p');
-        $part1['question'] = strip_tags($paragraphs->last()->html(), $allowedTags);
-
-        // if the last paragraph contains 'for example', use second-to-last paragraph as question.
-        if (stripos($part1['question'], 'for example') === 0) {
-            $part1['question'] = strip_tags($paragraphs->eq($paragraphs->count() - 2)->html(), $allowedTags);
-        }
-        $part1['question'] = preg_replace('/<(\w+)[^>]*>/', '<$1>', $part1['question']);
+        $part1['question'] = $this->parseQuestion($p1->filter('p'));
 
         if ($parts->count() == 2) {
             $part1['answer'] = $answers->first()->filter('code')->first()->text();
@@ -276,15 +266,7 @@ class AdventOfCodeDay
 
             $part2['unlocked'] = true;
 
-            $paragraphs = $p2->filter('p');
-            $part2['question'] = strip_tags($paragraphs->last()->html(), $allowedTags);
-
-            // if the last paragraph contains 'for example', use second-to-last paragraph as question.
-            if (stripos($part2['question'], 'for example') === 0) {
-                $part2['question'] = strip_tags($paragraphs->eq($paragraphs->count() - 2)->html(), $allowedTags);
-            }
-
-            $part2['question'] = preg_replace('/<(\w+)[^>]*>/', '<$1>', $part2['question']);
+            $part2['question'] = $this->parseQuestion($p2->filter('p'));
 
             if ($answers->count() == 2 && ($p2a = $answers->last()->filter('code'))->count()) {
                 $part2['answer'] = $p2a->first()->text();
@@ -292,6 +274,34 @@ class AdventOfCodeDay
         }
 
         return compact('title', 'part1', 'part2');
+    }
+
+    /**
+     * Parse the question from a list of paragraphs.
+     */
+    protected function parseQuestion(Crawler $paragraphs): string
+    {
+        $paragraphs = array_reverse(iterator_to_array($paragraphs));
+
+        // the html tags allowed when getting the html from the page.
+        $allowedTags = [
+            'em', 'code',
+        ];
+
+        foreach ($paragraphs as $paragraph) {
+            $question = strip_tags((new Crawler($paragraph))->html(), $allowedTags);
+
+            // skip empty paragraphs or paragraphs that contain 'for example'
+            if (empty($question) || stripos($question, 'for example') === 0) {
+                continue;
+            }
+
+            $question = preg_replace('/<(\w+)[^>]*>/', '<$1>', $question);
+
+            return $question;
+        }
+
+        return $question;
     }
 
     /**
