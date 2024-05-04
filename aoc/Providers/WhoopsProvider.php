@@ -14,9 +14,14 @@ class WhoopsProvider extends Provider
      */
     public function register(): void
     {
-        $writer = new Writer(output: $this->app->console);
+        $console = clone $this->app->console;
 
-        $writer->showEditor($this->app->console->isDebug());
+        // remove line wrapping for exceptions.
+        $console->setMaxLineWith(0);
+
+        $writer = new Writer(output: $console);
+
+        $writer->showEditor($console->isDebug());
 
         $handler = new Handler($writer);
 
