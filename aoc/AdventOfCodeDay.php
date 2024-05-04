@@ -260,7 +260,13 @@ class AdventOfCodeDay
         $title = trim(trim($p1->filter('h2')->first()->text(), '-'));
         $title = substr($title, strpos($title, ':') + 2);
 
-        $part1['question'] = strip_tags($p1->filter('p')->last()->html(), $allowedTags);
+        $paragraphs = $p1->filter('p');
+        $part1['question'] = strip_tags($paragraphs->last()->html(), $allowedTags);
+
+        // if the last paragraph contains 'for example', use second-to-last paragraph as question.
+        if (stripos($part1['question'], 'for example') === 0) {
+            $part1['question'] = strip_tags($paragraphs->eq($paragraphs->count() - 2)->html(), $allowedTags);
+        }
 
         if ($parts->count() == 2) {
             $part1['answer'] = $answers->first()->filter('code')->first()->text();
@@ -269,7 +275,13 @@ class AdventOfCodeDay
 
             $part2['unlocked'] = true;
 
-            $part2['question'] = strip_tags($p2->filter('p')->last()->html(), $allowedTags);
+            $paragraphs = $p2->filter('p');
+            $part2['question'] = strip_tags($paragraphs->last()->html(), $allowedTags);
+
+            // if the last paragraph contains 'for example', use second-to-last paragraph as question.
+            if (stripos($part2['question'], 'for example') === 0) {
+                $part2['question'] = strip_tags($paragraphs->eq($paragraphs->count() - 2)->html(), $allowedTags);
+            }
 
             if ($answers->count() == 2 && ($p2a = $answers->last()->filter('code'))->count()) {
                 $part2['answer'] = $p2a->first()->text();
