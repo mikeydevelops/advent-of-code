@@ -2,7 +2,6 @@
 
 namespace Mike\AdventOfCode;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Response;
 use Symfony\Component\DomCrawler\Crawler;
@@ -227,6 +226,9 @@ class AdventOfCodeDay
      */
     protected function parseInfo(string $html): array
     {
+        // the html tags allowed when getting the html from the page.
+        $allowedTags = ['em'];
+
         $cached = $this->infoIsCached() ? $this->getCachedInfo() : [];
 
         $title = $cached['title'] ?? null;
@@ -258,7 +260,7 @@ class AdventOfCodeDay
         $title = trim(trim($p1->filter('h2')->first()->text(), '-'));
         $title = substr($title, strpos($title, ':') + 2);
 
-        $part1['question'] = $p1->filter('p')->last()->html();
+        $part1['question'] = strip_tags($p1->filter('p')->last()->html(), $allowedTags);
 
         if ($parts->count() == 2) {
             $part1['answer'] = $answers->first()->filter('code')->first()->text();
@@ -267,7 +269,7 @@ class AdventOfCodeDay
 
             $part2['unlocked'] = true;
 
-            $part2['question'] = $p2->filter('p')->last()->html();
+            $part2['question'] = strip_tags($p2->filter('p')->last()->html(), $allowedTags);
 
             if ($answers->count() == 2 && ($p2a = $answers->last()->filter('code'))->count()) {
                 $part2['answer'] = $p2a->first()->text();
@@ -410,7 +412,8 @@ class AdventOfCodeDay
      */
     public function request(string $method, string $uri = '', array $options = []): Response
     {
-        $uri = $uri[0] == '/' ? $uri : "/$this->year/day/$this->day/$uri";
+        // adventofcode.com does not like trailing slashes.
+        $uri = $uri && $uri[0] == '/' ? $uri : rtrim("/$this->year/day/$this->day/$uri", '/');
 
         return $this->client->request($method, $uri, $options);
     }
