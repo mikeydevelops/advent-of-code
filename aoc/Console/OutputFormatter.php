@@ -153,8 +153,10 @@ class OutputFormatter implements WrappableOutputFormatterInterface
             } elseif (null === $style = $this->createStyleFromString($tag)) {
                 $output .= $this->applyCurrentStyle($text, $output, $width, $currentLineLength);
             } elseif ($open) {
-                if ($style->hasOnlyOptions()) {
-                    $style->mergeColorsWith($this->styleStack->getCurrent());
+                if ($style instanceof AccessibleOutputFormatterStyleInterface) {
+                    if ($style->hasOnlyOptions()) {
+                        $style->mergeColorsWith($this->styleStack->getCurrent());
+                    }
                 }
 
                 $this->styleStack->push($style);
