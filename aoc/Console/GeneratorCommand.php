@@ -18,26 +18,33 @@ abstract class GeneratorCommand extends Command
     {
         $this->prepare();
 
-        $fullClass = $this->getFullClassNamespace();
-        $path = $this->namespaceToPath($fullClass);
-        $relativePath = '.'.str_replace($this->app->basePath(), '', $path);
+        $classes = array_wrap($this->getFullClassNamespace());
+        $fails = [];
 
-        $className = basename($fullClass);
-        $namespace = dirname($fullClass);
+        foreach ($classes as $class) {
 
-        if (!$this->shouldOverwrite() && file_exists($path)) {
-            $this->error("$this->generatorType <white>[$className]</> already exits in <white>[$namespace]</>.");
+            $path = $this->namespaceToPath($class);
+            $relativePath = '.'.str_replace($this->app->basePath(), '', $path);
 
-            return Command::FAILURE;
+            $className = basename($class);
+            $namespace = dirname($class);
+
+            if (!$this->shouldOverwrite() && file_exists($path)) {
+                $this->error("$this->generatorType <white>[$className]</> already exits in <white>[$namespace]</>.");
+
+                $fails[] = $class;
+
+                continue;
+            }
+
+            $this->ensureClassDirectoryExists(dirname($path));
+
+            file_put_contents($path, $this->makeClass($class));
+
+            $this->success("$this->generatorType <white>[$relativePath]</> created successfully.");
         }
 
-        $this->ensureClassDirectoryExists(dirname($path));
-
-        file_put_contents($path, $this->makeClass($fullClass));
-
-        $this->success("$this->generatorType <white>[$relativePath]</> created successfully.");
-
-        return Command::SUCCESS;
+        return count($fails) ? Command::FAILURE : Command::SUCCESS;
     }
 
     /**
@@ -69,9 +76,23 @@ abstract class GeneratorCommand extends Command
     /**
      * Get the full namespace for the provided class name.
      */
-    protected function getFullClassNamespace(): string
+    protected function getFullClassNamespace(): string|array
     {
-        $name = trim($this->getClassName(), '\\/');
+        $name = $this->getClassName();
+
+        if (! is_array($name)) {
+            return $this->makeFullClassNamespace($name);
+        }
+
+        return array_map([$this, 'makeFullClassNamespace'], $name);
+    }
+
+    /**
+     * Construct the full namespace for provided class name.
+     */
+    protected function makeFullClassNamespace(string $name): string
+    {
+        $name = trim($name, '\\/');
         $name = str_replace('/', '\\', $name);
 
         return $this->getClassNamespace(rtrim($this->namespace(), '\\')).'\\'.$name;
@@ -113,10 +134,8 @@ abstract class GeneratorCommand extends Command
 
     /**
      * Get the user provided name for the class.
-     *
-     * @return string
      */
-    protected function getClassName(): string
+    protected function getClassName(): string|array
     {
         return trim($this->argument('name'));
     }
