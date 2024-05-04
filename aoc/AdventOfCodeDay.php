@@ -267,6 +267,7 @@ class AdventOfCodeDay
         if (stripos($part1['question'], 'for example') === 0) {
             $part1['question'] = strip_tags($paragraphs->eq($paragraphs->count() - 2)->html(), $allowedTags);
         }
+        $part1['question'] = preg_replace('/<(\w+)[^>]*>/', '<$1>', $part1['question']);
 
         if ($parts->count() == 2) {
             $part1['answer'] = $answers->first()->filter('code')->first()->text();
@@ -282,6 +283,8 @@ class AdventOfCodeDay
             if (stripos($part2['question'], 'for example') === 0) {
                 $part2['question'] = strip_tags($paragraphs->eq($paragraphs->count() - 2)->html(), $allowedTags);
             }
+
+            $part2['question'] = preg_replace('/<(\w+)[^>]*>/', '<$1>', $part2['question']);
 
             if ($answers->count() == 2 && ($p2a = $answers->last()->filter('code'))->count()) {
                 $part2['answer'] = $p2a->first()->text();
