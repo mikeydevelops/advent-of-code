@@ -159,10 +159,13 @@ abstract class Solution
 
     /**
      * Get the input of the day.
+     *
+     * @param  string  $real  Override the input when testing mode is off.
+     * @param  string  $example  Override the input when testing mode is on.
      */
-    public function getInput(): mixed
+    public function getInput(string $real = null, string $example = null): mixed
     {
-        return $this->transformInput($this->testing ? $this->exampleInput : $this->day->getInput());
+        return $this->transformInput($this->testing ? $example ?? $this->exampleInput : $real ?? $this->day->getInput());
     }
 
     /**
