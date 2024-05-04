@@ -4,7 +4,7 @@
     "type": "project",
     "require": {
         "php": ">=8.1",
-        "psy/psysh": "^0.11.10",
+        "psy/psysh": "^0.12.3",
         "symfony/var-dumper": "^6.3",
         "guzzlehttp/guzzle": "^7.5",
         "league/commonmark": "^2.3",
