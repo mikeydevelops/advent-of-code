@@ -192,29 +192,41 @@ class Application extends SymfonyApplication
             return false;
         }
 
-        $paths = $this->path('Providers');
-
-        $paths = array_unique(array_wrap($paths));
-
-        $paths = array_filter($paths, function ($path) {
-            return is_dir($path);
-        });
-
-        if (empty($paths)) {
-            return false;
-        }
-
-        $namespace = $this->getNamespace();
-
-        foreach (Finder::create()->in($paths)->files() as $file) {
-            $provider = $this->getClassFromPath($file->getRealPath(), $namespace);
-
+        foreach ($this->config->get('providers') as $provider) {
             if (is_subclass_of($provider, Provider::class) && ! (new ReflectionClass($provider))->isAbstract()) {
                 $this->registerProvider($provider);
             }
         }
 
         return $this->providersLoaded = true;
+
+        // The following is for auto loading providers from directory.
+        // but it is disabled because it does not allow for changing
+        // the order of providers.
+
+        // $paths = $this->path('Providers');
+
+        // $paths = array_unique(array_wrap($paths));
+
+        // $paths = array_filter($paths, function ($path) {
+        //     return is_dir($path);
+        // });
+
+        // if (empty($paths)) {
+        //     return false;
+        // }
+
+        // $namespace = $this->getNamespace();
+
+        // foreach (Finder::create()->in($paths)->files() as $file) {
+        //     $provider = $this->getClassFromPath($file->getRealPath(), $namespace);
+
+        //     if (is_subclass_of($provider, Provider::class) && ! (new ReflectionClass($provider))->isAbstract()) {
+        //         $this->registerProvider($provider);
+        //     }
+        // }
+
+        // return $this->providersLoaded = true;
     }
 
     /**

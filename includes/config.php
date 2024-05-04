@@ -3,6 +3,20 @@
 return [
     /**
      * --------------------------------------------------
+     *  Providers
+     * --------------------------------------------------
+     *
+     * Providers that register services for the
+     * application can be added here to be run when
+     * application starts.
+     *
+     */
+    'providers' => [
+        \Mike\AdventOfCode\Providers\AdventOfCodeProvider::class,
+    ],
+
+    /**
+     * --------------------------------------------------
      *  Advent of Code related configuration
      * --------------------------------------------------
      *
