@@ -53,12 +53,14 @@ class MakeSolutionCommand extends GeneratorCommand
 
     /**
      * Get the user provided name for the class.
-     *
-     * @return string
      */
-    protected function getClassName(): string
+    protected function getClassName(): string|array
     {
-        return 'Day'.sprintf('%02d', $this->day);
+        if (! is_array($this->day)) {
+            return 'Day'.sprintf('%02d', $this->day);
+        }
+
+        return array_map(fn(int $day) => ('Day'.sprintf('%02d', $day)), $this->day);
     }
 
     /**

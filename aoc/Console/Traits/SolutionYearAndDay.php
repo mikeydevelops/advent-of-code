@@ -20,7 +20,7 @@ trait SolutionYearAndDay
     /**
      * The day for the event solution.
      */
-    protected int $day;
+    protected int|array $day;
 
     /**
      * If year or day are not provided through options, ask for them interactively.
@@ -88,10 +88,16 @@ trait SolutionYearAndDay
 
         if (is_null($day)) {
             $choices = array_combine($days, array_map(fn(int $d) => "Day $d", $days));
-            $day = str_replace('Day ', '', $this->choice("The solution for which day in $year should run?", $days));
+            $choices['r'] = 'All remaining days (' . count($days) . ')';
+
+            $day = str_replace('Day ', '', $this->choice("The solution for which day in $year should run?", $choices));
+
+            if ($day === 'r') {
+                $day = $days;
+            }
         }
 
-        $this->day = (int) $day;
+        $this->day = $day;
     }
 
     /**
