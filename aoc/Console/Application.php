@@ -17,7 +17,7 @@ use Symfony\Component\Console\Application as SymfonyApplication;
 use Mike\AdventOfCode\Console\OutputFormatter;
 use Mike\AdventOfCode\Console\OutputFormatterStyle;
 use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Console\Output\ConsoleOutput;
+use Mike\AdventOfCode\Console\ConsoleOutput;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -25,7 +25,7 @@ use Symfony\Component\Finder\Finder;
  *
  * @property  \Symfony\Component\Console\Input\ArgvInput  $input  The application input.
  * @property  \Mike\AdventOfCode\Console\OutputStyle  $output  The application output.
- * @property  \Symfony\Component\Console\Output\ConsoleOutput  $console  The application console.
+ * @property  \Mike\AdventOfCode\Console\ConsoleOutput  $console  The application console.
  * @property  \Mike\AdventOfCode\Console\OutputFormatter  $formatter  The application output formatter.
  * @property  \Mike\AdventOfCode\Console\IO  $io  Easier way to interact with console.
  */
@@ -148,6 +148,8 @@ class Application extends SymfonyApplication
 
         $this->input = new ArgvInput();
         $this->console = new ConsoleOutput(formatter: $this->formatter);
+        // 75 characters appears to be the maximum on adventofcode.com
+        $this->console->setMaxLineWith(75);
         $this->output = new OutputStyle($this->input, $this->console);
 
         $this->configureIO($this->input, $this->output);
