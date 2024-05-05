@@ -26,7 +26,7 @@ class Day19 extends Solution
     public function transformInput(string $input): array
     {
         [$replacements, $molecule] = explode("\n\n", trim($input));
-        $replacements = array_filter(explode("\n", $replacements));
+        $replacements = split_lines($replacements);
         $map = [];
 
         foreach ($replacements as $replacement) {

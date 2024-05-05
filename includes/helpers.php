@@ -580,3 +580,33 @@ if (! function_exists('array_combinations')) {
         }
     }
 }
+
+if (! function_exists('split_lines')) {
+    /**
+     * Split string into lines.
+     *
+     * @param  string  $string
+     * @param  bool  $trim Trim the string before splitting.
+     * @param  bool  $ignoreEmpty  Ignore empty lines.
+     * @param  bool  $trimLines  Trim each line after splitting.
+     * @return string[]
+     */
+    function split_lines(string $string, bool $trim = true, bool $ignoreEmpty = true, bool $trimLines = true): array
+    {
+        if ($trim) {
+            $string = trim($string);
+        }
+
+        $result = preg_split('/\r?\n/', $string);
+
+        if ($ignoreEmpty) {
+            $result = array_filter($result);
+        }
+
+        if ($trimLines) {
+            $result = array_map('trim', $result);
+        }
+
+        return $result;
+    }
+}

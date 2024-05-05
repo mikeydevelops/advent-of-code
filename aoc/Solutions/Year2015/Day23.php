@@ -26,7 +26,7 @@ class Day23 extends Solution
      */
     public function transformInput(string $input): array
     {
-        $input = explode("\n", str_replace(',', '', trim($input)));
+        $input = split_lines(str_replace(',', '', $input));
 
         return array_map(fn(string $l) => explode(' ', $l), $input);
     }

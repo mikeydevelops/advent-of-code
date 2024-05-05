@@ -33,7 +33,7 @@ class Day15 extends Solution
     {
         $ingredients = [];
 
-        foreach (explode("\n", trim($input)) as $line) {
+        foreach (split_lines($input) as $line) {
             [$name, $properties] = explode(': ', $line);
 
             $properties = array_sliding(explode(' ', str_replace(',', '', $properties)), 2, 2);

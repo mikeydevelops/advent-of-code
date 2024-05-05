@@ -28,7 +28,7 @@ class Day16 extends Solution
     {
         $aunts = [];
 
-        foreach (explode("\n", trim($input)) as $line) {
+        foreach (split_lines($input) as $line) {
             [$name, $compounds] = explode(': ', $line, 2);
 
             $compounds = array_sliding(explode(' ', str_replace([':', ','], '', $compounds)), 2, 2);

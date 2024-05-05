@@ -26,7 +26,7 @@ class Day18 extends Solution
      */
     public function transformInput(string $input): array
     {
-        return array_map('str_split', explode("\n", trim($input)));
+        return array_map('str_split', split_lines($input));
     }
 
     /**

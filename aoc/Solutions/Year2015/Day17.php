@@ -21,7 +21,7 @@ class Day17 extends Solution
      */
     public function transformInput(string $input): array
     {
-        return array_map('intval', explode("\n", trim($input)));
+        return array_map('intval', split_lines($input));
     }
 
     /**

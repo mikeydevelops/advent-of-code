@@ -40,10 +40,10 @@ class Day13 extends Solution
         $input = str_replace(
             ['would ', 'happiness units by sitting next to ', '.', 'gain ', 'lose '],
             ['', '', '', '+', '-'],
-            trim($input)
+            $input
         );
 
-        foreach (explode("\n", $input) as $line) {
+        foreach (split_lines($input) as $line) {
             [$attendee, $points, $guest] = explode(' ', $line);
 
             $attendees[$attendee][$guest] = intval($points);

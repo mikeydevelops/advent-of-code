@@ -24,9 +24,9 @@ class Day22 extends Solution
     {
         $boss = [];
 
-        $input = str_replace('Hit Points', 'hp', trim($input));
+        $input = str_replace('Hit Points', 'hp', $input);
 
-        foreach (explode("\n", $input) as $line) {
+        foreach (split_lines($input) as $line) {
             [$stat, $value] = explode(': ', $line);
 
             $boss[strtolower($stat)] = intval($value);

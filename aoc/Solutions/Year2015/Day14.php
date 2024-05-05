@@ -36,10 +36,10 @@ class Day14 extends Solution
         $input = str_replace(
             ['can fly ', 'km/s for ', 'seconds, but then must rest for ', ' seconds.'],
             '',
-            trim($input)
+            $input
         );
 
-        foreach (explode("\n", $input) as $line) {
+        foreach (split_lines($input) as $line) {
             [$name, $speed, $stamina, $rest] = explode(' ', $line);
 
             $speed = intval($speed);

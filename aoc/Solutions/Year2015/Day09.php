@@ -4,7 +4,7 @@ namespace Mike\AdventOfCode\Solutions\Year2015;
 
 use Mike\AdventOfCode\Solutions\Solution;
 
-use Mike\AdventOfCode\Year2015\Day09\Distance;
+use Mike\AdventOfCode\Solutions\Year2015\Day09\Distance;
 
 /**
  * @method \Mike\AdventOfCode\Solutions\Year2015\Day09\Distance[] getInput() Get the list of locations.
@@ -30,8 +30,8 @@ class Day09 extends Solution
         return array_map(function ($distance) {
             [$from, $to, $length] = explode(' ', str_replace(['to ', '= '], '', $distance));
 
-            return Distance::instance($from, $to, $length);
-        }, explode("\n", $input));
+            return Distance::make($from, $to, $length);
+        }, split_lines($input));
     }
 
     /**

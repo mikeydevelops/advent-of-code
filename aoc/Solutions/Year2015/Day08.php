@@ -26,7 +26,7 @@ class Day08 extends Solution
      */
     public function transformInput(string $input): array
     {
-        return array_filter(explode("\n", $input));
+        return split_lines($input);
     }
 
     /**
