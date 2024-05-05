@@ -3,9 +3,10 @@
 namespace Mike\AdventOfCode\Solutions\Year2016;
 
 use Mike\AdventOfCode\Solutions\Solution;
-use Mike\AdventOfCode\Solutions\Year2016\Day11\Microchip;
-use Mike\AdventOfCode\Solutions\Year2016\Day11\RTG;
 
+/**
+ * @method  string[][]  getInput()  Get the components for each floor.
+ */
 class Day11 extends Solution
 {
     /**
@@ -20,83 +21,96 @@ class Day11 extends Solution
 
     /**
      * Process the input from the challenge.
+     *
+     * @return string[][]
      */
-    public function transformInput(string $input): mixed
+    public function transformInput(string $input): array
     {
-        $locations = [];
-        $map = [
-            'microchip' => Microchip::class,
-            'generator' => RTG::class,
-        ];
+        $floors = [];
 
         foreach (split_lines($input) as $floor) {
-            $location = [];
+            $components = [];
 
             if (preg_match_all('/([a-z]+)(?:-compatible)?\s(microchip|generator)/', $floor, $parts, PREG_SET_ORDER)) {
                 foreach ($parts as $part) {
-                    $location[] = new $map[$part[2]]($part[1]);
+                    $components[] = $part[1] . ' ' . $part[2];
                 }
             }
 
-            $locations[] = $location;
+            $floors[] = $components;
         }
 
-        return $locations;
+        return $floors;
     }
 
     /**
      * Run the first part of the challenge.
      */
-    public function part1()
+    public function part1(): int
     {
-        $this->renderDiagram($this->getInput());
+        return $this->findMinimumSteps($this->getInput());
     }
 
     /**
      * Run the second part of the challenge.
      */
-    public function part2()
+    public function part2(): int
     {
-        //
+        $floors = $this->getInput();
+        $floors[0] = array_merge($floors[0], [
+            'elerium generator',
+            'elerium microchip',
+            'dilithium generator',
+            'dilithium microchip',
+        ]);
+
+        return $this->findMinimumSteps($floors);
     }
 
     /**
-     * Render the given locations as per day 11 docs in website.
+     * Find the minimum steps needed to lift all components to the fourth floor.
      */
-    public function renderDiagram(array $locations, int $elevator = 0): void
+    public function findMinimumSteps(array $floors): int
     {
-        $all = array_group_by(
-            array_merge(...$locations),
-            fn(RTG|Microchip $item) => $item->element
-        );
+        $steps = 0;
+        $state = array_map('count', $floors);
+        $total = array_sum($state);
+        $slots = min($state[0], 2);
+        $state[0] -= $slots;
+        $level = 0;
 
-        $all = array_map(function ($g) {
-            // sort so generator is first in the group, then microchip
-            usort($g, fn ($a) => $a instanceof RTG ? 0 : 1);
+        while ($state[3] + 1 != $total) {
+            // go down
+            while ($slots < 2 && $level > 0) {
+                $level--;
+                $taken = min($state[$level], 2 - $slots);
 
-            return $g;
-        }, $all);
-
-        foreach (array_reverse($locations) as $idx => $parts) {
-            $level = 4 - $idx;
-
-            $e = $level == $elevator + 1 ? 'E' : '.';
-
-            $this->io->write("F$level $e   ");
-
-            foreach (array_merge(...array_values($all)) as $g) {
-                $partNames = array_map(fn(RTG|Microchip $p) => $p->abbr(), $parts);
-
-                if (in_array($s = $g->abbr(), $partNames)) {
-                    $this->io->write($s . ' ' . (strlen($s) == 2 ? ' ' : ''));
-
-                    continue;
+                if ($taken > 0) {
+                    $slots += $taken;
+                    $state[$level] -= $taken;
                 }
 
-                $this->io->write('.   ');
+                $steps++;
             }
 
-            $this->io->line('');
+            // go up
+            while ($level < 3) {
+                $level++;
+                $taken = min($state[$level], 2 - $slots);
+
+                if ($taken > 0) {
+                    $slots += $taken;
+                    $state[$level] -= $taken;
+                }
+
+                $steps++;
+            }
+
+            $state[3] += 1;
+
+            $slots--;
         }
+
+        return $steps;
     }
 }

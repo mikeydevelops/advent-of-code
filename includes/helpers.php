@@ -696,3 +696,16 @@ if (! function_exists('array_group_by')) {
         return $result;
     }
 }
+
+if (! function_exists('array_flat')) {
+    /**
+     * Flatten multidimensional array.
+     */
+    function array_flat(array $array): array
+    {
+        return iterator_to_array(
+            new RecursiveIteratorIterator(new RecursiveArrayIterator($array)),
+            false,
+        );
+    }
+}
