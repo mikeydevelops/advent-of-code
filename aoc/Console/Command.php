@@ -95,8 +95,10 @@ abstract class Command extends SymfonyCommand
         // set max output width only on commands extending this one.
         // internal commands will not be wrapped.
         // 75 characters appears to be the maximum on adventofcode.com
-        if ($this->output->getOutput() instanceof ConsoleOutput) {
-            $this->output->getOutput()->setMaxLineWith(75);
+        $out = $this->output->getOutput();
+
+        if ($out instanceof ConsoleOutput) {
+            $out->setMaxLineWith(75);
         }
 
         try {
