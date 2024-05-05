@@ -248,6 +248,14 @@ trait InputOutput
     }
 
     /**
+     * Write a string as standard output.
+     */
+    public function write(string $string, bool $newline = false, string|int $verbosity = null): void
+    {
+        $this->output->write($string, $newline, $this->parseVerbosity($verbosity));
+    }
+
+    /**
      * Write a blank line.
      */
     public function newLine(int $count = 1): static

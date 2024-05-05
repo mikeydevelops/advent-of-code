@@ -238,7 +238,7 @@ class AdventOfCodeDay
             'memory' => null,
         ], $cached['part1'] ?? []);
 
-        $part1 = array_merge([
+        $part2 = array_merge([
             'unlocked' => false,
             'question' => null,
             'answer' => null,

@@ -610,3 +610,89 @@ if (! function_exists('split_lines')) {
         return $result;
     }
 }
+
+if (! function_exists('caesar_char')) {
+    /**
+     * Rotate a character using caesar's cipher.
+     *
+     * @param  string  $char
+     * @param  integer $n  The amount of times to rotate the character.
+     * @return string
+     */
+    function caesar_char(string $char, int $n): string
+    {
+        $code = ord($char);
+
+        // these help with upper or lower case characters.
+        $start = $code > 96 && $code < 123 ? 97 : 65;
+        $end = $start == 97 ? 122 : 90;
+
+        for ($i = 0; $i < $n; $i++) {
+            $code ++;
+
+            if ($code > $end) {
+                $code = $start;
+            }
+        }
+
+        return chr($code);
+    }
+}
+
+if (! function_exists('array_rotate')) {
+    /**
+     * Rotate array elements $amount times to the right.
+     */
+    function array_rotate(array $array, int $amount = 1): array
+    {
+        for ($i = 0; $i < $amount; $i ++) {
+            array_unshift($array, array_pop($array));
+        }
+
+        return $array;
+    }
+}
+
+if (! function_exists('array_flip_row_column')) {
+
+    /**
+     * Flip the rows and columns in 2d array.
+     *
+     * i.e. if array is accessed as array[y][x] it will become array[x][y].
+     *
+     * @param  array  $array
+     * @return array
+     */
+    function array_flip_row_column(array $array): array
+    {
+        $result = [];
+
+        for ($i = 0; $i < count($array[0]); $i++) {
+            $result[] = array_column($array, $i);
+        }
+
+        return $result;
+    }
+}
+
+if (! function_exists('array_group_by')) {
+    /**
+     * Group items using provided key.
+     */
+    function array_group_by(array $array, callable|string|int $key): array
+    {
+        $result = [];
+
+        foreach ($array as $idx => $item) {
+            $k = $key;
+
+            if (is_callable($k)) {
+                $k = $k($item, $idx, $array);
+            }
+
+            $result[$k][] = $item;
+        }
+
+        return $result;
+    }
+}
