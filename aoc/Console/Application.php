@@ -150,7 +150,7 @@ class Application extends SymfonyApplication
         $this->input = new ArgvInput();
         $this->console = new ConsoleOutput(formatter: $this->formatter);
         // 75 characters appears to be the maximum on adventofcode.com
-        $this->console->setMaxLineWith(75);
+        // $this->console->setMaxLineWith(75);
         $this->output = new OutputStyle($this->input, $this->console);
 
         $this->configureIO($this->input, $this->output);

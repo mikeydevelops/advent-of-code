@@ -9,6 +9,7 @@ use Mike\AdventOfCode\Console\Parser;
 use Mike\AdventOfCode\Console\OutputStyle;
 use Mike\AdventOfCode\Console\Traits\InputOutput;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
+use Symfony\Component\Console\Formatter\WrappableOutputFormatterInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -90,6 +91,13 @@ abstract class Command extends SymfonyCommand
         $this->output = $output instanceof OutputStyle ? $output : $this->container->make(
             OutputStyle::class, ['input' => $input, 'output' => $output]
         );
+
+        // set max output width only on commands extending this one.
+        // internal commands will not be wrapped.
+        // 75 characters appears to be the maximum on adventofcode.com
+        if ($this->output->getOutput() instanceof ConsoleOutput) {
+            $this->output->getOutput()->setMaxLineWith(75);
+        }
 
         try {
             return parent::run(
