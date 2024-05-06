@@ -212,7 +212,7 @@ class AdventOfCodeDay
     public function part2IsUnlocked(): static
     {
         if (! $this->info('part2.unlocked')) {
-            $this->fetchInfo(true);
+            $this->info = $this->fetchInfo(true);
         }
 
         return $this;
@@ -226,7 +226,7 @@ class AdventOfCodeDay
      */
     protected function parseInfo(string $html): array
     {
-        $cached = $this->infoIsCached() ? $this->getCachedInfo() : [];
+        $cached = $this->info ?: ($this->infoIsCached() ? $this->getCachedInfo() : []);
 
         $title = $cached['title'] ?? null;
 
