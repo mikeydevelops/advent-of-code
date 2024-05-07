@@ -49,9 +49,7 @@ class Day14 extends Solution
 
         do {
             $idx = $this->findHashIndex($salt, $idx+1);
-
-            $c++;
-        } while ($c < 64);
+        } while (++$c < 64);
 
         return $idx;
     }
@@ -68,9 +66,7 @@ class Day14 extends Solution
 
         do {
             $idx = $this->findHashIndex($salt, $idx+1, stretch: true);
-
-            $c++;
-        } while ($c < 64);
+        } while (++$c < 64);
 
         return $idx;
     }
