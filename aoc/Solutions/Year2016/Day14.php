@@ -30,6 +30,14 @@ class Day14 extends Solution
     }
 
     /**
+     * Hook before each of the parts executes.
+     */
+    public function beforeEach(string $part): void
+    {
+        $this->hashCache = [];
+    }
+
+    /**
      * Run the first part of the challenge.
      */
     public function part1(): int
