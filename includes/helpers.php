@@ -293,6 +293,43 @@ if (! function_exists('array_find_repeating')) {
     }
 }
 
+
+if (! function_exists('array_count_consecutive')) {
+    /**
+     * Find repeating items in an array.
+     *
+     * @param  array  $items
+     * @return array
+     */
+    function array_count_consecutive(array $items): array
+    {
+        $repeating = [];
+
+        $current = 0;
+
+        foreach ($items as $idx => $item) {
+            $prev = $items[$idx - 1] ?? false;
+
+            if (isset($repeating[$current]) && $repeating[$current][0] === $prev && $item !== $prev) {
+                $current++;
+            }
+
+            if ($prev !== $item) {
+                continue;
+            }
+
+            if (! isset($repeating[$current])) {
+                $repeating[$current] = [$item, 1];
+            }
+
+            $repeating[$current][1] += 1;
+        }
+
+        return $repeating;
+    }
+}
+
+
 if (! function_exists('array_2d_grid')) {
     /**
      * Make 2d grid and fill it with given default value.
