@@ -47,6 +47,10 @@ class Day15 extends Solution
             $sculpture->reset($ticks++);
         } while (! $sculpture->run());
 
+        // https://www.reddit.com/r/adventofcode/comments/5ifn4v/comment/db7vwut
+        $duration = human_duration($ticks * 1000 - 1);
+        $this->io->info("You had to wait for <warning>$duration</> to get the stupid capsule. Christmas has been ruined. :/");
+
         return $ticks - 1;
     }
 
@@ -65,6 +69,10 @@ class Day15 extends Solution
         do {
             $sculpture->reset($ticks++);
         } while (! $sculpture->run());
+
+        // https://www.reddit.com/r/adventofcode/comments/5ifn4v/comment/db7vwut
+        $duration = human_duration($ticks * 1000 - 1);
+        $this->io->info("And this time, you had to wait for <warning>$duration</>. Christmas has definitely been ruined. :/");
 
         return $ticks - 1;
     }
