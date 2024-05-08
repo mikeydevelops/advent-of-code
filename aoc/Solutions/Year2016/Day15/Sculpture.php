@@ -58,10 +58,6 @@ class Sculpture
     {
         while ($this->capsule->hasNotFallen() && $this->capsule->hasNotBounced()) {
             $this->tick();
-
-            if ($this->ticks == 10) {
-                break;
-            }
         }
 
         return $this->capsule->hasFallen();
