@@ -746,3 +746,28 @@ if (! function_exists('array_flat')) {
         );
     }
 }
+
+if (! function_exists('array_merge_alternating')) {
+    /**
+     * Combine arrays into one alternating their values.
+     */
+    function array_merge_alternating(array ...$arrays): array
+    {
+        $result = [];
+
+        $lengths = array_map('count', $arrays);
+        $maxLength = max($lengths);
+
+        for ($i = 0; $i < $maxLength; $i++) {
+            foreach ($arrays as $idx => $array) {
+                if ($i >= $lengths[$idx]) {
+                    continue;
+                }
+
+                $result[] = $array[$i];
+            }
+        }
+
+        return $result;
+    }
+}
