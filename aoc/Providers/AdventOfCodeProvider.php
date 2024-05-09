@@ -40,11 +40,7 @@ class AdventOfCodeProvider extends Provider
      */
     protected function createClient(): AdventOfCode
     {
-        return new AdventOfCode(
-            $this->app->config->get('aoc.session'),
-            $this->app->getName(),
-            $this->app->getVersion(),
-        );
+        return new AdventOfCode($this->app);
     }
 
     /**

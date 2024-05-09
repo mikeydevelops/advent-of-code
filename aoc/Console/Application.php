@@ -7,6 +7,7 @@ use RuntimeException;
 
 use DI\Container;
 use Dotenv\Dotenv;
+use GuzzleHttp\ClientInterface;
 use Mike\AdventOfCode\Console\Command;
 use Mike\AdventOfCode\Console\Exceptions\ConsoleException;
 use Mike\AdventOfCode\Providers\Provider;
@@ -71,11 +72,21 @@ class Application extends SymfonyApplication
     protected static ?Application $instance = null;
 
     /**
+     * Cached string for the user agent used throughout the application.
+     */
+    protected ?string $userAgent = null;
+
+    /**
+     * The cached composer file.
+     */
+    protected array $composer = [];
+
+    /**
      * Create new instance of console application.
      */
     public function __construct(string $basePath, string $version)
     {
-        parent::__construct('Advent of Code by Mike', $version);
+        parent::__construct('Advent of Code Solutions by Mike', $version);
 
         $this->container = new Container;
         $this->basePath = $basePath;
@@ -347,8 +358,7 @@ class Application extends SymfonyApplication
             return $this->namespace;
         }
 
-        $composer = json_decode(file_get_contents($this->basePath('composer.json')), true);
-        $psr4 = $composer['autoload']['psr-4'] ?? [];
+        $psr4 = $this->composer('autoload.psr-4', []);
 
         foreach ($psr4 as $namespace => $path) {
             foreach ((array) $path as $pathChoice) {
@@ -397,5 +407,44 @@ class Application extends SymfonyApplication
         }
 
         return static::$instance;
+    }
+
+    /**
+     * Get the application user agent.
+     */
+    public function getUserAgent(): string
+    {
+        if ($this->userAgent) {
+            return $this->userAgent;
+        }
+
+        $appName = str_replace(' ', '-', $this->getName());
+        $appVersion = $this->getVersion();
+        $source = $this->composer('support.source', 'https://github.com/mikeydevelops/advent-of-code');
+        $email = $this->composer('support.email', 'mike@mikeydevs.com');
+
+        $guzzleVersion = ClientInterface::MAJOR_VERSION;
+        $phpVersion = phpversion();
+
+        $platformName = php_uname('s');
+        $platformRelease = php_uname('r');
+        $platformVersion = php_uname('v');
+        $machineType = php_uname('m');
+
+        $platform = "($platformName $platformRelease; $platformVersion; $machineType)";
+
+        return $this->userAgent = "$appName/$appVersion ($source; $email) GuzzleHttp/$guzzleVersion PHP/$phpVersion $platform";
+    }
+
+    /**
+     * Get an item from the app composer.json.
+     */
+    public function composer(string $key, $default = null): mixed
+    {
+        if (empty($this->composer)) {
+            $this->composer = json_decode(file_get_contents($this->basePath('composer.json')), true);
+        }
+
+        return array_get_dot($this->composer, $key, $default);
     }
 }

@@ -6,10 +6,16 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Cookie\SetCookie;
 use GuzzleHttp\Psr7\Response;
+use Mike\AdventOfCode\Console\Application;
 use Mike\AdventOfCode\Console\IO;
 
 class AdventOfCode
 {
+    /**
+     * The base application.
+     */
+    protected Application $app;
+
     /**
      * The HTTP client.
      */
@@ -26,23 +32,13 @@ class AdventOfCode
     protected ?string $session = null;
 
     /**
-     * The name of the application used to access adventofcode.com. Needed for User-Agent header.
-     */
-    protected ?string $appName = null;
-
-    /**
-     * The version of the application used to access adventofcode.com. Needed for User-Agent header.
-     */
-    protected ?string $appVersion = null;
-
-    /**
      * Create new instance of Advent of Code class.
      */
-    public function __construct(string $session = null, string $appName = null, string $appVersion = null)
+    public function __construct(Application $app)
     {
-        $this->session = $session;
-        $this->appName = $appName ?? 'Advent of Code by Mike';
-        $this->appVersion = $appVersion ?? '1.0';
+        $this->app = $app;
+
+        $this->session = $app->config->get('aoc.session');
 
         $this->setupHttp();
     }
@@ -102,11 +98,9 @@ class AdventOfCode
                 'HttpOnly' => false,
             ]);
 
-            $headers = [];
-
-            if ($this->appName && $this->appVersion) {
-                $headers['User-Agent'] = "$this->appName/$this->appVersion";
-            }
+            $headers = [
+                'User-Agent' => $this->app->getUserAgent(),
+            ];
 
             $this->http = new Client([
                 'base_uri' => 'https://adventofcode.com',

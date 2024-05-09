@@ -15,6 +15,11 @@
         "vlucas/phpdotenv": "^5.6",
         "symfony/css-selector": "^7.0"
     },
+    "support": {
+        "issues": "https://github.com/mikeydevelops/advent-of-code/issues",
+        "source": "https://github.com/mikeydevelops/advent-of-code",
+        "email": "mike@mikeydevs.com"
+    },
     "license": "MIT",
     "autoload": {
         "files": [
@@ -27,7 +32,7 @@
     "authors": [
         {
             "name": "Michael Goodman",
-            "email": "bulgedition@gmail.com"
+            "email": "mike@mikeydevs.com"
         }
     ],
     "config": {
