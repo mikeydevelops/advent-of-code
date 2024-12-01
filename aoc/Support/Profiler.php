@@ -107,8 +107,8 @@ class Profiler
      */
     protected function tick(): void
     {
-        $memory = memory_get_usage(false) - $this->tickMemory;
         $time = microtime(true) - $this->tickTime;
+        $memory = memory_get_usage(false) - $this->tickMemory;
         fwrite($this->data, sprintf("%.6f", $time).",".$memory.PHP_EOL);
         $this->tickTime = microtime(true);
         $this->tickMemory = memory_get_usage(false);
