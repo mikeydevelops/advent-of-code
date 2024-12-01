@@ -21,7 +21,7 @@ class Day01 extends Solution
     /**
      * Process the input from the challenge.
      */
-    public function transformInput(string $input): mixed
+    public function transformInput(string $input): array
     {
         $lists = preg_split('/\r?\n/', $input);
 
@@ -37,7 +37,7 @@ class Day01 extends Solution
     /**
      * Run the first part of the challenge.
      */
-    public function part1()
+    public function part1(): int
     {
         $lists = $this->getInput();
 
@@ -55,7 +55,7 @@ class Day01 extends Solution
     /**
      * Run the second part of the challenge.
      */
-    public function part2()
+    public function part2(): int
     {
         $lists = $this->getInput();
 
