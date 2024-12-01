@@ -23,7 +23,7 @@ class Day01 extends Solution
      */
     public function transformInput(string $input): array
     {
-        $lists = preg_split('/\r?\n/', $input);
+        $lists = array_filter(preg_split('/\r?\n/', $input));
 
         $lists = array_map(function ($row) {
             $row = preg_split('/\s+/', trim($row));
@@ -46,10 +46,10 @@ class Day01 extends Solution
         $distance = 0;
 
         for ($i = 0; $i < count($lists[0]); $i++) {
-            $distance += $lists[0][$i] - $lists[1][$i];
+            $distance += abs($lists[0][$i] - $lists[1][$i]);
         }
 
-        return abs($distance);
+        return $distance;
     }
 
     /**
