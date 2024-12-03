@@ -44,8 +44,13 @@ class MakeSolutionCommand extends GeneratorCommand
     protected function onGeneratorFinish(array $classes): void
     {
         $editor = $this->option('open');
+        $count = count($classes);
 
-        if (count($classes) != 1 || $editor === 'env') {
+        if ($editor !== 'env' && $count > 1) {
+            $this->warn("--open is not supported when generating more than one solution.");
+
+            return;
+        } else if ($count != 1) {
             return;
         }
 
