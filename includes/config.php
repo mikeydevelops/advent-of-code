@@ -36,5 +36,17 @@ return [
          *
          */
         'session' => env('AOC_SESSION'),
+
+
+        /**
+         * -------------------------------------------------
+         * Preferred Editor Command
+         * -------------------------------------------------
+         *
+         * This command is ran when a solution is generated
+         * to open it in the preferred editor.
+         *
+         */
+        'editor' => env('EDITOR_COMMAND'),
     ],
 ];

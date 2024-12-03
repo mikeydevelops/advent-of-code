@@ -15,6 +15,7 @@ class MakeSolutionCommand extends GeneratorCommand
     protected string $signature = 'make:solution
                                         {--y|year= : The event year.}
                                         {--d|day= : The event day.}
+                                        {--o|open=env : Auto open generated day in configured editor. If empty, value from EDITOR_COMMAND environment variable will be used.}
                                         {--f|force : Create the solution class if it already exists, overwrite it.}';
 
     /**
@@ -33,6 +34,37 @@ class MakeSolutionCommand extends GeneratorCommand
     protected function prepare(): void
     {
         $this->ensureRemainingYearAndDayAvailable();
+    }
+
+    /**
+     * Hook after all files have been generated.
+     *
+     * @param  array<string,string>  $classes  The keys are the full class name to the file, and the value is the path to the generated file.
+     */
+    protected function onGeneratorFinish(array $classes): void
+    {
+        $editor = $this->option('open');
+
+        if (count($classes) != 1 || $editor === 'env') {
+            return;
+        }
+
+        $editor = $editor ?? $this->app->config->get('aoc.editor');
+
+        if (! $editor) {
+            return;
+        }
+
+        $file = array_pop($classes);
+
+        $cmd = "$editor \"$file\"";
+
+        if(class_exists('COM')) {
+            $shell = new \COM('WScript.Shell');
+            $shell->Run($cmd, 1, false);
+        } else {
+            exec('nohup ' . $cmd . ' 2>&1 &');
+        }
     }
 
     /**

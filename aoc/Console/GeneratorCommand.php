@@ -20,6 +20,7 @@ abstract class GeneratorCommand extends Command
 
         $classes = array_wrap($this->getFullClassNamespace());
         $fails = [];
+        $generated = [];
 
         foreach ($classes as $class) {
 
@@ -41,8 +42,12 @@ abstract class GeneratorCommand extends Command
 
             file_put_contents($path, $this->makeClass($class));
 
+            $generated[$class] = $path;
+
             $this->success("$this->generatorType <white>[$relativePath]</> created successfully.");
         }
+
+        $this->onGeneratorFinish($generated);
 
         return count($fails) ? Command::FAILURE : Command::SUCCESS;
     }
@@ -51,6 +56,16 @@ abstract class GeneratorCommand extends Command
      * Prepare the generator.
      */
     protected function prepare(): void
+    {
+        //
+    }
+
+    /**
+     * Hook after all files have been generated.
+     *
+     * @param  array<string,string>  $classes  The keys are the full class name to the file, and the value is the path to the generated file.
+     */
+    protected function onGeneratorFinish(array $classes): void
     {
         //
     }
