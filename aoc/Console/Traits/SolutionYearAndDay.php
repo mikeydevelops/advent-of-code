@@ -82,15 +82,24 @@ trait SolutionYearAndDay
             $this->terminate(function (TerminateExceptionBuilder $builder) use ($year) {
                 $builder->setExitCode(Command::FAILURE);
 
-                $builder->warn("Advent of Code year <white>[$year]</> has all event solutions ready!");
+                $this->warn("Advent of Code <white>$year</> has all available event solutions ready!");
             });
         }
 
         if (is_null($day)) {
             $choices = array_combine($days, array_map(fn(int $d) => "Day $d", $days));
-            $choices['r'] = 'All remaining days (' . count($days) . ')';
 
-            $day = str_replace('Day ', '', $this->choice("The solution for which day in $year should run?", $choices));
+            if (count($choices) == 1) {
+                $answer = array_pop($choices);
+
+                $this->line("Auto selecting <info>$answer</info> as it is the only choice available.");
+            } else {
+                $choices['r'] = 'All remaining days (' . count($days) . ')';
+
+                $answer = $this->choice("The solution for which day in $year should run?", $choices);
+            }
+
+            $day = str_replace('Day ', '', $answer);
 
             if ($day === 'r') {
                 $day = $days;
