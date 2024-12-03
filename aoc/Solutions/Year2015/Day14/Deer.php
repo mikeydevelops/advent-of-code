@@ -2,7 +2,7 @@
 
 namespace Mike\AdventOfCode\Solutions\Year2015\Day14;
 
-class deer
+class Deer
 {
     /**
      * The name of the deer.
