@@ -23,8 +23,9 @@ composer install
 
 ### Logging in
 
-After you have installed the dependencies, you have to provide session key for the application
-to be able to work properly. Follow the steps bellow to get your session key.
+After you have installed the dependencies, if you want to receive additional information in the cli,
+like day title and questions for each part, you have to provide session key for the application.
+Follow the steps bellow to get your session key.
 
 1. Visit https://adventofcode.com
 2. After the site has loaded, press `F12` or `CTRL+SHIFT+I` on your keyboard.
@@ -38,7 +39,7 @@ to be able to work properly. Follow the steps bellow to get your session key.
 
 `php ./advent` or `./advent`. To see what options are available use `./advent --help`.
 
-When you run solutions, information about the chosen day is automatically downloaded from adventofcode.com
+When you run solutions, if you have provided aoc session, information about the chosen day is automatically downloaded from adventofcode.com
 and used when showing the result of the solutions.
 
 ### Running the solution scripts
