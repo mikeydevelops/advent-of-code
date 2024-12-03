@@ -33,6 +33,7 @@ class Day03 extends Solution
         preg_match_all('/(?:mul\((\d+),(\d+)\))|(?:do|don\'t)\(\)/', $this->getInput(), $instructions, PREG_SET_ORDER);
 
         $include = true;
+        $products = [];
 
         foreach ($instructions as $idx => $ins) {
             if (in_array($ins[0], ['do()', "don't()"])) {
@@ -44,12 +45,12 @@ class Day03 extends Solution
 
             if (! $include) {
                 unset($instructions[$idx]);
+
+                continue;
             }
+
+            $products[] = (int) $ins[1] * (int) $ins[2];
         }
-
-        $instructions = array_map(fn($ins) => [(int) $ins[1], (int) $ins[2]], $instructions);
-
-        $products = array_map('array_product', $instructions);
 
         return array_sum($products);
     }
