@@ -1,4 +1,4 @@
-# Advent of Code
+# Advent of Code 2024
 
 My Advent of Code solutions in PHP.
 
@@ -71,6 +71,6 @@ That command runs solution for year 2015, day 1, shows first and second part, en
 ## Todo
 
  - [x] automatically fetch input.
- - [ ] refactor solutions to use OOP.
+ - [x] refactor solutions to use OOP.
  - [ ] submit solutions from cli (maybe never).
  - [x] download day description automatically.
