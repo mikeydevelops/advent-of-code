@@ -72,7 +72,9 @@ abstract class Solution
         }
 
         $this->io->info("Advent of Code {$this->day->getYear()}");
-        $this->io->info("Day {$this->day->getDay()}: {$this->day->info('title')}");
+        $title = $this->day->info('title');
+        $title = $title ? ": $title" : '';
+        $this->io->info("Day {$this->day->getDay()}$title");
         $this->io->newLine();
 
         $this->before();
@@ -123,7 +125,9 @@ abstract class Solution
 
         $label = $label ?? $part;
 
-        !$silent && $this->io->line(sprintf('<question>%s: %s</>', $label, $this->day->info("$part.question", $label.' question has not been set')));
+        $question = $this->day->info("$part.question");
+        $question = $question ? ": $question" : '';
+        !$silent && $this->io->line(sprintf('<question>%s%s</>', $label, $question));
 
         $result = null;
         $profiler = null;

@@ -13,20 +13,22 @@ class AdventOfCodeProvider extends Provider
     public function register(): void
     {
         if (empty($key = $this->app->config->get('aoc.session'))) {
-            AdventOfCode::promptEmptySession($this->app->io);
+            // AdventOfCode::promptEmptySession($this->app->io);
 
-            exit(1);
+            // exit(1);
 
-            return;
+            // return;
+
+            $this->app->io->warn("To get more complete information about the day,\nlike the title and the questions for each part,\nprovide AOC_SESSION in .env file.");
         }
 
-        if (! $this->validateSessionKey($key)) {
-            AdventOfCode::promptInvalidSessionKey($this->app->io);
+        // if (! $this->validateSessionKey($key)) {
+        //     AdventOfCode::promptInvalidSessionKey($this->app->io);
 
-            exit(1);
+        //     exit(1);
 
-            return;
-        }
+        //     return;
+        // }
 
         $this->app->aoc = $client = $this->createClient();
         $this->app->singleton(AdventOfCode::class, $client);

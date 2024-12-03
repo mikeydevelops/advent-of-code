@@ -40,7 +40,9 @@ class AdventOfCode
 
         $this->session = $app->config->get('aoc.session');
 
-        $this->setupHttp();
+        if ($this->session) {
+            $this->setupHttp();
+        }
     }
 
     /**

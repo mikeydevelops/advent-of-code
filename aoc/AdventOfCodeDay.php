@@ -200,7 +200,8 @@ class AdventOfCodeDay
 
             $this->cacheInfo($info);
         } catch (Throwable $ex) {
-            throw AdventOfCodeException::failedToFetchInfo($this->year, $this->day, $ex);
+            // throw AdventOfCodeException::failedToFetchInfo($this->year, $this->day, $ex);
+            return static::defaultInfo();
         }
 
         return $info;
@@ -226,26 +227,14 @@ class AdventOfCodeDay
      */
     protected function parseInfo(string $html): array
     {
-        $cached = $this->info ?: ($this->infoIsCached() ? $this->getCachedInfo() : []);
+        $default = static::defaultInfo();
+        $cached = $this->info ?: ($this->infoIsCached() ? $this->getCachedInfo() : $default);
 
-        $title = $cached['title'] ?? null;
+        $title = $cached['title'] ?? $default['title'];
 
-        $part1 = array_merge([
-            'question' => null,
-            'answer' => null,
-            'result' => null,
-            'time' => null,
-            'memory' => null,
-        ], $cached['part1'] ?? []);
+        $part1 = array_merge($default['part1'], $cached['part1'] ?? []);
 
-        $part2 = array_merge([
-            'unlocked' => false,
-            'question' => null,
-            'answer' => null,
-            'result' => null,
-            'time' => null,
-            'memory' => null,
-        ], $cached['part2'] ?? []);
+        $part2 = array_merge($default['part2'], $cached['part2'] ?? []);
 
         $crawler = new Crawler($html);
 
@@ -274,6 +263,29 @@ class AdventOfCodeDay
         }
 
         return compact('title', 'part1', 'part2');
+    }
+
+    /** Get the default day info. */
+    public static function defaultInfo(): array
+    {
+        return [
+            'title' => null,
+            'part1' => [
+                'question' => null,
+                'answer' => null,
+                'result' => null,
+                'time' => null,
+                'memory' => null,
+            ],
+            'part2' => [
+                'unlocked' => false,
+                'question' => null,
+                'answer' => null,
+                'result' => null,
+                'time' => null,
+                'memory' => null,
+            ],
+        ];
     }
 
     /**
