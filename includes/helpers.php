@@ -841,3 +841,43 @@ if (! function_exists('word_search'))
         return $occurrences;
     }
 }
+
+if (! function_exists('array_combinations'))
+{
+    /**
+     * Generate combinations of array items with given limit.
+     *
+     * @see https://docs.python.org/3/library/itertools.html#itertools.combinations
+     */
+    function array_combinations(array $items, int $r): \Generator {
+        $n = count($items);
+
+        if ($r > $n || $r < 0) {
+            return; // No combinations possible
+        }
+
+        $indices = range(0, $r - 1);
+
+        yield array_map(fn($i) => $items[$i], $indices);
+
+        while (true) {
+            $i = $r - 1;
+
+            while ($i >= 0 && $indices[$i] == $i + $n - $r) {
+                $i --;
+            }
+
+            if ($i < 0) {
+                return;
+            }
+
+            $indices[$i] ++;
+
+            for ($j = $i + 1; $j < $r; $j ++) {
+                $indices[$j] = $indices[$j - 1] + 1;
+            }
+
+            yield array_map(fn($i) => $items[$i], $indices);
+        }
+    }
+}
