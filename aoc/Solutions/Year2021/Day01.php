@@ -25,7 +25,7 @@ class Day01 extends Solution
     /**
      * Process the input from the challenge.
      */
-    public function transformInput(string $input): mixed
+    public function transformInput(string $input): array
     {
         return array_map('intval', preg_split('/\r?\n/',$input));
     }
