@@ -771,3 +771,73 @@ if (! function_exists('array_merge_alternating')) {
         return $result;
     }
 }
+
+if (! function_exists('walk_2d_grid'))
+{
+    /**
+     * Iterate over 2d grid array.
+     *
+     * @return \Generator<array>
+     */
+    function walk_2d_grid(array $grid): \Generator
+    {
+        $y = count($grid);
+        $x = count($grid[0]);
+
+        for ($row = 0; $row < $y; $row++) {
+            for ($col = 0; $col < $x; $col++) {
+                yield [$row, $col, $grid[$row][$col]];
+            }
+        }
+    }
+}
+
+if (! function_exists('word_search'))
+{
+
+    /**
+     * Find all occurrences of given word in a 2d grid of characters.
+     *
+     * @param  array<string[]>
+     * @return array<int[]>
+     */
+    function word_search(array $grid, string $search): array
+    {
+        $searchLen = strlen($search);
+        $occurrences = [];
+
+        $directions = [
+            [-1, -1, 'diag-top-left'],
+            [-1,  0, 'right-left'],
+            [-1,  1, 'diag-bottom-left'],
+            [ 0, -1, 'bottom-top'],
+            [ 0,  1, 'top-bottom'],
+            [ 1, -1, 'diag-top-right'],
+            [ 1,  0, 'left-right'],
+            [ 1,  1, 'diag-bottom-right'],
+        ];
+
+        foreach (walk_2d_grid($grid) as [$row, $col, $char]) {
+            // skip if the first char does not match
+            if ($char !== $search[0]) continue;
+
+            foreach ($directions as $dir) {
+                $x = $col + $dir[0];
+                $y = $row + $dir[1];
+
+                for ($i = 1; $i < $searchLen; $i++) {
+                    if (($grid[$y][$x] ?? null) !== $search[$i]) break;
+
+                    $x += $dir[0];
+                    $y += $dir[1];
+                }
+
+                if ($i === $searchLen) {
+                    $occurrences[] = [$row, $col, $dir[2]];
+                }
+            }
+        }
+
+        return $occurrences;
+    }
+}
