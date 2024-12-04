@@ -169,7 +169,18 @@ abstract class Solution
      */
     public function getInput(string $real = null, string $example = null): mixed
     {
-        return $this->transformInput($this->testing ? $example ?? $this->exampleInput : $real ?? $this->day->getInput());
+        return $this->transformInput($this->getRawInput($real, $example));
+    }
+
+    /**
+     * Get the raw input without transformation applied.
+     *
+     * @param  string  $real  Override the input when testing mode is off.
+     * @param  string  $example  Override the input when testing mode is on.
+     */
+    public function getRawInput(string $real = null, string $example = null)
+    {
+        return $this->testing ? $example ?? $this->exampleInput : $real ?? $this->day->getInput();
     }
 
     /**
