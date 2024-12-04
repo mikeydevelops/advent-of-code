@@ -120,7 +120,7 @@ class Day21 extends Solution
         $keys = array_keys($parameters);
         $values = array_values($parameters);
 
-        foreach (array_combinations($values) as $comb) {
+        foreach (array_2d_combinations($values) as $comb) {
             $comb = array_combine($keys, $comb);
 
             // cannot have 2 of the same ring.

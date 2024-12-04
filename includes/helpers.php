@@ -597,16 +597,16 @@ if (! function_exists('grid_animate')) {
     }
 }
 
-if (! function_exists('array_combinations')) {
+if (! function_exists('array_2d_combinations')) {
     /**
      * Create combinations for 2d array.
      * @return \Generator<array>
      */
-    function array_combinations(array $array) : Generator
+    function array_2d_combinations(array $array) : Generator
     {
         if (! empty($array)) {
             if ($u = array_pop($array)) {
-                foreach (array_combinations($array) as $p) {
+                foreach (array_2d_combinations($array) as $p) {
                     foreach ($u as $v) {
                         yield array_merge($p, [$v]);
                     }
