@@ -10,7 +10,7 @@ Currently working on the 2024 challenges as they come. Also trying to catch up w
 | 2021 | <span style="color: lightblue;">Catching Up</span> | Day 1  |
 | 2020 | <span style="color: lightblue;">Catching Up</span> | Day 1  |
 | 2019 | <span style="color: lightblue;">Catching Up</span> | Day 1  |
-| 2018 | <span style="color: lightblue;">Catching Up</span> | Day 1  |
+| 2018 | <span style="color: lightblue;">Catching Up</span> | Day 2  |
 | 2017 | <span style="color: lightblue;">Catching Up</span> | Day 2  |
 | 2016 | <span style="color: yellow">Paused</span>          | Day 16 |
 | 2015 | <span style="color: green">Done</span>             |        |
