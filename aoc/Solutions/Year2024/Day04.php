@@ -88,7 +88,7 @@ class Day04 extends Solution
     {
         $count = 0;
 
-        foreach (walk_2d_grid($grid = $this->getInput()) as [$row, $col, $char]) {
+        foreach (walk_2d_grid($grid = $this->getInput()) as [$col, $row, $char]) {
             if ($char !== 'A') {
                 continue;
             }

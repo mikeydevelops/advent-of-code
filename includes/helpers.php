@@ -786,7 +786,7 @@ if (! function_exists('walk_2d_grid'))
 
         for ($row = 0; $row < $y; $row++) {
             for ($col = 0; $col < $x; $col++) {
-                yield [$row, $col, $grid[$row][$col]];
+                yield [$col, $row, $grid[$row][$col]];
             }
         }
     }
@@ -817,7 +817,7 @@ if (! function_exists('word_search'))
             [ 1,  1, 'diag-bottom-right'],
         ];
 
-        foreach (walk_2d_grid($grid) as [$row, $col, $char]) {
+        foreach (walk_2d_grid($grid) as [$col, $row, $char]) {
             // skip if the first char does not match
             if ($char !== $search[0]) continue;
 
