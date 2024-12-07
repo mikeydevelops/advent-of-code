@@ -38,6 +38,9 @@ class Day07 extends Solution
 
     /**
      * Calibrate the bridge.
+     *
+     * @param  array{int,array>}  $equations
+     * @param  array<string,callable(int $value, int $number):int>
      */
     public function calibrateBridge(array $equations, array $operators): int
     {
