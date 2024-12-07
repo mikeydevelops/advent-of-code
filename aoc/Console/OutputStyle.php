@@ -2,6 +2,7 @@
 
 namespace Mike\AdventOfCode\Console;
 
+use Closure;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -21,6 +22,37 @@ class OutputStyle extends SymfonyStyle
         $this->output = $output;
 
         parent::__construct($input, $output);
+    }
+
+     /**
+     * Run a callback with progress bar.
+     *
+     * @param  iterable|integer  $steps
+     * @param  \Closure  $callback
+     * @param  mixed  ...$args  additional arguments to pass to the callback.
+     * @return \Symfony\Component\Console\Helper\ProgressBar
+     */
+    public function withProgress(iterable|int $steps, Closure $callback, ...$args)
+    {
+        $bar = $this->createProgressBar(is_iterable($steps) ? count($steps) : $steps);
+
+        $args[] = $bar;
+
+        $bar->start();
+
+        if (is_iterable($steps)) {
+            foreach ($steps as $value) {
+                $callback($value, ...$args);
+
+                $bar->advance();
+            }
+        } else {
+            $callback(...$args);
+        }
+
+        $bar->finish();
+
+        return $bar;
     }
 
     /**

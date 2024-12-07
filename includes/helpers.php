@@ -906,3 +906,33 @@ if (! function_exists('array_combinations'))
         }
     }
 }
+
+if (! function_exists('array_search_2d'))
+{
+    /**
+     * Searches the 2d grid for a given value and returns the first corresponding x, y if successful
+     *
+     * @param  mixed[]|mixed  $needle  The searched value. If the needle is an array.
+     *                         If needle is a string, the comparison is done in a case-sensitive manner.
+     * @param  array<mixed[]>  $haystack  The grid.
+     * @param  boolean  $strict [optional] If the third parameter strict is set to true then the
+     *                          array_search_2d function will also check the types of the needle in the haystack.
+     *
+     * @return array{int,int} an array of containing the X and Y position for needle
+     *                        if it is found in the grid, empty array otherwise.
+     */
+    function array_search_2d($needle, array $haystack, bool $strict = false): array
+    {
+        $needles = is_array($needle) ? $needle : [$needle];
+
+        foreach (walk_2d_grid($haystack) as $cell) {
+            foreach ($needles as $needle) {
+                if ((!$strict && $cell[2] == $needle) || ($strict && $cell[2] === $needle)) {
+                    return [$cell[0], $cell[1]];
+                }
+            }
+        }
+
+        return [];
+    }
+}
