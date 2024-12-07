@@ -381,20 +381,22 @@ if (! function_exists('array_permutations')) {
      */
     function array_permutations(array $array): Generator
     {
-        foreach ($array as $key => $firstItem) {
-            $remaining = $array;
+        if (count($array) === 1) {
+            yield $array;
+            return;
+        }
 
-            array_splice($remaining, $key, 1);
+        foreach ($array as $key => $value) {
+            $remaining = [];
 
-            if (0 === count($remaining)) {
-                yield [$firstItem];
-
-                continue;
+            foreach ($array as $k => $v) {
+                if ($k !== $key) {
+                    $remaining[] = $v;
+                }
             }
 
             foreach (array_permutations($remaining) as $permutation) {
-                array_unshift($permutation, $firstItem);
-
+                $permutation[] = $value;
                 yield $permutation;
             }
         }
@@ -934,5 +936,36 @@ if (! function_exists('array_search_2d'))
         }
 
         return [];
+    }
+}
+
+
+if (! function_exists('array_cartesian'))
+{
+    /**
+     * Generate cartesian product of array items.
+     *
+     * @param  array  ...$arrays
+     * @return Generator<array>
+     */
+    function array_cartesian(array ...$arrays)
+    {
+        $results = [[]];
+
+        foreach ($arrays as $index => $array) {
+            $append = [];
+
+            foreach ($results as $product) {
+                foreach ($array as $item) {
+                    $product[$index] = $item;
+
+                    $append[] = $product;
+                }
+            }
+
+            $results = $append;
+        }
+
+        yield from $results;
     }
 }
