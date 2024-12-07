@@ -867,14 +867,14 @@ if (! function_exists('word_search'))
     }
 }
 
-if (! function_exists('array_combinations'))
+if (! function_exists('combinations'))
 {
     /**
      * Generate combinations of array items with given limit.
      *
      * @see https://docs.python.org/3/library/itertools.html#itertools.combinations
      */
-    function array_combinations(array $items, int $r): \Generator {
+    function combinations(array $items, int $r): \Generator {
         $n = count($items);
 
         if ($r > $n || $r < 0) {

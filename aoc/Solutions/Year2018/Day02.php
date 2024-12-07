@@ -63,7 +63,7 @@ class Day02 extends Solution
         wvxyz
         TXT);
 
-        foreach (array_combinations($boxes, 2) as $comb) {
+        foreach (combinations($boxes, 2) as $comb) {
             if (levenshtein($comb[0], $comb[1]) === 1) {
                 return implode('', array_intersect(str_split($comb[0]), str_split($comb[1])));
             }

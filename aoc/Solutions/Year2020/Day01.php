@@ -48,7 +48,7 @@ class Day01 extends Solution
      */
     public function part2(): int
     {
-        foreach (array_combinations($this->getInput(), 3) as $p) {
+        foreach (combinations($this->getInput(), 3) as $p) {
             if (array_sum($p) == 2020) {
                 break;
             }

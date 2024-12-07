@@ -53,7 +53,7 @@ class Day02 extends Solution
         $result = 0;
 
         foreach ($lines as $nums) {
-            foreach (array_combinations($nums, 2) as $comb) {
+            foreach (combinations($nums, 2) as $comb) {
                 $max = max($comb);
                 $min = min($comb);
 

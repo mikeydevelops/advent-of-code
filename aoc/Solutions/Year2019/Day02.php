@@ -46,7 +46,7 @@ class Day02 extends Solution
 
         $inputs = $this->testing
             ? [[9, 10]]
-            : array_combinations(range(0, 99), 2);
+            : combinations(range(0, 99), 2);
 
         foreach ($inputs as [$noun, $verb]) {
             $p = $program;
