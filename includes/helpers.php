@@ -627,10 +627,8 @@ if (! function_exists('array_combinations')) {
      * Create combinations for 2d array.
      * @return \Generator<array>
      */
-    function array_combinations(array $array, array ...$arrays) : Generator
+    function array_combinations(array ...$arrays) : Generator
     {
-        $arrays = array_merge([$array], $arrays);
-
         if (! empty($arrays)) {
             if ($u = array_pop($arrays)) {
                 foreach (array_combinations(...$arrays) as $p) {
