@@ -37,18 +37,22 @@ class Day07 extends Solution
     }
 
     /**
-     * Calibrate the bridge.
+     * Calibrate the bridge using cartesian product for each operator.
+     *
+     * ~ 10sec for part 2.
      *
      * @param  array{int,array>}  $equations
      * @param  array<string,callable(int $value, int $number):int>
      */
-    public function calibrateBridge(array $equations, array $operators): int
+    public function calibrateBridgeCartesian(array $equations, array $operators): int
     {
         $result = 0;
 
         foreach ($equations as [$test, $numbers]) {
+            // repeat operators as many times as there are numbers excluding the first.
             $ops = array_fill(0, count($numbers) - 1, $operators);
 
+            // iterate over each cartesian product of the possible operators.
             foreach (array_cartesian(...$ops) as $ops) {
                 $val = $numbers[0];
 
@@ -71,13 +75,72 @@ class Day07 extends Solution
         return $result;
     }
 
+    /**
+     * Calibrate the bridge using recursion.
+     *
+     * ~ 1sec for part 2
+     *
+     * @param  array{int,array>}  $equations
+     * @param  array<string,callable(int $value, int $number):int>
+     */
+    public function calibrateBridgeRecurse(array $equations, array $operators): int
+    {
+        $result = 0;
+
+        foreach ($equations as [$test, $numbers]) {
+            $val = array_shift($numbers);
+
+            if ($this->calibrateBridgeRecursively($test, $numbers, $operators, $val)) {
+                $result += $test;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Calibrate the bridge using recursion.
+     * Adding because everyone in thesubreddit was boasting about recursion.
+     *
+     * @param  integer  $test  The target value.
+     * @param  integer[]  $numbers  The numbers to test
+     * @param  string[]  $operators The operators to use.
+     * @param  integer  $val  Optional used for recursion.
+     * @return boolean
+     */
+    public function calibrateBridgeRecursively(int $test, array $numbers, array $operators, int $val = 0): bool
+    {
+        if (empty($numbers)) {
+            return $test === $val;
+        }
+
+        $number = $numbers[0];
+
+        foreach ($operators as $op) {
+            $newVal = match($op) {
+                '+' => $val + $number,
+                '*' => $val * $number,
+                '||' => (int) "$val$number",
+            };
+
+            if ($newVal > $test) {
+                continue;
+            }
+
+            if ($this->calibrateBridgeRecursively($test, array_slice($numbers, 1), $operators, $newVal)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     /**
      * Run the first part of the challenge.
      */
     public function part1(): int
     {
-        return $this->calibrateBridge($this->getInput(), ['+', '*']);
+        return $this->calibrateBridgeRecurse($this->getInput(), ['+', '*']);
     }
 
     /**
@@ -85,6 +148,6 @@ class Day07 extends Solution
      */
     public function part2(): int
     {
-        return $this->calibrateBridge($this->getInput(), ['+', '*', '||']);
+        return $this->calibrateBridgeRecurse($this->getInput(), ['+', '*', '||']);
     }
 }
