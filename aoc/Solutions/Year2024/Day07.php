@@ -47,13 +47,17 @@ class Day07 extends Solution
         $result = 0;
 
         foreach ($equations as [$test, $numbers]) {
-            $ops = array_fill(0, count($numbers) - 1, array_keys($operators));
+            $ops = array_fill(0, count($numbers) - 1, $operators);
 
             foreach (array_cartesian(...$ops) as $ops) {
                 $val = $numbers[0];
 
                 foreach (array_slice($numbers, 1) as $idx => $number) {
-                    $val = $operators[$ops[$idx]]($val, $number);
+                    $val = match($ops[$idx]) {
+                        '+' => $val + $number,
+                        '*' => $val * $number,
+                        '||' => (int) "$val$number",
+                    };
                 }
 
                 if ($val === $test) {
@@ -73,12 +77,7 @@ class Day07 extends Solution
      */
     public function part1(): int
     {
-        $operators = [
-            '+' => fn($v, $num) => $v + $num,
-            '*' => fn($v, $num) => $v * $num,
-        ];
-
-        return $this->calibrateBridge($this->getInput(), $operators);
+        return $this->calibrateBridge($this->getInput(), ['+', '*']);
     }
 
     /**
@@ -86,12 +85,6 @@ class Day07 extends Solution
      */
     public function part2(): int
     {
-        $operators = [
-            '+' => fn($v, $num) => $v + $num,
-            '*' => fn($v, $num) => $v * $num,
-            '||' => fn($v, $num) => intval(strval($v).strval($num)),
-        ];
-
-        return $this->calibrateBridge($this->getInput(), $operators);
+        return $this->calibrateBridge($this->getInput(), ['+', '*', '||']);
     }
 }
