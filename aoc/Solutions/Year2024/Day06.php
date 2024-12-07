@@ -154,6 +154,8 @@ class Day06 extends Solution
 
     /**
      * Run the second part of the challenge.
+     *
+     * just plain brute force, takes around a 1min to complete
      */
     public function part2(): int
     {
