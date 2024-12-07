@@ -530,7 +530,7 @@ if (! function_exists('grid_get_adjacent')) {
      * @param  integer  $x
      * @param  integer  $y
      * @param  mixed  $default
-     * @return array
+     * @return array{top-left:mixed,top:mixed,top-right:mixed,right:mixed,bottom-right:mixed,bottom:mixed,bottom-left:mixed,left:mixed}
      */
     function grid_get_adjacent(array $grid, int $x, int $y, $default = null): array
     {
@@ -544,14 +544,30 @@ if (! function_exists('grid_get_adjacent')) {
         $default = $setDefault ? $default : $missing;
 
         $adjacent = [
-            $grid[$y - 1][$x - 1] ?? $default,
-            $grid[$y - 1][$x    ] ?? $default,
-            $grid[$y - 1][$x + 1] ?? $default,
-            $grid[$y    ][$x + 1] ?? $default,
-            $grid[$y + 1][$x + 1] ?? $default,
-            $grid[$y + 1][$x    ] ?? $default,
-            $grid[$y + 1][$x - 1] ?? $default,
-            $grid[$y    ][$x - 1] ?? $default,
+            'top-left' => $tl = $grid[$y - 1][$x - 1] ?? $default, // top left
+            'top' => $t = $grid[$y - 1][$x    ] ?? $default, // top
+            'top-right' => $tr = $grid[$y - 1][$x + 1] ?? $default, // top right
+            'right' => $r = $grid[$y    ][$x + 1] ?? $default, // right
+            'bottom-right' => $br = $grid[$y + 1][$x + 1] ?? $default, // bottom right
+            'bottom' => $b = $grid[$y + 1][$x    ] ?? $default, // bottom
+            'bottom-left' => $bl = $grid[$y + 1][$x - 1] ?? $default, // bottom left
+            'left' => $l = $grid[$y    ][$x - 1] ?? $default, // left
+
+            // add 2d representation of the adjacent cells.
+            $y - 1 => [
+                $x - 1 => $tl,
+                $x     => $t,
+                $x + 1 => $tr,
+            ],
+            $y     => [
+                $x + 1 => $r,
+                $x - 1 => $l,
+            ],
+            $y + 1 => [
+                $x + 1 => $br,
+                $x     => $b,
+                $x - 1 => $bl
+            ],
         ];
 
         if (! $setDefault) {
@@ -569,28 +585,37 @@ if (! function_exists('grid_animate')) {
      * Animate a 2d grid with given amount of frames.
      * Update cell using the provided callback.
      *
-     * @param  array  $grid
-     * @param  integer  $frames
-     * @param  callable  $callback
-     * @return array
+     * @template TGrid
+     *
+     * @param  TGrid  $grid  The 2d grid.
+     * @param  integer|\Generator<integer>  $frames  The amount of frames the grid will be changed.
+     *                                               If a generator callback is provided, its value
+     *                                               will be used for frame number.
+     * @param  callable(array{x: int, y: int, value: mixed, adjacent: array{top-left:mixed,top:mixed,top-right:mixed,right:mixed,bottom-right:mixed,bottom:mixed,bottom-left:mixed,left:mixed}} $cell, int $frame, TGrid $grid): mixed  $callback  Used to update the cell value for each frame.
+     * @param  callable(TGrid $grid, int $frame): TGrid|null  $before [optional] Modify the grid before the frame is animated.
+     *                             If provided will be called right before a new frame is started animating.
+     * @param  callable(TGrid $grid, int $frame): TGrid|null  $after [optional] Modify the grid after the frame has been animated.
+     *                            If provided will be called right after a frame has been animated.
+     * @return TGrid
      */
-    function grid_animate(array $grid, int $frames, callable $callback, callable $before = null, callable $after = null): array
+    function grid_animate(array $grid, int|\Generator $frames, callable $callback, callable $before = null, callable $after = null): array
     {
-        foreach (range(0, $frames - 1) as $frame) {
-            $newGrid = $before ? call_user_func($before, $grid) : $grid;
+        $state = new stdClass;
+        $state->break = false;
 
-            foreach ($grid as $y => $row) {
-                foreach ($row as $x => $cell) {
-                    $newGrid[$y][$x] = call_user_func($callback, [
-                        'x' => $x,
-                        'y' => $y,
-                        'value' => $cell,
-                        'adjacent' => grid_get_adjacent($grid, $x, $y),
-                    ], $frame, $grid);
-                }
+        $frameGen = is_callable($frames) ? $frames : (fn() => yield from range(0, $frames - 1))();
+
+        foreach ($frameGen as $frame) {
+            $newGrid = $before ? call_user_func($before, $grid, $frame) : $grid;
+
+            foreach (walk_2d_grid($grid) as [$x, $y, $value]) {
+                $adjacent = grid_get_adjacent($grid, $x, $y);
+                $cell = compact('x', 'y', 'value', 'adjacent');
+
+                $newGrid[$y][$x] = call_user_func($callback, $cell, $frame, $grid);
             }
 
-            $grid = $after ? call_user_func($after, $newGrid) : $newGrid;
+            $grid = $after ? call_user_func($after, $newGrid, $frame) : $newGrid;
         }
 
         return $grid;
