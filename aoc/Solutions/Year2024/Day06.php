@@ -27,10 +27,14 @@ class Day06 extends Solution
      */
     public function transformInput(string $input): array
     {
+        // map to replace initial grid with usable values.
+        // every value below 0 is an obstacle, so the guard cannot go there.
+        // 0 means a free space. above 1 holds the starting direction of the guard.
         $values = [
             '.' => '0 ',
             '#' => '-1 ',
             '^' => '1 ',
+            // not necessary, but just for completeness.
             '>' => '2 ',
             'v' => '3 ',
             '<' => '4 ',
@@ -39,11 +43,16 @@ class Day06 extends Solution
         $input = str_replace(array_keys($values), array_values($values), $input);
 
         $grid = split_lines($input);
+        // split each line on space and cast to integer.
         $grid = array_map(fn($row) => array_map('intval', explode(' ', trim($row))), $grid);
 
+        // find the initial x and y of the guard.
         [$x, $y] = array_search_2d([1, 2, 3, 4], $grid, true);
 
+        // direction is zero based
         $dir = $grid[$y][$x] - 1;
+        // reset to 1, from now on, the value will be how
+        // many times the guard has passed this position.
         $grid[$y][$x] = 1;
 
         return [$grid, [$x, $y, $dir]];
@@ -106,22 +115,24 @@ class Day06 extends Solution
      */
     public function simulate(array $grid, array $initialState): array|false
     {
-        $state = $floyd = $prevState = $initialState;
+        $guard = $hare = $prevState = $initialState;
 
-        while (! $this->hasLeftMap($grid, $state)) {
-            $prevState = $state;
+        while (! $this->hasLeftMap($grid, $guard)) {
+            $prevState = $guard;
 
-            $grid[$state[1]][$state[0]] ++;
+            $grid[$guard[1]][$guard[0]] ++;
 
-            $state = $this->move($grid, $state);
+            $guard = $this->move($grid, $guard);
 
-            $floyd = $this->move($grid, $floyd);
-
-            if (! $this->hasLeftMap($grid, $floyd)) {
-                $floyd = $this->move($grid, $floyd);
+            // the hare moves twice per round
+            $hare = $this->move($grid, $hare);
+            if (! $this->hasLeftMap($grid, $hare)) {
+                $hare = $this->move($grid, $hare);
             }
 
-            if ($state === $floyd) {
+            // according to Floyd's tortoise and hare, when the guard and the hare have exact same
+            // x, y, and direction, it means the guard has made a loop, so we quit
+            if ($guard === $hare) {
                 return false;
             }
         }
@@ -134,9 +145,10 @@ class Day06 extends Solution
      */
     public function part1(): int
     {
-        [$grid, $state] = $this->getInput();
-        [$grid, $state] = $this->simulate($grid, $state);
+        [$grid, $guard] = $this->getInput();
+        [$grid, $guard] = $this->simulate($grid, $guard);
 
+        // flatten the grid and count all values which the guard has passed.
         return count(array_filter(array_flat($grid), fn($v) => $v > 0));
     }
 
@@ -147,7 +159,7 @@ class Day06 extends Solution
     {
         $loops = 0;
 
-        [$grid, $state] = $this->getInput();
+        [$grid, $guard] = $this->getInput();
 
         $empty = [];
 
@@ -157,13 +169,13 @@ class Day06 extends Solution
             }
         }
 
-        $bar = $this->io->getOutput()->withProgress($empty, function ($pos, $grid, $state) use (&$loops) {
+        $bar = $this->io->getOutput()->withProgress($empty, function ($pos, $grid, $guard) use (&$loops) {
             $grid[$pos[1]][$pos[0]] = -2;
 
-            if ($this->simulate($grid, $state) === false) {
+            if ($this->simulate($grid, $guard) === false) {
                 $loops++;
             }
-        }, $grid, $state);
+        }, $grid, $guard);
 
         $bar->clear();
 
