@@ -21,7 +21,7 @@ class Day01 extends Solution
      */
     public function transformInput(string $input): array
     {
-        return preg_split('/\r?\n/', $input);
+        return split_lines($input);
     }
 
     /**

@@ -21,7 +21,7 @@ class Day01 extends Solution
      */
     public function transformInput(string $input): mixed
     {
-        return array_map('intval', preg_split('/\r?\n/', $input));
+        return array_map('intval', split_lines($input));
     }
 
     /**

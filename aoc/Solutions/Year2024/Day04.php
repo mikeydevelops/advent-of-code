@@ -27,7 +27,7 @@ class Day04 extends Solution
      */
     public function transformInput(string $input): mixed
     {
-        return array_map('str_split', preg_split('/\r?\n/', $input));
+        return array_map('str_split', split_lines($input));
     }
 
     public function renderGrid(array $grid, array $matches, string $search): void

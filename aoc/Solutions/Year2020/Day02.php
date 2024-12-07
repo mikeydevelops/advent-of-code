@@ -22,7 +22,7 @@ class Day02 extends Solution
      */
     public function transformInput(string $input): array
     {
-        $policies = preg_split('/\r?\n/', $input);
+        $policies = split_lines($input);
 
         $policies = array_map(function ($policy) {
             preg_match('/(?<min>\d+)-(?<max>\d+)\s+(?<letter>[a-z]):\s+(?<password>[a-z]+)/', $policy, $match);

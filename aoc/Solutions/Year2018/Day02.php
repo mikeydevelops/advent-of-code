@@ -24,7 +24,7 @@ class Day02 extends Solution
      */
     public function transformInput(string $input): mixed
     {
-        return preg_split('/\r?\n/', $input);
+        return split_lines($input);
     }
 
     /**

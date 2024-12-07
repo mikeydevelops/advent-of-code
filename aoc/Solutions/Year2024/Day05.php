@@ -51,9 +51,9 @@ class Day05 extends Solution
 
         $parse = fn($data, $separator) => array_map('intval', explode($separator, $data));
 
-        $rules = array_map(fn($rule) => $parse($rule, '|'), preg_split('/\r?\n/', $rules));
+        $rules = array_map(fn($rule) => $parse($rule, '|'), split_lines($rules));
 
-        $updates = array_map(fn($update) => $parse($update, ','), preg_split('/\r?\n/', $updates));
+        $updates = array_map(fn($update) => $parse($update, ','), split_lines($updates));
 
         return [$rules, $updates];
     }

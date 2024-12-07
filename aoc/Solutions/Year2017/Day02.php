@@ -22,7 +22,7 @@ class Day02 extends Solution
      */
     public function transformInput(string $input): array
     {
-        $lines = preg_split('/\r?\n/', $input);
+        $lines = split_lines($input);
         $lines = array_map(fn($line) => array_map('intval', preg_split('/\s+/', $line)), $lines);
 
         return $lines;

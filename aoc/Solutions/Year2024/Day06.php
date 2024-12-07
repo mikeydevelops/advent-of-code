@@ -38,7 +38,7 @@ class Day06 extends Solution
 
         $input = str_replace(array_keys($values), array_values($values), $input);
 
-        $grid = preg_split('/\r?\n/', $input);
+        $grid = split_lines($input);
         $grid = array_map(fn($row) => array_map('intval', explode(' ', trim($row))), $grid);
 
         [$x, $y] = array_search_2d([1, 2, 3, 4], $grid, true);

@@ -20,7 +20,7 @@ class Day02 extends Solution
      */
     public function transformInput(string $input): array
     {
-        return array_map(fn($round) => explode(' ', $round), preg_split('/\r?\n/', $input));
+        return array_map(fn($round) => explode(' ', $round), split_lines($input));
     }
 
     /**

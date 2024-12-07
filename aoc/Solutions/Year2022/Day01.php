@@ -33,7 +33,7 @@ class Day01 extends Solution
     {
         $inventories = preg_split('/[\r?\n]{2}/', $input);
 
-        return array_map(fn($i) => array_map('intval', preg_split('/\r?\n/', $i)), $inventories);
+        return array_map(fn($i) => array_map('intval', split_lines($i)), $inventories);
     }
 
     /**

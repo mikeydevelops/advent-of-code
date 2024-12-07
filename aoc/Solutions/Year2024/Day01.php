@@ -23,7 +23,7 @@ class Day01 extends Solution
      */
     public function transformInput(string $input): array
     {
-        $lists = array_filter(preg_split('/\r?\n/', $input));
+        $lists = array_filter(split_lines($input));
 
         $lists = array_map(function ($row) {
             $row = preg_split('/\s+/', trim($row));
