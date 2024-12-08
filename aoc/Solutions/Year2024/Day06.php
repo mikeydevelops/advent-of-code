@@ -47,7 +47,7 @@ class Day06 extends Solution
         $grid = array_map(fn($row) => array_map('intval', explode(' ', trim($row))), $grid);
 
         // find the initial x and y of the guard.
-        [$x, $y] = array_search_2d($grid, [1, 2, 3, 4], true);
+        [$x, $y] = grid_search($grid, [1, 2, 3, 4], true)->current();
 
         // direction is zero based
         $dir = $grid[$y][$x] - 1;

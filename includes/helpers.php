@@ -909,7 +909,7 @@ if (! function_exists('combinations'))
     }
 }
 
-if (! function_exists('array_search_2d'))
+if (! function_exists('grid_search'))
 {
     /**
      * Searches the 2d grid for a given value and returns the first corresponding x, y if successful
@@ -918,24 +918,28 @@ if (! function_exists('array_search_2d'))
      * @param  mixed[]|mixed  $needle  The searched value. If the needle is an array.
      *                         If needle is a string, the comparison is done in a case-sensitive manner.
      * @param  boolean  $strict [optional] If the third parameter strict is set to true then the
-     *                          array_search_2d function will also check the types of the needle in the haystack.
+     *                          grid_search function will also check the types of the needle in the haystack.
      *
-     * @return array{int,int} an array of containing the X and Y position for needle
+     * @return \Generator<array{int,int}> an array of containing the X and Y position for needle
      *                        if it is found in the grid, empty array otherwise.
      */
-    function array_search_2d(array $haystack, $needle, bool $strict = false): array
+    function grid_search(array $haystack, $needle, bool $strict = false): \Generator
     {
         $needles = is_array($needle) ? $needle : [$needle];
+        $matches = 0;
 
         foreach (walk_2d_grid($haystack) as [$x, $y, $v]) {
             foreach ($needles as $needle) {
                 if ((!$strict && $v == $needle) || ($strict && $v === $needle)) {
-                    return [$x, $y];
+                    $matches ++;
+                    yield [$x, $y];
                 }
             }
         }
 
-        return [];
+        if (! $matches) {
+            yield [];
+        }
     }
 }
 
