@@ -165,7 +165,7 @@ class Day06 extends Solution
 
         $empty = [];
 
-        foreach (walk_2d_grid($grid) as [$x, $y, $v]) {
+        foreach (grid_walk($grid) as [$x, $y, $v]) {
             if ($v === 0) {
                 $empty[] = [$x, $y];
             }

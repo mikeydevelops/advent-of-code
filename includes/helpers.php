@@ -610,7 +610,7 @@ if (! function_exists('grid_animate')) {
         foreach ($frameGen as $frame) {
             $newGrid = $before ? call_user_func($before, $grid, $frame) : $grid;
 
-            foreach (walk_2d_grid($grid) as [$x, $y, $value]) {
+            foreach (grid_walk($grid) as [$x, $y, $value]) {
                 $adjacent = grid_get_adjacent($grid, $x, $y);
                 $cell = compact('x', 'y', 'value', 'adjacent');
 
@@ -799,14 +799,14 @@ if (! function_exists('array_merge_alternating')) {
     }
 }
 
-if (! function_exists('walk_2d_grid'))
+if (! function_exists('grid_walk'))
 {
     /**
      * Iterate over 2d grid array.
      *
      * @return \Generator<array>
      */
-    function walk_2d_grid(array $grid): \Generator
+    function grid_walk(array $grid): \Generator
     {
         $y = count($grid);
         $x = count($grid[0]);
@@ -844,7 +844,7 @@ if (! function_exists('word_search'))
             [ 1,  1, 'diag-bottom-right'],
         ];
 
-        foreach (walk_2d_grid($grid) as [$col, $row, $char]) {
+        foreach (grid_walk($grid) as [$col, $row, $char]) {
             // skip if the first char does not match
             if ($char !== $search[0]) continue;
 
@@ -928,7 +928,7 @@ if (! function_exists('grid_search'))
         $needles = is_array($needle) ? $needle : [$needle];
         $matches = 0;
 
-        foreach (walk_2d_grid($haystack) as [$x, $y, $v]) {
+            foreach (grid_walk($haystack) as [$x, $y, $v]) {
             foreach ($needles as $needle) {
                 if ((!$strict && $v == $needle) || ($strict && $v === $needle)) {
                     $matches ++;
