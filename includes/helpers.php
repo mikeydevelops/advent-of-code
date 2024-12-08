@@ -925,18 +925,30 @@ if (! function_exists('grid_search'))
      */
     function grid_search(array $haystack, $needle, bool $strict = false): \Generator
     {
-        $needles = is_array($needle) ? $needle : [$needle];
+        $needles = is_array($needle) || is_callable($needle) ? $needle : [$needle];
         $matches = 0;
 
+        if (is_callable($needles)) {
             foreach (grid_walk($haystack) as [$x, $y, $v]) {
+                if ($needles($v, $x, $y) === true) {
+                    $matches++;
+                    yield [$x, $y, $v];
+                }
+            }
+
+            goto ret;
+        }
+
+        foreach (grid_walk($haystack) as [$x, $y, $v]) {
             foreach ($needles as $needle) {
                 if ((!$strict && $v == $needle) || ($strict && $v === $needle)) {
                     $matches ++;
-                    yield [$x, $y];
+                    yield [$x, $y, $v];
                 }
             }
         }
 
+        ret:
         if (! $matches) {
             yield [];
         }
@@ -971,5 +983,122 @@ if (! function_exists('array_cartesian'))
         }
 
         yield from $results;
+    }
+}
+
+if (! function_exists('grid_count_values'))
+{
+    /**
+     * Count the values of a 2d grid.
+     *
+     * @param  array<string[]|integer[]>  $grid
+     * @param  string|integer|array|null  $needle  [optional]. If provided, only the cells containing
+     *                                             this value will be counted. if array is provided
+     *                                             only cells matching the values of the array are counted.
+     * @return  array<string|integer,integer>|integer  If needle was provided, only the count for
+     * that needle is returned, else all unique values and their counts.
+     */
+    function grid_count_values(array $grid, string|int|array $needle = null): array|int
+    {
+        $needles = is_array($needle) ? $needle : (is_null($needle) ? [] : [$needle]);
+        $result = [];
+        $args = func_num_args();
+
+        if ($args === 2) {
+            $result = array_combine($needles, array_fill(0, count($needles), 0));
+        }
+
+        foreach (grid_walk($grid) as [$x, $y, $v]) {
+            if ($args === 2 && ! in_array($v, $needles)) {
+                continue;
+            }
+
+            $result[$v] = ($result[$v] ?? 0) + 1;
+        }
+
+        if ($args === 2 && ! is_array($needle)) {
+            return $result[$needle];
+        }
+
+        return $result;
+    }
+}
+
+if (! function_exists('grid_line'))
+{
+    /**
+     * Get all points between two points that form a straight line in a 2d grid.
+     * Using Bresenham's line algorithm
+     *
+     * @see https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+     *
+     * @param  array<string[]|integer[]>  $grid
+     * @param  array{int,int}  $start  The x and y coordinates of the starting point.
+     * @param  array{int,int}  $end  The x and y coordinates of the end point.
+     * @param  boolean  $includeStartAndEnd  [optional] Wether to include the starting and end points.
+     * @return array<array{int,int,mixed}>
+     */
+    function grid_line(array $grid, array $start, array $end, bool $includeStartAndEnd = true): array
+    {
+        [$x, $y] = $start;
+        $xDiff = abs($end[0] - $x);
+        $xStep = $x < $end[0] ? 1 : -1;
+        $yDiff = -abs($end[1] - $y);
+        $yStep = $y < $end[1] ? 1 : -1;
+        $err = $xDiff + $yDiff;
+        $points = [];
+
+        while (true) {
+
+            $points[] = [$x, $y, $grid[$y][$x]];
+
+            if (! $includeStartAndEnd && $x == $start[0] && $y == $start[1])
+                array_pop($points);
+
+            if (! $includeStartAndEnd && $x == $end[0] && $y == $end[1])
+                array_pop($points);
+
+            if ($x == $end[0] && $y == $end[1])
+                break;
+
+            $err2 = 2 * $err;
+
+            if ($err2 >= $yDiff) {
+                $err = $err + $yDiff;
+                $x = $x + $xStep;
+            }
+
+            if ($err2 <= $xDiff) {
+                $err = $err + $xDiff;
+                $y = $y + $yStep;
+            }
+        }
+
+        return $points;
+    }
+}
+
+if (! function_exists('grid_print'))
+{
+    /**
+     * Print a grid to the cli output.
+     *
+     * @param  array  $grid  The grid.
+     * @param  array  $replacers  Associative array to replace the value when printing.
+     * @return void
+     */
+    function grid_print(array $grid, array $replacers = null): void
+    {
+        $replacers = $replacers ?? [];
+
+        foreach ($grid as $row) {
+            $line = '';
+
+            foreach ($row as $pixel) {
+                $line .= $replacers[$pixel] ?? $pixel;
+            }
+
+            echo $line . PHP_EOL;
+        }
     }
 }
