@@ -44,7 +44,7 @@ class Day13 extends Solution
         $width = $target->x+2;
         $height = $target->y+2;
 
-        $grid = array_2d_grid($height, $width, 0);
+        $grid = grid_make($height, $width, 0);
 
         $queue = [[1, 1, []]];
         $shortestPath = [];

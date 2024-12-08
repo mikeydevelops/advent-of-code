@@ -38,7 +38,7 @@ class Day06 extends Solution
      */
     public function part1(): int
     {
-        $grid = array_2d_grid(1000, 1000, 0);
+        $grid = grid_make(1000, 1000, 0);
 
         $lit = 0;
 
@@ -81,7 +81,7 @@ class Day06 extends Solution
      */
     public function part2(): int
     {
-        $grid = array_2d_grid(1000, 1000, 0);
+        $grid = grid_make(1000, 1000, 0);
 
         foreach ($this->getInput() as $ins) {
             for ($y = $ins->from->y; $y <= $ins->to->y; $y++) {

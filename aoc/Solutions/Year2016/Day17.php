@@ -34,7 +34,7 @@ class Day17 extends Solution
      */
     public function part1(): string
     {
-        $grid = array_2d_grid(4, 4, 0);
+        $grid = grid_make(4, 4, 0);
         $grid[0][0] = 1;
         $passcode = $this->getInput();
         $path = '';

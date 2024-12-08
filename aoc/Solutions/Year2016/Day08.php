@@ -38,8 +38,8 @@ class Day08 extends Solution
     public function part1(): int
     {
         $display =  $this->testing
-            ? array_2d_grid(3, 7, 0)
-            : array_2d_grid(6, 50, 0);
+            ? grid_make(3, 7, 0)
+            : grid_make(6, 50, 0);
 
         $display = $this->computeImage($display, $this->getInput());
 
@@ -52,8 +52,8 @@ class Day08 extends Solution
     public function part2(): string
     {
         $display = $this->testing
-            ? array_2d_grid(3, 7, 0)
-            : array_2d_grid(6, 50, 0);
+            ? grid_make(3, 7, 0)
+            : grid_make(6, 50, 0);
 
         $display = $this->computeImage($display, $this->getInput());
 

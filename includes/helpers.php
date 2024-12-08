@@ -330,7 +330,7 @@ if (! function_exists('array_count_consecutive')) {
 }
 
 
-if (! function_exists('array_2d_grid')) {
+if (! function_exists('grid_make')) {
     /**
      * Make 2d grid and fill it with given default value.
      *
@@ -340,7 +340,7 @@ if (! function_exists('array_2d_grid')) {
      * @param  T|null  $fill
      * @return T[][]
      */
-    function array_2d_grid(int $height, int $width, $fill = null) : array
+    function grid_make(int $height, int $width, $fill = null) : array
     {
         return array_fill(0, $height, array_fill(0, $width, $fill));
     }
