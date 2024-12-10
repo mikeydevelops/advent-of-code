@@ -554,31 +554,51 @@ if (! function_exists('grid_get_adjacent')) {
             'bottom' => $b = $grid[$y + 1][$x    ] ?? $default, // bottom
             'bottom-left' => $bl = $grid[$y + 1][$x - 1] ?? $default, // bottom left
             'left' => $l = $grid[$y    ][$x - 1] ?? $default, // left
-
-            // add 2d representation of the adjacent cells.
-            $y - 1 => [
-                $x - 1 => $tl,
-                $x     => $t,
-                $x + 1 => $tr,
-            ],
-            $y     => [
-                $x + 1 => $r,
-                $x - 1 => $l,
-            ],
-            $y + 1 => [
-                $x + 1 => $br,
-                $x     => $b,
-                $x - 1 => $bl
-            ],
         ];
 
         if (! $setDefault) {
-            $adjacent = array_filter($adjacent, function ($v) use ($missing) {
-                return $v !== $missing;
-            });
+            $adjacent = array_filter($adjacent, fn($v) => $v !== $missing);
         }
 
         return $adjacent;
+    }
+}
+
+if (! function_exists('grid_get_adjacent_xy')) {
+    /**
+     * Get all adjacent values from a 2d grid given x and y. Returns coordinates and value instead of value only.
+     *
+     * @param  array  $grid
+     * @param  integer  $x
+     * @param  integer  $y
+     * @param  mixed  $default
+     * @return array{top-left:mixed,top:mixed,top-right:mixed,right:mixed,bottom-right:mixed,bottom:mixed,bottom-left:mixed,left:mixed}
+     */
+    function grid_get_adjacent_xy(array $grid, int $x, int $y, $default = null): array
+    {
+        // hack based on num args, to not brake intended functionality
+        $adj = func_num_args() == 3
+            ? grid_get_adjacent($grid, $x, $y)
+            : grid_get_adjacent($grid, $x, $y, $default);
+
+        $map = [
+            'top-left'     => [-1, -1],
+            'top'          => [ 0, -1],
+            'top-right'    => [ 1, -1],
+            'right'        => [ 1,  0],
+            'bottom-right' => [ 1,  1],
+            'bottom'       => [ 0,  1],
+            'bottom-left'  => [-1,  1],
+            'left'         => [-1,  0],
+        ];
+
+        foreach ($adj as $dir => $v) {
+            [$dX, $dY] = $map[$dir];
+
+            $adj[$dir] = [$x + $dX, $y + $dY, $v];
+        }
+
+        return $adj;
     }
 }
 
@@ -1100,5 +1120,24 @@ if (! function_exists('grid_print'))
 
             echo $line . PHP_EOL;
         }
+    }
+}
+
+if (! function_exists('grid_parse'))
+{
+    /**
+     * Parse a 2d grid from string.
+     *
+     * @param  string  $grid  The grid to parse.
+     * @param  callable|null  $cellCallback  [optional]  The callback to run on cell parse. Default: intval
+     * @param  callable|null  $rowCallback  [optional]  The callback to run on row parse. Default: str_split
+     * @return array[]
+     */
+    function grid_parse(string $grid, ?callable $cellCallback = null, ?callable $rowCallback = null): array
+    {
+        return array_map(
+            fn (array $row) => array_map($cellCallback ?? 'intval', $row),
+            array_map($rowCallback ?? 'str_split', split_lines($grid))
+        );
     }
 }
