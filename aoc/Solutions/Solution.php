@@ -2,11 +2,9 @@
 
 namespace Mike\AdventOfCode\Solutions;
 
-use Closure;
 use Mike\AdventOfCode\AdventOfCodeDay;
 use Mike\AdventOfCode\AdventOfCodeException;
 use Mike\AdventOfCode\Console\IO;
-use Mike\AdventOfCode\Support\Profiler;
 
 abstract class Solution
 {
@@ -129,16 +127,18 @@ abstract class Solution
         $question = $question ? ": $question" : '';
         !$silent && $this->io->line(sprintf('<question>%s%s</>', $label, $question));
 
-        $result = null;
-        $profiler = null;
+        $time = $memory = null;
 
-        if ($profile) {
-            $profiler = $this->profile(function () use ($part, &$result) {
-                $result = $this->{$part}();
-            });
-        } else {
-            $result = $this->{$part}();
-        }
+        $start = microtime(true);
+        $mem = memory_get_peak_usage();
+
+        $result = $this->{$part}();
+
+        $time = microtime(true) - $start;
+        $memory = memory_get_peak_usage() - $mem;
+
+        $this->day->setInfo("$part.time", $time);
+        $this->day->setInfo("$part.memory", $memory);
 
         $this->{"{$part}Result"} = $result;
 
@@ -150,12 +150,9 @@ abstract class Solution
             $this->io->newLine();
             $this->io->info(sprintf(
                 "$part took <white>%s</> and used <white>%s</> memory.",
-                human_duration($time = $profiler->getTimeTaken()),
-                human_filesize($memory = $profiler->getMemoryUsage()),
+                human_duration($time = $time * 1000),
+                human_filesize($memory = $memory),
             ));
-
-            $this->day->setInfo("$part.time", $time);
-            $this->day->setInfo("$part.memory", $memory);
         }
 
         $this->afterEach($part, $result);
@@ -183,17 +180,6 @@ abstract class Solution
         return $this->testing ? $example ?? $this->exampleInput : $real ?? $this->day->getInput();
     }
 
-    /**
-     * Profile given closure and show time and memory usage.
-     */
-    protected function profile(Closure $callback): Profiler
-    {
-        $profiler = new Profiler;
-
-        $profiler->profile($callback);
-
-        return $profiler;
-    }
     /**
      * Process the input from the challenge.
      */
