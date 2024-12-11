@@ -7,7 +7,7 @@
         "psy/psysh": "^0.12.3",
         "symfony/var-dumper": "^6.4.4",
         "guzzlehttp/guzzle": "^7.9",
-        "league/commonmark": "^2.5",
+        "league/commonmark": "^2.6",
         "symfony/dom-crawler": "^6.4",
         "symfony/console": "^6.4",
         "php-di/php-di": "^7.0",
