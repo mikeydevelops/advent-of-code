@@ -26,8 +26,10 @@ class AdventOfCodeDay
 
     /**
      * The day's input.
+     *
+     * @var string|resource|null
      */
-    protected ?string $input = null;
+    protected $input = null;
 
     /**
      * The day's information.
@@ -75,16 +77,46 @@ class AdventOfCodeDay
     }
 
     /**
-     * Fetch the input for the current day and cache it.
+     * Stream the input, instead of loading it to memory.
+     *
+     * @param string $mode The mode parameter specifies the type of access you require to the stream.
+     * It may be any of the following:
+     *
+     * 'r'  Open for reading only; place the file pointer at the beginning of the file.
+     * 'r+' Open for reading and writing; place the file pointer at the beginning of the file.
+     * 'w'  Open for writing only; place the file pointer at the beginning of the file and truncate the file to zero length. If the file does not exist, attempt to create it.
+     * 'w+' Open for reading and writing; otherwise it has the same behavior as 'w'.
+     * 'a'  Open for writing only; place the file pointer at the end of the file. If the file does not exist, attempt to create it. In this mode, fseek() has no effect, writes are always appended.
+     * 'a+' Open for reading and writing; place the file pointer at the end of the file. If the file does not exist, attempt to create it. In this mode, fseek() only affects the reading position, writes are always appended.
+     * 'x'  Create and open for writing only; place the file pointer at the beginning of the file. If the file already exists, the fopen() call will fail by returning false and generating an error of level E_WARNING. If the file does not exist, attempt to create it. This is equivalent to specifying O_EXCL|O_CREAT flags for the underlying open(2) system call.
+     * 'x+' Create and open for reading and writing; otherwise it has the same behavior as 'x'.
+     * 'c'  Open the file for writing only. If the file does not exist, it is created. If it exists, it is neither truncated (as opposed to 'w'), nor the call to this function fails (as is the case with 'x'). The file pointer is positioned on the beginning of the file. This may be useful if it's desired to get an advisory lock (see flock()) before attempting to modify the file, as using 'w' could truncate the file before the lock was obtained (if truncation is desired, ftruncate() can be used after the lock is requested).
+     * 'c+' Open the file for reading and writing; otherwise it has the same behavior as 'c'.
+     * 'e'  Set close-on-exec flag on the opened file descriptor. Only available in PHP compiled on POSIX.1-2008 conform systems.
+     * @param  resource|null  $context  A stream context resource.
+     * @return resource
      */
-    protected function fetchInput(): string
+    public function streamInput(string $mode = 'r', $context = null)
+    {
+        if ($this->inputIsCached()) {
+            return $this->input = fopen($this->inputPath(), $mode, false, $context);
+        }
+
+        return $this->input = $this->fetchInput(true);
+    }
+
+    /**
+     * Fetch the input for the current day and cache it.
+     *
+     * @param  boolean  $asStream  If true result will be returned as a resource.
+     * @return string|resource
+     */
+    protected function fetchInput(bool $asStream = false)
     {
         try {
             $response = $this->request('GET', 'input');
 
-            $input = trim($response->getBody()->getContents());
-
-            $this->cacheInput($input);
+            $this->cacheInput($input = $response->getBody()->detach());
         } catch (ClientException $ex) {
             if ($ex->getResponse()->getStatusCode() == 400) {
                 $text = $ex->getResponse()->getBody()->getContents();
@@ -99,7 +131,9 @@ class AdventOfCodeDay
             throw AdventOfCodeException::failedToFetchInput($this->year, $this->day, $ex);
         }
 
-        return $input;
+        rewind($input);
+
+        return $asStream ? $input : stream_get_contents($input);
     }
 
     /**
@@ -128,13 +162,19 @@ class AdventOfCodeDay
 
     /**
      * Cache given input.
+     *
+     * @param  string|resource  $input
      */
-    public function cacheInput(string $input): bool
+    public function cacheInput($input): bool
     {
         $path = $this->inputPath();
 
         if (! is_dir($dir = dirname($path))) {
             mkdir($dir, 0777, true);
+        }
+
+        if (is_resource($input)) {
+            rewind($input);
         }
 
         return file_put_contents($path, $input) !== false;
