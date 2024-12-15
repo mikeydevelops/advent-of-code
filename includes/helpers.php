@@ -774,7 +774,7 @@ if (! function_exists('array_group_by')) {
                 $k = $k($item, $idx, $array);
             }
 
-            $result[$k][] = $item;
+            $result[$item[$k]][] = $item;
         }
 
         return $result;
