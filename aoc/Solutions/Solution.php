@@ -4,6 +4,7 @@ namespace Mike\AdventOfCode\Solutions;
 
 use Mike\AdventOfCode\AdventOfCodeDay;
 use Mike\AdventOfCode\AdventOfCodeException;
+use Mike\AdventOfCode\Console\Application;
 use Mike\AdventOfCode\Console\IO;
 
 abstract class Solution
@@ -17,6 +18,11 @@ abstract class Solution
      * The console input/output.
      */
     protected IO $io;
+
+    /**
+     * The main application instance.
+     */
+    protected Application $app;
 
     /**
      * The example input to be used to test the solution.
@@ -307,6 +313,29 @@ abstract class Solution
     public function setIO(IO $io): static
     {
         $this->io = $io;
+
+        return $this;
+    }
+
+    /**
+     * Get the main application instance.
+     *
+     * @return \Mike\AdventOfCode\Console\Application
+     */
+    public function app(): Application
+    {
+        return $this->app;
+    }
+
+    /**
+     * Set the main application instance.
+     *
+     * @param  \Mike\AdventOfCode\Console\Application  $app
+     * @return $this
+     */
+    public function setApplication(Application $app): self
+    {
+        $this->app = $app;
 
         return $this;
     }
