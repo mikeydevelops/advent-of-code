@@ -1104,11 +1104,22 @@ if (! function_exists('grid_print'))
      *
      * @param  array  $grid  The grid.
      * @param  array  $replacers  Associative array to replace the value when printing.
+     * @param  callable|null  $rowRenderer  Custom print hook.
      * @return void
      */
-    function grid_print(array $grid, array $replacers = null): void
+    function grid_print(array $grid, array $replacers = null, ?callable $rowRenderer = null): void
     {
         $replacers = $replacers ?? [];
+
+        if (! is_callable($rowRenderer)) {
+            $echo = function ($line) {
+                echo $line . PHP_EOL;
+            };
+
+            $void = fn() => null;
+
+            $rowRenderer = is_null($rowRenderer) ? $echo : $void;
+        }
 
         foreach ($grid as $row) {
             $line = '';
@@ -1117,7 +1128,9 @@ if (! function_exists('grid_print'))
                 $line .= $replacers[$pixel] ?? $pixel;
             }
 
-            echo $line . PHP_EOL;
+            $line;
+
+            $rowRenderer($line);
         }
     }
 }
