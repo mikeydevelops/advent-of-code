@@ -11,6 +11,8 @@ class OutputStyle extends SymfonyStyle
 {
     /**
      * The output instance.
+     *
+     * @var \Mike\AdventOfCode\Console\ConsoleOutput
      */
     protected OutputInterface $output;
 
@@ -90,7 +92,7 @@ class OutputStyle extends SymfonyStyle
     /**
      * Get the underlying Symfony output implementation.
      */
-    public function getOutput(): OutputInterface
+    public function getOutput(): OutputInterface|ConsoleOutput
     {
         return $this->output;
     }

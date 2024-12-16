@@ -29,6 +29,7 @@ use Symfony\Component\Finder\Finder;
  * @property  \Mike\AdventOfCode\Console\ConsoleOutput  $console  The application console.
  * @property  \Mike\AdventOfCode\Console\OutputFormatter  $formatter  The application output formatter.
  * @property  \Mike\AdventOfCode\Console\IO  $io  Easier way to interact with console.
+ * @property  \Mike\AdventOfCode\Console\Terminal  $terminal  The terminal instance.
  */
 class Application extends SymfonyApplication
 {
@@ -167,6 +168,8 @@ class Application extends SymfonyApplication
         $this->configureIO($this->input, $this->output);
 
         $this->io = new IO($this->input, $this->output);
+
+        $this->terminal = new Terminal();
     }
 
     /**

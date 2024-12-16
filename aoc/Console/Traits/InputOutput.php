@@ -7,6 +7,7 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableStyle;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\ConsoleSectionOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
@@ -38,6 +39,29 @@ trait InputOutput
         'quiet' => OutputInterface::VERBOSITY_QUIET,
         'normal' => OutputInterface::VERBOSITY_NORMAL,
     ];
+
+    /**
+     * The output sections.
+     *
+     * @var \Symfony\Component\Console\Output\ConsoleSectionOutput[]
+     */
+    protected array $consoleSectionOutputs = [];
+
+    /**
+     * Create new output section.
+     *
+     * @return \Symfony\Component\Console\Output\ConsoleSectionOutput
+     */
+    public function section(): ConsoleSectionOutput
+    {
+        return new ConsoleSectionOutput(
+            $this->getOutput()->getOutput()->getStream(),
+            $this->consoleSectionOutputs,
+            $this->getOutput()->getVerbosity(),
+            $this->getOutput()->isDecorated(),
+            $this->getOutput()->getFormatter()
+        );
+    }
 
     /**
      * Confirm a question with the user.

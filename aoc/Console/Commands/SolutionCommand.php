@@ -55,6 +55,7 @@ class SolutionCommand extends Command
 
         $solution = $this->makeSolution($day)
             ->setIO(new IO($this->getInput(), $this->getOutput()))
+            ->setApplication($this->app)
             ->testing($this->option('test'));
 
         $part1 = $this->option('part1');
