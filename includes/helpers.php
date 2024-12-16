@@ -1,6 +1,5 @@
 <?php
 
-use DI\Container;
 use Mike\AdventOfCode\Console\Application;
 use Mike\AdventOfCode\Support\Env;
 
@@ -167,7 +166,7 @@ if (! function_exists('explode_trim')) {
     }
 }
 
-if (! function_exists('aoc')) {
+if (! function_exists('app')) {
     /**
      * Get the available container instance.
      *
