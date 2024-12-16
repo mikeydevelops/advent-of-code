@@ -78,7 +78,7 @@ class Region
             $x = array_column($row, 0);
 
             return [min($x), max($x), $x];
-        }, array_group_by($this->plot, 1));
+        }, grid_group_by($this->plot, 1));
 
         $minX = null;
         $maxX = null;
@@ -133,8 +133,8 @@ class Region
             return true;
         }
 
-        $columns = array_group_by($this->perimeter, 0);
-        $rows = array_group_by($this->perimeter, 1);
+        $columns = grid_group_by($this->perimeter, 0);
+        $rows = grid_group_by($this->perimeter, 1);
 
         [$x, $y] = is_array($region) ? $region : $region->plot[0];
 

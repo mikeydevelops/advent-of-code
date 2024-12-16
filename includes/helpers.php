@@ -774,7 +774,7 @@ if (! function_exists('array_group_by')) {
                 $k = $k($item, $idx, $array);
             }
 
-            $result[$item[$k]][] = $item;
+            $result[$k][] = $item;
         }
 
         return $result;
@@ -1139,5 +1139,29 @@ if (! function_exists('grid_parse'))
             fn (array $row) => array_map($cellCallback ?? 'intval', $row),
             array_map($rowCallback ?? 'str_split', split_lines($grid))
         );
+    }
+}
+
+
+
+if (! function_exists('grid_group_by')) {
+    /**
+     * Group items using provided key.
+     */
+    function grid_group_by(array $grid, callable|string|int $key): array
+    {
+        $result = [];
+
+        foreach ($grid as $idx => $item) {
+            $k = $key;
+
+            if (is_callable($k)) {
+                $k = $k($item, $idx, $grid);
+            }
+
+            $result[$item[$k]][] = $item;
+        }
+
+        return $result;
     }
 }
