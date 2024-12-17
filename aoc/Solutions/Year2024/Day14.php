@@ -142,11 +142,7 @@ class Day14 extends Solution
 
         $section->clear();
 
-        $o = fopen(app()->basePath('storage', 'cache', 'debug', $status . '.txt'), 'w');
-
-        grid_print($grid, [' ', ...array_fill(0, count($robots), '█')], fn($line) => fwrite($o, $line . PHP_EOL));
-
-        fclose($o);
+        grid_print($grid, [' ', ...array_fill(0, count($robots), '█')], fn($line) => $section->writeln($line));
 
         if ($status) {
             $section->writeln($status);
