@@ -55,17 +55,6 @@ class Day15 extends Solution
     #endregion
 
     /**
-     * The warehouse from the input. In a 2d grid.
-     * 0 - wall (#)
-     * 1 - free space (.)
-     * 2 - box (O)
-     * 3 - robot (@)
-     *
-     * @var array<int[]>|null
-     */
-    protected ?array $warehouse = null;
-
-    /**
      * Where the robot's moves start in the input.
      * This is helper to make things quicker while reading the input.
      * if null, when reading the input, the sequence will have to be detected.
