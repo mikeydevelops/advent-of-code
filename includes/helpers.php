@@ -1162,9 +1162,8 @@ if (! function_exists('grid_parse'))
     }
 }
 
-
-
-if (! function_exists('grid_group_by')) {
+if (! function_exists('grid_group_by'))
+{
     /**
      * Group items using provided key.
      */
@@ -1183,5 +1182,31 @@ if (! function_exists('grid_group_by')) {
         }
 
         return $result;
+    }
+}
+
+if (! function_exists('grid_set'))
+{
+    /**
+     * Set values of given points in grid to given value.
+     *
+     * @template T
+     * @param  array<T[]>  $grid  The grid.
+     * @param  array<array{int,int}>|array{int,int}  $points  The grid points to update.
+     * @param  T  $value  The new value.
+     * @return array<T[]>
+     */
+    function grid_set(array $grid, array $points, $value): array
+    {
+        // possible just one point instead of set of points.
+        if (count($points) === 2 && is_int($points[0]) && is_int($points[1])) {
+            $points = [$points];
+        }
+
+        foreach ($points as [$x, $y]) {
+            $grid[$y][$x] = $value;
+        }
+
+        return $grid;
     }
 }
