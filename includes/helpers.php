@@ -944,13 +944,14 @@ if (! function_exists('grid_search'))
      * @param  array<mixed[]>  $haystack  The grid.
      * @param  mixed[]|mixed  $needle  The searched value. If the needle is an array.
      *                         If needle is a string, the comparison is done in a case-sensitive manner.
+     * @param  boolean  $includeValue  If true, value of cell will be appended to position.
      * @param  boolean  $strict [optional] If the third parameter strict is set to true then the
      *                          grid_search function will also check the types of the needle in the haystack.
      *
      * @return \Generator<array{int,int}> an array of containing the X and Y position for needle
      *                        if it is found in the grid, empty array otherwise.
      */
-    function grid_search(array $haystack, $needle, bool $strict = false): \Generator
+    function grid_search(array $haystack, $needle, bool $includeValue = true, bool $strict = false): \Generator
     {
         $needles = is_array($needle) || is_callable($needle) ? $needle : [$needle];
         $matches = 0;
@@ -959,7 +960,7 @@ if (! function_exists('grid_search'))
             foreach (grid_walk($haystack) as [$x, $y, $v]) {
                 if ($needles($v, $x, $y) === true) {
                     $matches++;
-                    yield [$x, $y, $v];
+                    yield $includeValue ? [$x, $y, $v] : [$x, $y];
                 }
             }
 
@@ -970,7 +971,7 @@ if (! function_exists('grid_search'))
             foreach ($needles as $needle) {
                 if ((!$strict && $v == $needle) || ($strict && $v === $needle)) {
                     $matches ++;
-                    yield [$x, $y, $v];
+                    yield $includeValue ? [$x, $y, $v] : [$x, $y];
                 }
             }
         }
@@ -1193,7 +1194,7 @@ if (! function_exists('grid_set'))
      * @template T
      * @param  array<T[]>  $grid  The grid.
      * @param  array<array{int,int}>|array{int,int}  $points  The grid points to update.
-     * @param  T  $value  The new value.
+     * @param  T|callable  $value  The new value.
      * @return array<T[]>
      */
     function grid_set(array $grid, array $points, $value): array
@@ -1203,8 +1204,9 @@ if (! function_exists('grid_set'))
             $points = [$points];
         }
 
-        foreach ($points as [$x, $y]) {
-            $grid[$y][$x] = $value;
+        foreach ($points as $point) {
+            [$x, $y] = $point;
+            $grid[$y][$x] = is_callable($value) ? $value($point, $grid[$y][$x]) : $value;
         }
 
         return $grid;
