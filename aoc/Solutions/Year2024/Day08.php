@@ -39,7 +39,7 @@ class Day08 extends Solution
     {
         $map = $this->getInput();
 
-        $antinodes = grid_make(count($map), count($map[0]), '.');
+        $antinodes = grid_make(count($map[0]), count($map), '.');
 
         $frequencies = grid_count_values($map);
         // remove empty spaces.
@@ -100,7 +100,7 @@ class Day08 extends Solution
     {
         $map = $this->getInput();
 
-        $antinodes = grid_make(count($map), count($map[0]), '.');
+        $antinodes = grid_make(count($map[0]), count($map), '.');
 
         $frequencies = grid_count_values($map);
         // remove empty spaces.

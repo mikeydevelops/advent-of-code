@@ -95,7 +95,7 @@ class Day12 extends Solution
     {
         $regions = [];
 
-        $this->visited = grid_make(count($grid), count($grid[0]), false);
+        $this->visited = grid_make(count($grid[0]), count($grid), false);
 
         foreach (grid_walk($grid) as [$x, $y, $label]) {
             if ($this->visited[$y][$x]) {

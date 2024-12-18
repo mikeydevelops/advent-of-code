@@ -134,7 +134,7 @@ class Day14 extends Solution
 
         $section = $this->renderSection;
 
-        $grid = grid_make($h, $w, 0);
+        $grid = grid_make($w, $h, 0);
 
         foreach ($robots as $robot) {
             $grid[$robot->y][$robot->x] ++;

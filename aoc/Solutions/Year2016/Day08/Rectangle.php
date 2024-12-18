@@ -35,6 +35,6 @@ class Rectangle extends Command
      */
     public function updateDisplay(array $display): array
     {
-        return array_replace_recursive($display, grid_make($this->height, $this->width, 1));
+        return array_replace_recursive($display, grid_make($this->width, $this->height, 1));
     }
 }

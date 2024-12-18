@@ -334,14 +334,22 @@ if (! function_exists('grid_make')) {
      * Make 2d grid and fill it with given default value.
      *
      * @template T
-     * @param  integer  $height
      * @param  integer  $width
-     * @param  T|null  $fill
+     * @param  integer  $height
+     * @param  T|callable|null  $fill  if callable is provided, it will be called each time with the x and y and its result will be used for cell value.
      * @return T[][]
      */
-    function grid_make(int $height, int $width, $fill = null) : array
+    function grid_make(int $width, int $height, $fill = null) : array
     {
-        return array_fill(0, $height, array_fill(0, $width, $fill));
+        $grid = [];
+
+        for ($y = 0; $y < $height; $y ++) {
+            for ($x = 0; $x < $width; $x++) {
+                $grid[$y][$x] = is_callable($fill) ? $fill($x, $y) : $fill;
+            }
+        }
+
+        return $grid;
     }
 }
 
