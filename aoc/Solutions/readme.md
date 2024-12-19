@@ -4,7 +4,7 @@ Currently working on the 2024 challenges as they come. Also trying to catch up w
 
 | Year | Status                                     | Notes                                  |
 |------|--------------------------------------------|----------------------------------------|
-| 2024 | Current                                    | Day 18, Days 12, 15, 16 have no part 2 |
+| 2024 | Current                                    | Day 19, Days 12, 15, 16 have no part 2 |
 | 2023 | <span style="color: yellow;">Paused</span> | Day 1                                  |
 | 2022 | <span style="color: yellow;">Paused</span> | Day 2                                  |
 | 2021 | <span style="color: yellow;">Paused</span> | Day 2                                  |
