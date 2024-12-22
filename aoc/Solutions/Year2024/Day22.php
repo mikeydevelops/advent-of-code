@@ -10,62 +10,7 @@ class Day22 extends Solution
     /**
      * The example input to be used to test the solution.
      */
-    protected ?string $exampleInput = <<<TXT
-    1
-    10
-    100
-    2024
-    TXT;
-
-    /**
-     * Find the secret given initial seed value.
-     *
-     * @param  integer  $seed  The initial secret value.
-     * @param  integer  $iterations  The amount of iterations to generate the secret.
-     * @param  boolean  $all  Wether to return an array of individual iteration values.
-     * @return integer|\Generator<integer>  If $all is true, returns list of iteration values. Otherwise returns the end result.
-     */
-    protected function findSecret(int $seed, int $iterations = 1, bool $all = false): int|Generator
-    {
-        $secret = $seed;
-
-        for ($i = 0; $i < $iterations; $i++) {
-            $secret = ($secret ^ ($secret << 6)) & 16777215;
-            $secret = ($secret ^ ($secret >> 5)) & 16777215;
-            $secret = ($secret ^ ($secret << 11)) & 16777215;
-
-            if ($all) {
-                yield $secret;
-            }
-        }
-
-        if ($all) {
-            return;
-        }
-
-        yield $secret;
-    }
-
-    /**
-     * Find the secret given initial seed value.
-     *
-     * @param  integer  $seed  The initial secret value.
-     * @param  integer  $iterations  The amount of iterations to generate the secret.
-     * @return \Generator<array{int,int}>  The differences between each change of secret. The first element is the price, the second is the change from previous.
-     */
-    protected function getChanges(int $seed, int $iterations = 1): Generator
-    {
-        $changes = [];
-        $prev = $seed % 10;
-
-        foreach ($this->findSecret($seed, $iterations, true) as $secret) {
-            $one = $secret % 10;
-            yield [$one, $one - $prev];
-            $prev = $one;
-        }
-
-        return $changes;
-    }
+    protected ?string $exampleInput = "1\n10\n100\n2024";
 
     /**
      * Run the first part of the challenge.
@@ -74,8 +19,14 @@ class Day22 extends Solution
     {
         $sum = 0;
 
-        foreach ($this->streamLines() as $s) {
-            $sum += $this->findSecret(intval($s), 2000)->current();
+        foreach ($this->streamLines() as $secret) {
+            for ($i = 0; $i < 2000; $i++) {
+                $secret ^= ($secret << 6) & 0xFFFFFF; // 16777215
+                $secret ^= $secret >> 5;
+                $secret ^= ($secret << 11) & 0xFFFFFF;
+            }
+
+            $sum += $secret;
         }
 
         return $sum;
@@ -88,43 +39,45 @@ class Day22 extends Solution
     {
         $buyers = $this->streamLines(example: "1\n2\n3\n2024", map: 'intval');
 
-        $sequences = [];
         $values = [];
         $max = 0;
 
         foreach ($buyers as $buyer) {
             $seen = [];
-            $changes = $this->getChanges($buyer, 2000);
-            $window = array_map(function () use ($changes) {
-                $result = $changes->current();
-                $changes->next();
-                return $result;
-            }, array_fill(0, 4, 0));
+            $prev = $buyer % 10;
+            $a = $b = $c = $d = 0;
 
-            while ($changes->valid()) {
-                $sequence = array_column($window, 1);
-                $id = implode(',', $sequence);
+            for ($i = 0; $i < 2000; $i++) {
+                $buyer ^= ($buyer << 6) & 0xFFFFFF; // 16777215
+                $buyer ^= $buyer >> 5;
+                $buyer ^= ($buyer << 11) & 0xFFFFFF;
+
+                $v = $buyer % 10;
+                $a = $b; $b = $c; $c = $d; $d = $v - $prev;
+                $prev = $v;
+
+                if ($i < 3) {
+                    continue;
+                }
+
+                //  19^3 * a + 19^2 * b + 19^1 * c + d
+                $id = 6859 * $a + 361 * $b + 19 * $c + $d;
 
                 // reading comprehension had me stumped here.
                 // forgot the monkey buys the first sequence only.
                 if (! isset($seen[$id])) {
-                    $seen[$id] = true;
+                    $seen[$id] = 1;
 
-                    if (! isset($sequences[$id])) {
-                        $sequences[$id] = $sequence;
+                    if (! isset($values[$id])) {
                         $values[$id] = 0;
                     }
 
-                    $values[$id] += $window[3][0];
+                    $values[$id] += $v;
 
                     if ($max < $values[$id]) {
                         $max = $values[$id];
                     }
                 }
-
-                $window[] = $changes->current();
-                $changes->next();
-                array_shift($window);
             }
         }
 
