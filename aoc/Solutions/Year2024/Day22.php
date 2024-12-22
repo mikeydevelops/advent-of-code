@@ -2,6 +2,7 @@
 
 namespace Mike\AdventOfCode\Solutions\Year2024;
 
+use Generator;
 use Mike\AdventOfCode\Solutions\Solution;
 
 class Day22 extends Solution
@@ -17,11 +18,6 @@ class Day22 extends Solution
     TXT;
 
     /**
-     * The cache.
-     */
-    protected array $cache = [];
-
-    /**
      * Process the input from the challenge.
      */
     public function transformInput(string $input): mixed
@@ -35,30 +31,27 @@ class Day22 extends Solution
      * @param  integer  $seed  The initial secret value.
      * @param  integer  $iterations  The amount of iterations to generate the secret.
      * @param  boolean  $all  Wether to return an array of individual iteration values.
-     * @return integer|array  If $all is true, returns list of iteration values. Otherwise returns the end result.
+     * @return integer|\Generator<integer>  If $all is true, returns list of iteration values. Otherwise returns the end result.
      */
-    protected function findSecret(int $seed, int $iterations = 1, bool $all = false): int|array
+    protected function findSecret(int $seed, int $iterations = 1, bool $all = false): int|Generator
     {
-        $secrets = [];
         $secret = $seed;
 
         for ($i = 0; $i < $iterations; $i++) {
-            if (! isset($this->cache[$s = $secret])) {
-                $secret = ($secret ^ ($secret * 64)) % 16777216;
-                $secret = ($secret ^ ((int) floor($secret / 32))) % 16777216;
-                $secret = ($secret ^ ($secret * 2048)) % 16777216;
-
-                $this->cache[$s] = $secret;
-            } else {
-                $secret = $this->cache[$s];
-            }
+            $secret = ($secret ^ ($secret * 64)) % 16777216;
+            $secret = ($secret ^ ((int) floor($secret / 32))) % 16777216;
+            $secret = ($secret ^ ($secret * 2048)) % 16777216;
 
             if ($all) {
-                $secrets[] = $secret;
+                yield $secret;
             }
         }
 
-        return $all ? $secrets : $secret;
+        if ($all) {
+            return;
+        }
+
+        yield $secret;
     }
 
     /**
@@ -66,17 +59,16 @@ class Day22 extends Solution
      *
      * @param  integer  $seed  The initial secret value.
      * @param  integer  $iterations  The amount of iterations to generate the secret.
-     * @return array{int,int}  The differences between each change of secret. The first element is the price, the second is the change from previous.
+     * @return \Generator<array{int,int}>  The differences between each change of secret. The first element is the price, the second is the change from previous.
      */
-    protected function getChanges(int $seed, int $iterations = 1): array
+    protected function getChanges(int $seed, int $iterations = 1): Generator
     {
         $changes = [];
         $prev = $seed % 10;
-        $secrets = $this->findSecret($seed, $iterations, true);
 
-        foreach ($secrets as $secret) {
+        foreach ($this->findSecret($seed, $iterations, true) as $secret) {
             $one = $secret % 10;
-            $changes[] = [$one, $this->cache[$k = "c$one.$prev"] ?? $this->cache[$k] = $one - $prev];
+            yield [$one, $one - $prev];
             $prev = $one;
         }
 
@@ -88,7 +80,7 @@ class Day22 extends Solution
      */
     public function part1(): int
     {
-        return array_sum(array_map(fn($s) => $this->findSecret($s, 2000), $this->getInput()));
+        return array_sum(array_map(fn($s) => $this->findSecret($s, 2000)->current(), $this->getInput()));
     }
 
     /**
@@ -100,32 +92,44 @@ class Day22 extends Solution
 
         $sequences = [];
         $values = [];
+        $max = 0;
 
         foreach ($buyers as $buyer) {
-            $changes = $this->getChanges($buyer, 2000);
-            $total = count($changes) - 3;
             $seen = [];
+            $changes = $this->getChanges($buyer, 2000);
+            $window = array_map(function () use ($changes) {
+                $result = $changes->current();
+                $changes->next();
+                return $result;
+            }, array_fill(0, 4, 0));
 
-            for ($i = 0; $i < $total; $i++) {
-                $window = array_slice($changes, $i, 4);
+            while ($changes->valid()) {
                 $sequence = array_column($window, 1);
                 $id = implode(',', $sequence);
 
                 // reading comprehension had me stumped here.
                 // forgot the monkey buys the first sequence only.
-                if (isset($seen[$id])) {
-                    continue;
+                if (! isset($seen[$id])) {
+                    $seen[$id] = true;
+
+                    if (! isset($sequences[$id])) {
+                        $sequences[$id] = $sequence;
+                        $values[$id] = 0;
+                    }
+
+                    $values[$id] += $window[3][0];
+
+                    if ($max < $values[$id]) {
+                        $max = $values[$id];
+                    }
                 }
 
-                if (! isset($sequences[$id])) {
-                    $sequences[$id] = $sequence;
-                }
-
-                $values[$id] = ($values[$id] ?? 0) + $window[3][0];
-                $seen[$id] = true;
+                $window[] = $changes->current();
+                $changes->next();
+                array_shift($window);
             }
         }
 
-        return max($values);
+        return $max;
     }
 }
