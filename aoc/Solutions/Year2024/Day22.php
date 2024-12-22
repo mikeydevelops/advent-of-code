@@ -2,7 +2,6 @@
 
 namespace Mike\AdventOfCode\Solutions\Year2024;
 
-use Generator;
 use Mike\AdventOfCode\Solutions\Solution;
 
 class Day22 extends Solution
