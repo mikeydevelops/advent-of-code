@@ -677,12 +677,13 @@ if (! function_exists('split_lines')) {
      * Split string into lines.
      *
      * @param  string  $string
-     * @param  bool  $trim Trim the string before splitting.
-     * @param  bool  $ignoreEmpty  Ignore empty lines.
-     * @param  bool  $trimLines  Trim each line after splitting.
+     * @param  callable|null  $map  Map over each line with given callback, after all other filters.
+     * @param  boolean  $trim Trim the string before splitting.
+     * @param  boolean  $ignoreEmpty  Ignore empty lines.
+     * @param  boolean  $trimLines  Trim each line after splitting.
      * @return string[]
      */
-    function split_lines(string $string, bool $trim = true, bool $ignoreEmpty = true, bool $trimLines = true): array
+    function split_lines(string $string, ?callable $map = null, bool $trim = true, bool $ignoreEmpty = true, bool $trimLines = true): array
     {
         if ($trim) {
             $string = trim($string);
@@ -696,6 +697,10 @@ if (! function_exists('split_lines')) {
 
         if ($trimLines) {
             $result = array_map('trim', $result);
+        }
+
+        if (! is_null($map)) {
+            $result = array_map($map, $result);
         }
 
         return $result;
@@ -1168,7 +1173,7 @@ if (! function_exists('grid_group_by'))
     /**
      * Group items using provided key.
      */
-    function grid_group_by(array $grid, callable|string|int $key): array
+    function grid_group_by(array $grid, callable|string|int $key, bool $preserve_keys = false): array
     {
         $result = [];
 
@@ -1179,7 +1184,11 @@ if (! function_exists('grid_group_by'))
                 $k = $k($item, $idx, $grid);
             }
 
-            $result[$item[$k]][] = $item;
+            if ($preserve_keys) {
+                $result[$item[$k]][$idx] = $item;
+            } else {
+                $result[$item[$k]][] = $item;
+            }
         }
 
         return $result;
