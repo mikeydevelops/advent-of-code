@@ -18,14 +18,6 @@ class Day22 extends Solution
     TXT;
 
     /**
-     * Process the input from the challenge.
-     */
-    public function transformInput(string $input): mixed
-    {
-        return split_lines($input, map: 'intval');
-    }
-
-    /**
      * Find the secret given initial seed value.
      *
      * @param  integer  $seed  The initial secret value.
@@ -38,9 +30,9 @@ class Day22 extends Solution
         $secret = $seed;
 
         for ($i = 0; $i < $iterations; $i++) {
-            $secret = ($secret ^ ($secret * 64)) % 16777216;
-            $secret = ($secret ^ ((int) floor($secret / 32))) % 16777216;
-            $secret = ($secret ^ ($secret * 2048)) % 16777216;
+            $secret = ($secret ^ ($secret << 6)) & 16777215;
+            $secret = ($secret ^ ($secret >> 5)) & 16777215;
+            $secret = ($secret ^ ($secret << 11)) & 16777215;
 
             if ($all) {
                 yield $secret;
@@ -80,7 +72,13 @@ class Day22 extends Solution
      */
     public function part1(): int
     {
-        return array_sum(array_map(fn($s) => $this->findSecret($s, 2000)->current(), $this->getInput()));
+        $sum = 0;
+
+        foreach ($this->streamLines() as $s) {
+            $sum += $this->findSecret(intval($s), 2000)->current();
+        }
+
+        return $sum;
     }
 
     /**
@@ -88,7 +86,7 @@ class Day22 extends Solution
      */
     public function part2(): int
     {
-        $buyers = $this->getInput(example: "1\n2\n3\n2024");
+        $buyers = $this->streamLines(example: "1\n2\n3\n2024", map: 'intval');
 
         $sequences = [];
         $values = [];

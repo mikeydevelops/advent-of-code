@@ -2,6 +2,7 @@
 
 namespace Mike\AdventOfCode\Solutions;
 
+use Generator;
 use Mike\AdventOfCode\AdventOfCodeDay;
 use Mike\AdventOfCode\AdventOfCodeException;
 use Mike\AdventOfCode\Console\Application;
@@ -228,6 +229,50 @@ abstract class Solution
         return $real
             ? fopen("data://text/plain,$real", $mode, false, $context)
             : $this->day->streamInput($mode, $context);
+    }
+
+    /**
+     * Stream the input, instead of loading it to memory.
+     *
+     * @param  string  $real  Override the input when testing mode is off.
+     * @param  string  $example  Override the input when testing mode is on.
+     * @param  callable|null  $map  Map over each line with given callback, after all other filters.
+     * @param  boolean  $trim Trim each line after splitting.
+     * @param  boolean  $ignoreEmpty  Ignore empty lines.
+     * @param  resource|null  $context  A stream context resource.
+     * @return \Generator
+     */
+    public function streamLines(string $real = null, string $example = null, ?callable $map = null, bool $trim = true, bool $ignoreEmpty = true): Generator
+    {
+        $stream = $this->streamInput($real, $example);
+
+        while ($line = fgets($stream)) {
+            $end = strlen($line) - 1;
+
+            if ($line[$end] === "\n") {
+                $line = substr($line, 0, -1);
+
+                if ($line[$end-1] === "\r") {
+                    $line = substr($line, 0, -1);
+                }
+            }
+
+            if ($trim) {
+                $line = trim($line);
+            }
+
+            if ($ignoreEmpty && $line == '') {
+                continue;
+            }
+
+            if (! is_null($map)) {
+                $line = call_user_func($map, $line);
+            }
+
+            yield $line;
+        }
+
+        fclose($stream);
     }
 
     /**
